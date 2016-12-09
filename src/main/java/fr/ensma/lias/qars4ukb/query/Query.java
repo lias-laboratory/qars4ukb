@@ -48,7 +48,7 @@ public interface Query {
     boolean isFailing(Session session) throws Exception;
 
     /**
-     * Retrun the triple patterns of the query
+     * Returns the triple patterns of the query
      * 
      * @return the triple patterns of the query
      */

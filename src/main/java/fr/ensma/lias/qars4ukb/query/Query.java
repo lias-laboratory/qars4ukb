@@ -41,7 +41,7 @@ public interface Query {
     Result getResult(Session s) throws Exception;
 
     /**
-     * Return wether this query has an empty result or not
+     * Checks whether this query has an empty result or not
      * 
      * @return True is the result of this query is empty
      */
@@ -94,29 +94,6 @@ public interface Query {
      */
     Query inverseOf(Query q);
 
-    /**
-     * Return the similarity with this query.
-     * 
-     * @return the similarity with this query
-     */
-    double getSimilarity(Query q);
-   
-    /**
-     * Return true if this query is a relaxation of the input.
-     * 
-     * @param q
-     * @return true if this query is a relaxation of the input
-     */
-    boolean isRelaxationOf(Query q);
-
-    /**
-     * Return the first occurence of a query that the current query relaxes.
-     * 
-     * @param listQuery
-     *            the input list of queries
-     * @return the first query of the input list that this query relaxes
-     */
-    Query firstRelaxationOf(List<Query> listQuery);
     
     /**
      * Compute the set of MFS of this query with a specific algorithm.

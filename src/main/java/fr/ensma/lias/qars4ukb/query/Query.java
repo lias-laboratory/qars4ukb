@@ -30,23 +30,24 @@ import fr.ensma.lias.qars4ukb.query.AbstractQuery.ComputeMFSAndXSSAlgorithm;
  */
 public interface Query {
 
-    /**
-     * Execute this query
-     * 
-     * @param s
-     *            the connection to the triplestore
-     * @return the result
-     * @throws Exception
-     */
-    Result getResult(Session s);
+	/**
+	 * Execute this query
+	 * 
+	 * @param s
+	 *            the connection to the triplestore
+	 * @return the result
+	 */
+	Result getResult(Session s);
 
-    /**
-     * Checks whether this query has an empty result or not
-     * 
-     * @return True is the result of this query is empty
-     */
-    boolean isFailing(Session session);
-    
+	/**
+	 * Checks whether this query has an empty result or not
+	 * 
+	 * @param s
+	 *            the connection to the triplestore
+	 * @return True is the result of this query is empty
+	 */
+	boolean isFailing(Session session);
+
 	/**
 	 * Add a triple pattern to this query
 	 * 
@@ -55,72 +56,84 @@ public interface Query {
 	 */
 	void addTriplePattern(TriplePattern tp);
 
-    /**
-     * Returns the triple patterns of the query
-     * 
-     * @return the triple patterns of the query
-     */
-    List<TriplePattern> getTriplePatterns();
+	/**
+	 * Returns the triple patterns of the query
+	 * 
+	 * @return the triple patterns of the query
+	 */
+	List<TriplePattern> getTriplePatterns();
 
-    /**
-     * Run the LBA algorithm. It fills the allMFS and allXSS variable
-     * 
-     * @param session
-     * @throws Exception
-     */
-    public void runLBA(Session session);
+	/**
+	 * Return an MFS of this query (must be failing)
+	 * 
+	 * @param s
+	 *            the connection to the triplestore
+	 * @return an MFS of this query
+	 */
+	Query findAnMFS(Session session);
 
-    /**
-     * Test if this query includes one of the input queries
-     * 
-     * @param queries
-     *            the input queries
-     * @return true if this query includes one of the input queries
-     */
-    public boolean includesAQueryOf(List<Query> queries);
+	/**
+	 * Run the LBA algorithm. It fills the allMFS and allXSS variable
+	 * 
+	 * @param s
+	 *            the connection to the triplestore
+	 */
+	public void runLBA(Session session);
 
-    /**
-     * Get the query executed on the target platform
-     * 
-     * @return the query executed on the target platform
-     */
-    String toNativeQuery();
+	/**
+	 * Test if this query includes one of the input queries
+	 * 
+	 * @param queries
+	 *            the input queries
+	 * @return true if this query includes one of the input queries
+	 */
+	public boolean includesAQueryOf(List<Query> queries);
 
-    /**
-     * Return true if this query is empty
-     * 
-     * @return true if this query is empty
-     */
-    boolean isEmpty();
+	/**
+	 * Get the query executed on the target platform
+	 * 
+	 * @return the query executed on the target platform
+	 */
+	String toNativeQuery();
 
-    
-    /**
-     * Compute the set of MFS of this query with a specific algorithm.
-     * 
-     * @param p
-     * @param algo
-     * @return
-     * @throws Exception
-     */
-    List<Query> computeAllMFS(Session p, ComputeMFSAndXSSAlgorithm algo);
-    
-    /**
-     * Compute the set of XSS of this query with a specific algorithm.
-     * 
-     * @param p
-     * @param algo
-     * @return
-     * @throws Exception
-     */
-    List<Query> computeAllXSS(Session p, ComputeMFSAndXSSAlgorithm algo);
-    
-    /**
-     * @return
-     */
-    List<Query> getAllMFS();
-    
-    /**
-     * @return
-     */
-    List<Query> getAllXSS();
+	/**
+	 * Return true if this query is empty
+	 * 
+	 * @return true if this query is empty
+	 */
+	boolean isEmpty();
+
+	/**
+	 * Compute the set of MFSs of this query with a specific algorithm.
+	 * 
+	 * @param s
+	 *            the connection to the triplestore
+	 * @param algo
+	 *            the chosen algorithms
+	 * @return the set of MFSs of this query
+	 */
+	List<Query> computeAllMFS(Session s, ComputeMFSAndXSSAlgorithm algo);
+
+	/**
+	 * Compute the set of XSSs of this query with a specific algorithm.
+	 * 
+	 * @param s
+	 *            the connection to the triplestore
+	 * @param algo
+	 *            the chosen algorithms
+	 * @return the set of XSSs of this query
+	 */
+	List<Query> computeAllXSS(Session s, ComputeMFSAndXSSAlgorithm algo);
+
+	/**
+	 * Return the MFSs of this query
+	 * @return the MFSs of this query
+	 */
+	List<Query> getAllMFS();
+
+	/** 
+	 * Return the XSSs of this query
+	 * @return the XSSs of this query
+	 */
+	List<Query> getAllXSS();
 }

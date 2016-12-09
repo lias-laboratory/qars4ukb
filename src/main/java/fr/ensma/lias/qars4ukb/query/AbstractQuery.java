@@ -35,61 +35,82 @@ import fr.ensma.lias.qars4ukb.exception.NotYetImplementedException;
  */
 public abstract class AbstractQuery implements Query {
 
-
+	/**
+	 * The two implemented algorithms to compute MFSs and XSSs
+	 */
 	public enum ComputeMFSAndXSSAlgorithm {
 		LBA, DFS
 	}
 
-	protected String rdfQuery;
-
+	/**
+	 * Factory to create other queries
+	 */
 	protected QueryFactory factory;
 
+	/**
+	 * String of this query
+	 */
+	protected String rdfQuery;
+
+	/**
+	 * List of triple patterns of this query
+	 */
 	protected List<TriplePattern> triplePatterns;
+
+	/**
+	 * Number of triple patterns of this query (this could be computed)
+	 */
 	protected int nbTriplePatterns;
 
+	/**
+	 * List of the MFSs of this query
+	 */
 	public List<Query> allMFS;
+
+	/**
+	 * List of the XSSs of this query
+	 */
 	public List<Query> allXSS;
 
+	/**
+	 * Most queries will be created during the execution of LBA the
+	 * newInitialQuery represents the query on which LBA was executed
+	 */
 	protected Query newInitialQuery;
 
+	/**
+	 * Get the initial query on which LBA was executed
+	 * 
+	 * @return
+	 */
+	public Query getInitialQuery() {
+		return this.newInitialQuery;
+	}
+
+	/**
+	 * Set the initial query on which LBA was executed
+	 * 
+	 * @param query
+	 *            the initial query on which LBA was executed
+	 */
+	public void setInitialQuery(Query query) {
+		this.newInitialQuery = query;
+	}
+
+	/**
+	 * Builds a query from its string and a reference to its factory
+	 * 
+	 * @param factory
+	 *            a factory to create some queries
+	 * @param query
+	 *            the string of this query
+	 */
 	public AbstractQuery(QueryFactory factory, String query) {
 		this.factory = factory;
 		this.rdfQuery = query;
 		this.decomposeQuery();
 		nbTriplePatterns = triplePatterns.size();
 	}
-
-	public AbstractQuery(QueryFactory factory, List<TriplePattern> tps) {
-		this.factory = factory;
-		this.rdfQuery = computeRDFQuery(tps);
-		triplePatterns = tps;
-		nbTriplePatterns = triplePatterns.size();
-	}
-
-	public void setInitialQuery(Query query) {
-		this.newInitialQuery = query;
-	}
-
-	public Query getInitialQuery() {
-		return this.newInitialQuery;
-	}
-
-	@Override
-	public List<Query> getAllMFS() {
-		return this.allMFS;
-	}
-
-	@Override
-	public List<Query> getAllXSS() {
-		return this.allXSS;
-	}
-
-	@Override
-	public List<TriplePattern> getTriplePatterns() {
-		return triplePatterns;
-	}
-
-	protected abstract boolean isFailingAux(Session session);
 
 	/**
 	 * Decompose a SPARQL Query into a set of triple patterns.
@@ -114,6 +135,62 @@ public abstract class AbstractQuery implements Query {
 		}
 	}
 
+	/**
+	 * Builds a query from its triple patterns and a reference to its factory
+	 * 
+	 * @param factory
+	 *            a factory to create some queries
+	 * @param tps
+	 *            the triple patterns of the query
+	 */
+	public AbstractQuery(QueryFactory factory, List<TriplePattern> tps) {
+		this.factory = factory;
+		this.rdfQuery = computeRDFQuery(tps);
+		triplePatterns = tps;
+		nbTriplePatterns = triplePatterns.size();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((triplePatterns == null) ? 0 : new HashSet<TriplePattern>(triplePatterns).hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractQuery other = (AbstractQuery) obj;
+		if (other.nbTriplePatterns != this.nbTriplePatterns) // same
+			// size
+			return false;
+		if (!this.includesSimple(other)) // and one is included in the other
+			return false;
+		return true;
+	}
+
+	@Override
+	public List<Query> getAllMFS() {
+		return this.allMFS;
+	}
+
+	@Override
+	public List<Query> getAllXSS() {
+		return this.allXSS;
+	}
+
+	@Override
+	public List<TriplePattern> getTriplePatterns() {
+		return triplePatterns;
+	}
+
 	@Override
 	public String toString() {
 		return rdfQuery;
@@ -131,13 +208,10 @@ public abstract class AbstractQuery implements Query {
 		return isFailingAux(session);
 	}
 
-	/**
-	 * Return an MFS of this query (must be failing)
-	 * 
-	 * @return an MFS of this query
-	 * @throws Exception
-	 */
-	protected Query findAnMFS(Session session) {
+	protected abstract boolean isFailingAux(Session session);
+
+	@Override
+	public Query findAnMFS(Session session) {
 		Query qPrim = factory.createQuery(rdfQuery);
 		Query qStar = factory.createQuery("", newInitialQuery);
 		Query qTemp;
@@ -146,7 +220,7 @@ public abstract class AbstractQuery implements Query {
 			tp = ((AbstractQuery) qPrim).removeTriplePattern();
 			qTemp = ((AbstractQuery) qPrim).concat(qStar);
 			if (!qTemp.isFailing(session))
-				 qStar.addTriplePattern(tp);
+				qStar.addTriplePattern(tp);
 		}
 		return qStar;
 	}
@@ -157,12 +231,9 @@ public abstract class AbstractQuery implements Query {
 	 * @return the removed triple pattern
 	 */
 	protected TriplePattern removeTriplePattern() {
-		// un-comment to test the non-determinism
+		// we remove them in the order of the query
+		// it could also be non-deterministic
 		int numTriplePattern = 0;
-		// if (nbTriplePatterns>1) {
-		// Random r = new Random();
-		// numTriplePattern = r.nextInt(nbTriplePatterns);
-		// }
 		TriplePattern res = triplePatterns.remove(numTriplePattern);
 		updateQueryAfterRemoveTP();
 		return res;
@@ -179,11 +250,22 @@ public abstract class AbstractQuery implements Query {
 		updateQueryAfterRemoveTP();
 	}
 
+	/**
+	 * Computes the string of this query when a some triple patterns have
+	 * changed
+	 */
 	protected void updateQueryAfterRemoveTP() {
 		nbTriplePatterns--;
 		rdfQuery = computeRDFQuery(triplePatterns);
 	}
 
+	/**
+	 * Computes the string of this query from a list of triple patterns
+	 * 
+	 * @param listTP
+	 *            a list of triple patterns
+	 * @return the string of this query
+	 */
 	private String computeRDFQuery(List<TriplePattern> listTP) {
 		String res = "";
 		int nbTPs = listTP.size();
@@ -244,33 +326,8 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((triplePatterns == null) ? 0 : new HashSet<TriplePattern>(triplePatterns).hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AbstractQuery other = (AbstractQuery) obj;
-		if (other.nbTriplePatterns != this.nbTriplePatterns) // same
-			// size
-			return false;
-		if (!this.includesSimple(other)) // and one is included in the other
-			return false;
-		return true;
-	}
-
-	@Override
 	public List<Query> computeAllMFS(Session p, ComputeMFSAndXSSAlgorithm algo) {
+		// we only computes the MFSs if it was not already done
 		if (allMFS == null) {
 			startAlgorithm(p, algo);
 		}
@@ -279,12 +336,21 @@ public abstract class AbstractQuery implements Query {
 
 	@Override
 	public List<Query> computeAllXSS(Session p, ComputeMFSAndXSSAlgorithm algo) {
+		// we only computes the XSSs if it was not already done
 		if (allXSS == null) {
 			this.startAlgorithm(p, algo);
 		}
 		return allXSS;
 	}
 
+	/**
+	 * Launch the chosen algorithm to compute the XSSs and MFSs
+	 * 
+	 * @param session
+	 *            the connection to the KB
+	 * @param algo
+	 *            the chosen algorithm
+	 */
 	protected void startAlgorithm(Session session, ComputeMFSAndXSSAlgorithm algo) {
 		switch (algo) {
 		case LBA:
@@ -293,20 +359,21 @@ public abstract class AbstractQuery implements Query {
 		case DFS:
 			runDFS(session);
 			break;
+		default:
+			throw new NotYetImplementedException();
 		}
 	}
 
 	/**
-	 * Choose a random element from the list
+	 * Choose a query from a list of queries
 	 * 
 	 * @param queries
+	 *            a list of queries
 	 * @return
 	 */
 	protected Query element(List<Query> queries) {
-		// Random r = new Random();
-		// int numQuery = r.nextInt(queries.size());
-		// return queries.get(numQuery);
-		// // j'enlève le non-déterminisme
+		// We do not use a random query as it seems to be more efficient to take
+		// the first one
 		return queries.get(0);
 	}
 
@@ -329,8 +396,8 @@ public abstract class AbstractQuery implements Query {
 	 * The opt query uses bitmap so we define a method to avoid using bitmap
 	 * when needed.
 	 * 
-	 * @param q
-	 * @return
+	 * @param q a query
+	 * @return true if this query includes q
 	 */
 	private boolean includesSimple(Query q) {
 		for (TriplePattern tp : q.getTriplePatterns()) {
@@ -340,6 +407,11 @@ public abstract class AbstractQuery implements Query {
 		return true;
 	}
 
+	/**
+	 * Checks whether this query includes a triple pattern
+	 * @param t a triple pattern
+	 * @return true if this query includes t
+	 */
 	private boolean includes(TriplePattern t) {
 		if (rdfQuery.indexOf(t.toString()) == -1)
 			return false;
@@ -347,7 +419,7 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	/**
-	 * Test if this query is included in one of the input queries
+	 * Check whether this query is included in one of the input queries
 	 * 
 	 * @param queries
 	 *            the input queries
@@ -371,9 +443,17 @@ public abstract class AbstractQuery implements Query {
 		return false;
 	}
 
+	/**
+	 * Init the LBA algorithm
+	 */
 	public void initLBA() {
 	}
 
+	/**
+	 * Launch the LBA algorithm with a set of known MFSs
+	 * @param session the connection to the KB
+	 * @param knownMFS the known MFSs
+	 */
 	public void runLBA(Session session, List<Query> knownMFS) {
 		((AbstractSession) session).setExecutedQueryCount(0);
 		this.setInitialQuery(this);
@@ -424,30 +504,19 @@ public abstract class AbstractQuery implements Query {
 	/**
 	 * Add a new MFS and change the pxss accordingly.
 	 * 
-	 * @param qStar
-	 * @param pxss
+	 * @param qStar the MFS
+	 * @param pxss the current list of pxss
 	 */
 	private void refactor(Query qStar, List<Query> pxss) {
 		List<Query> pxssPrim;
 		for (ListIterator<Query> itQPrimPrim = pxss.listIterator(); itQPrimPrim.hasNext();) {
 			Query qPrimPrim = itQPrimPrim.next();
-			// System.out.println("---- Element de pxss testé : -- " +
-			// qPrimPrim.toSimpleString(this));
 			if (((AbstractQuery) qPrimPrim).includes(qStar)) {
-				// System.out.println("---- il inclut la mfs, on l'enlève de
-				// pxss ----");
 				itQPrimPrim.remove();
 				pxssPrim = ((AbstractQuery) qPrimPrim).computePotentialXSS(qStar);
-				// System.out.println("-- nombre de PXSS correspondant que l'on
-				// peut ajouter : "
-				// + pxssPrim.size());
 				for (Query qJ : pxssPrim) {
 					if (!((AbstractQuery) qJ).isIncludedInAQueryOf(pxss)
 							&& !((AbstractQuery) qJ).isIncludedInAQueryOf(allXSS)) {
-						// System.out.println("****** on ajoute la requête
-						// suivante à pxss car elle n'est pas inclu dans une
-						// autre : "
-						// + qJ.toSimpleString(this));
 						itQPrimPrim.add(qJ);
 					}
 				}
@@ -460,6 +529,11 @@ public abstract class AbstractQuery implements Query {
 		runLBA(session, new ArrayList<Query>());
 	}
 
+	/**
+	 * Display nicely a list of queries "t1^t2^t3"
+	 * @param queries a list of queries
+	 * @return a nice string representation of this list of queries
+	 */
 	public String toSimpleString(List<Query> queries) {
 		String res = "";
 		for (Query q : queries) {
@@ -469,10 +543,10 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	/**
-	 * Create a query with the triples patterns that have the input positions.
+	 * Create a query with the triple patterns that have the input positions.
 	 * 
-	 * @param pos
-	 * @return
+	 * @param pos the input positions
+	 * @return  a query with the triple patterns corresponding to the positions
 	 */
 	public Query createCorrespondingQuery(List<Integer> pos) {
 		List<TriplePattern> tp = new ArrayList<TriplePattern>();
@@ -485,10 +559,10 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	/**
-	 * Get the position of the triple of this query in the input query
+	 * Get the position of the triple patterns of this query in the initial query
 	 * 
-	 * @param initialQuery
-	 * @return
+	 * @param initialQuery the initial query
+	 * @return the position the positions of the triple patterns of this query in the initial query
 	 */
 	public List<Integer> getIndexOfTriplePattern(Query initialQuery) {
 		List<Integer> res = new ArrayList<Integer>();
@@ -526,6 +600,12 @@ public abstract class AbstractQuery implements Query {
 		return rdfQuery;
 	}
 
+	/**
+	 * 
+	 * @param executedQueries a cache of already executed queries
+	 * @param s connection to the KB
+	 * @return true iff this query is failing
+	 */
 	private boolean isFailingForDFS(Map<Query, Boolean> executedQueries, Session s) {
 		if (this.equals(this.getInitialQuery())) {
 			return true;
@@ -570,6 +650,10 @@ public abstract class AbstractQuery implements Query {
 		return res;
 	}
 
+	/**
+	 * Run the DFS algorithm
+	 * @param session connection to the KB
+	 */
 	public void runDFS(Session session) {
 		allMFS = new ArrayList<Query>();
 		allXSS = new ArrayList<Query>();
@@ -581,14 +665,10 @@ public abstract class AbstractQuery implements Query {
 		listQuery.add(this);
 		while (!listQuery.isEmpty()) {
 			Query qTemp = listQuery.remove(0);
-			// System.out.println("Traitement de "
-			// + qTemp.toSimpleString(initialQuery));
 			if (!markedQueries.containsKey(qTemp)) {
 				markedQueries.put(qTemp, true);
 				List<Query> subqueries = ((AbstractQuery) qTemp).getSubQueries();
 				if (((AbstractQuery) qTemp).isFailingForDFS(executedQueries, session)) {
-					// this is a potential MFS
-					// System.out.println("potential mfs");
 					boolean isMFS = true;
 					for (Query subquery : subqueries) {
 						if (((AbstractQuery) subquery).isFailingForDFS(executedQueries, session))
@@ -611,6 +691,5 @@ public abstract class AbstractQuery implements Query {
 
 		}
 	}
-
 
 }

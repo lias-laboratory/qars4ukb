@@ -20,12 +20,14 @@
 package fr.ensma.lias.qars4ukb.triplestore.jdbcdb;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
 import fr.ensma.lias.qars4ukb.AbstractSession;
 import fr.ensma.lias.qars4ukb.Result;
 import fr.ensma.lias.qars4ukb.Session;
+import fr.ensma.lias.qars4ukb.exception.TripleStoreException;
 import fr.ensma.lias.qars4ukb.query.AbstractQuery;
 import fr.ensma.lias.qars4ukb.query.QueryHelper;
 import fr.ensma.lias.qars4ukb.query.TriplePattern;
@@ -35,40 +37,42 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class JDBCQuery extends AbstractQuery {
 
-    private QueryHelper helper;
+	private QueryHelper helper;
 
-    public JDBCQuery(JDBCQueryFactory factory, String query) {
-	super(factory, query);
-	
-	helper = factory.createQueryHelper(this);
-    }
+	public JDBCQuery(JDBCQueryFactory factory, String query) {
+		super(factory, query);
+		helper = factory.createQueryHelper(this);
+	}
 
-    public JDBCQuery(JDBCQueryFactory factory, List<TriplePattern> tps) {
-	super(factory, tps);
-	
-	helper =  factory.createQueryHelper(this);
-    }
+	public JDBCQuery(JDBCQueryFactory factory, List<TriplePattern> tps) {
+		super(factory, tps);
+		helper = factory.createQueryHelper(this);
+	}
 
-    @Override
-    public boolean isFailingAux(Session session) throws Exception {
-	Statement stmt = ((JDBCSession) session).getConnection()
-		.createStatement();
-	ResultSet rset = stmt.executeQuery(toNativeQuery());
-	((AbstractSession) session).setExecutedQueryCount(
-		((AbstractSession) session).getExecutedQueryCount() + 1);
-	boolean res = !rset.next();
-	rset.close();
-	stmt.close();
-	return res;
-    }
+	@Override
+	public boolean isFailingAux(Session session) {
+		try {
+			Statement stmt = ((JDBCSession) session).getConnection().createStatement();
+			ResultSet rset = stmt.executeQuery(toNativeQuery());
+			((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
+			boolean res = !rset.next();
+			rset.close();
+			stmt.close();
+			return res;
+		} catch (SQLException e) {
+			System.out.println("Unable to execute the query: " + e.getMessage());
+			e.printStackTrace();
+			throw new TripleStoreException();
+		}
+	}
 
-    @Override
-    public String toNativeQuery() {
-	return helper.toNativeQuery();
-    }
+	@Override
+	public String toNativeQuery() {
+		return helper.toNativeQuery();
+	}
 
-    @Override
-    public Result getResult(Session session) throws Exception {
-	return helper.getResult(session);
-    }
+	@Override
+	public Result getResult(Session session) {
+		return helper.getResult(session);
+	}
 }

@@ -20,11 +20,13 @@
 package fr.ensma.lias.qars4ukb.triplestore.jdbcdb;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import fr.ensma.lias.qars4ukb.AbstractSession;
 import fr.ensma.lias.qars4ukb.Result;
 import fr.ensma.lias.qars4ukb.Session;
+import fr.ensma.lias.qars4ukb.exception.TripleStoreException;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.QueryHelper;
 
@@ -33,30 +35,40 @@ import fr.ensma.lias.qars4ukb.query.QueryHelper;
  */
 public abstract class AbstractJDBCQueryHelper implements QueryHelper {
 
-    protected Query q;
+	protected Query q;
 
-    public AbstractJDBCQueryHelper(Query q) {
-	this.q = q;
-    }
+	public AbstractJDBCQueryHelper(Query q) {
+		this.q = q;
+	}
 
-    @Override
-    public boolean executeQuery(Session session) throws Exception {
-	Statement stmt = ((JDBCSession) session).getConnection()
-		.createStatement();
-	ResultSet rset = stmt.executeQuery(q.toNativeQuery());
-	((AbstractSession) session).setExecutedQueryCount(
-		((AbstractSession) session).getExecutedQueryCount() + 1);
-	boolean isEmpty = !rset.next();
-	rset.close();
-	stmt.close();
-	return isEmpty;
-    }
+	@Override
+	public boolean executeQuery(Session session) {
+		Statement stmt;
+		try {
+			stmt = ((JDBCSession) session).getConnection().createStatement();
+			ResultSet rset = stmt.executeQuery(q.toNativeQuery());
+			((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
+			boolean isEmpty = !rset.next();
+			rset.close();
+			stmt.close();
+			return isEmpty;
+		} catch (SQLException e) {
+			System.out.println("Unable to execute the query: " + e.getMessage());
+			e.printStackTrace();
+			throw new TripleStoreException();
+		}
+	}
 
-    @Override
-    public Result getResult(Session s) throws Exception {
-	Statement reqOracle = ((JDBCSession) s).getConnection()
-		.createStatement();
-	ResultSet rset = reqOracle.executeQuery(toNativeQuery());
-	return new JDBCResult(rset);
-    }
+	@Override
+	public Result getResult(Session s) {
+		try {
+			Statement reqOracle = ((JDBCSession) s).getConnection().createStatement();
+			ResultSet rset = reqOracle.executeQuery(toNativeQuery());
+			return new JDBCResult(rset);
+		} catch (SQLException e) {
+			System.out.println("Unable to execute the query: " + e.getMessage());
+			e.printStackTrace();
+			throw new TripleStoreException();
+		}
+	}
 }

@@ -33,32 +33,31 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class SPARQLEndpointQueryOpt extends AbstractQueryOpt {
 
-    protected SPARQLEndpointQueryHelper helper;
+	protected SPARQLEndpointQueryHelper helper;
 
-    public SPARQLEndpointQueryOpt(QueryFactory factory, String query) {
-	super(factory, query);
-	this.helper = new SPARQLEndpointQueryHelper(this);
-    }
+	public SPARQLEndpointQueryOpt(QueryFactory factory, String query) {
+		super(factory, query);
+		this.helper = new SPARQLEndpointQueryHelper(this);
+	}
 
-    public SPARQLEndpointQueryOpt(QueryFactory factory,
-	    List<TriplePattern> tps) {
-	super(factory, tps);
-	this.helper = new SPARQLEndpointQueryHelper(this);
-    }
+	public SPARQLEndpointQueryOpt(QueryFactory factory, List<TriplePattern> tps) {
+		super(factory, tps);
+		this.helper = new SPARQLEndpointQueryHelper(this);
+	}
 
-    @Override
-    public String toNativeQuery() {
-	return helper.toNativeQuery();
-    }
+	@Override
+	public String toNativeQuery() {
+		return helper.toNativeQuery();
+	}
 
-    @Override
-    protected boolean executeQuery(Query q, Session session) throws Exception {
-	return new SPARQLEndpointQueryHelper(q).executeQuery(session);
-    }
+	@Override
+	protected boolean executeQuery(Query q, Session session) throws Exception {
+		return new SPARQLEndpointQueryHelper(q).executeQuery(session);
+	}
 
-    @Override
-    public Result getResult(Session session) throws Exception {
-	return helper.getResult(session);
-    }
+	@Override
+	public Result getResult(Session session) {
+		return helper.getResult(session);
+	}
 
 }

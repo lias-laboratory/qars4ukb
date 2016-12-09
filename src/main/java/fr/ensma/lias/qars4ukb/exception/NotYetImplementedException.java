@@ -17,7 +17,7 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with QARS4UKB.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************/
-package fr.ensma.lias.qars4ukb;
+package fr.ensma.lias.qars4ukb.exception;
 
 /**
  * @author Mickael BARON

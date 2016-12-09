@@ -51,12 +51,12 @@ public class JenaTDBNativeQueryOpt extends AbstractQueryOpt {
     }
 
     @Override
-    protected boolean executeQuery(Query q, Session session) throws Exception {
+    protected boolean executeQuery(Query q, Session session)  {
 	return new JenaTDBNativeQueryHelper(q).executeQuery(session);
     }
 
     @Override
-    public Result getResult(Session session) throws Exception {
+    public Result getResult(Session session) {
 	return jenaHelper.getResult(session);
     }
 

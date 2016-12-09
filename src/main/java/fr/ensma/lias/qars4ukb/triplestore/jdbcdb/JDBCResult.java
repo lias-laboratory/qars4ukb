@@ -20,62 +20,101 @@
 package fr.ensma.lias.qars4ukb.triplestore.jdbcdb;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.ensma.lias.qars4ukb.Result;
+import fr.ensma.lias.qars4ukb.exception.TripleStoreException;
 
 /**
  * @author Stephane JEAN
  */
 public class JDBCResult implements Result {
 
-    private ResultSet rset;
+	private ResultSet rset;
 
-    public JDBCResult(ResultSet rset) {
-	this.rset = rset;
-    }
-
-    @Override
-    public void close() throws Exception {
-	rset.close();
-
-    }
-
-    @Override
-    public boolean next() throws Exception {
-	return rset.next();
-    }
-
-    @Override
-    public String getString(int col) throws Exception {
-	return rset.getString(col);
-    }
-
-    @Override
-    public int getNbRow() throws Exception {
-	int res = 0;
-	while (rset.next()) {
-	    res++;
+	public JDBCResult(ResultSet rset) {
+		this.rset = rset;
 	}
-	return res;
-    }
 
-    @Override
-    public List<String> getNbRow(int maxK) throws Exception {
-	List<String> res = new ArrayList<String>();
-	while (rset.next() && res.size() <= maxK) {
-	    res.add(rset.getString(1));
+	@Override
+	public void close() {
+		try {
+			rset.close();
+		} catch (SQLException e) {
+			System.out.println("Unable to close the resultset: " + e.getMessage());
+			e.printStackTrace();
+			throw new TripleStoreException();
+		}
 	}
-	return res;
-    }
 
-    @Override
-    public String[] getString(String[] cols) throws Exception {
-	String[] res = new String[cols.length];
-	for (int i = 0; i < cols.length; i++) {
-	    res[i] = rset.getString(cols[i]);
+	@Override
+	public boolean next() {
+		try {
+			return rset.next();
+		} catch (SQLException e) {
+			System.out.println("Unable to call the next method of the resultset: " + e.getMessage());
+			e.printStackTrace();
+			throw new TripleStoreException();
+		}
+
 	}
-	return res;
-    }
+
+	@Override
+	public String getString(int col) {
+		try {
+			return rset.getString(col);
+		} catch (SQLException e) {
+			System.out.println("Unable to call the get method of the resultset: " + e.getMessage());
+			e.printStackTrace();
+			throw new TripleStoreException();
+		}
+	}
+
+	@Override
+	public int getNbRow() {
+		try {
+			int res = 0;
+			while (rset.next()) {
+				res++;
+			}
+			return res;
+		} catch (SQLException e) {
+			System.out.println("Unable to get the number of row of the resultset: " + e.getMessage());
+			e.printStackTrace();
+			throw new TripleStoreException();
+		}
+
+	}
+
+	@Override
+	public List<String> getNbRow(int maxK) {
+		try {
+			List<String> res = new ArrayList<String>();
+			while (rset.next() && res.size() <= maxK) {
+				res.add(rset.getString(1));
+			}
+			return res;
+		} catch (SQLException e) {
+			System.out.println("Unable to call the next method of the resultset: " + e.getMessage());
+			e.printStackTrace();
+			throw new TripleStoreException();
+		}
+	}
+
+	@Override
+	public String[] getString(String[] cols) {
+		try {
+			String[] res = new String[cols.length];
+			for (int i = 0; i < cols.length; i++) {
+				res[i] = rset.getString(cols[i]);
+			}
+			return res;
+		} catch (SQLException e) {
+			System.out.println("Unable to call the getString method of the resultset: " + e.getMessage());
+			e.printStackTrace();
+			throw new TripleStoreException();
+		}
+	}
 }

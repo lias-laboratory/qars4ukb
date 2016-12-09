@@ -45,12 +45,12 @@ public class SPARQLEndpointQuery extends AbstractQuery {
     }
 
     @Override
-    public Result getResult(Session session) throws Exception {
+    public Result getResult(Session session) {
 	return helper.getResult(session);
     }
 
     @Override
-    protected boolean isFailingAux(Session session) throws Exception {
+    protected boolean isFailingAux(Session session) {
 	return helper.executeQuery(session);
     }
 

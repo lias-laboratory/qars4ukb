@@ -32,54 +32,54 @@ import fr.ensma.lias.qars4ukb.Result;
  */
 public class JenaTDBNativeResult implements Result {
 
-    private ResultSet rset;
+	private ResultSet rset;
 
-    public JenaTDBNativeResult(ResultSet rset) {
-	super();
-	this.rset = rset;
-    }
-
-    @Override
-    public void close() throws Exception {
-    }
-
-    @Override
-    public boolean next() throws Exception {
-	return rset.hasNext();
-    }
-
-    @Override
-    public String getString(int col) throws Exception {
-	QuerySolution sol = rset.nextSolution();
-	return sol.get("X").toString();
-    }
-
-    public String[] getString(String[] cols) throws Exception {
-	String[] res = new String[cols.length];
-	QuerySolution sol = rset.nextSolution();
-	for (int i = 0; i < cols.length; i++) {
-	    res[i] = sol.get(cols[i]).toString();
+	public JenaTDBNativeResult(ResultSet rset) {
+		super();
+		this.rset = rset;
 	}
-	return res;
 
-    }
-
-    @Override
-    public int getNbRow() throws Exception {
-	int res = 0;
-	while (rset.hasNext()) {
-	    res++;
-	    rset.nextSolution();
+	@Override
+	public void close() {
 	}
-	return res;
-    }
 
-    @Override
-    public List<String> getNbRow(int maxK) throws Exception {
-	List<String> res = new ArrayList<String>();
-	while (rset.hasNext() && res.size() <= maxK) {
-	    res.add(rset.nextSolution().toString());
+	@Override
+	public boolean next() {
+		return rset.hasNext();
 	}
-	return res;
-    }
+
+	@Override
+	public String getString(int col) {
+		QuerySolution sol = rset.nextSolution();
+		return sol.get("X").toString();
+	}
+
+	public String[] getString(String[] cols) {
+		String[] res = new String[cols.length];
+		QuerySolution sol = rset.nextSolution();
+		for (int i = 0; i < cols.length; i++) {
+			res[i] = sol.get(cols[i]).toString();
+		}
+		return res;
+
+	}
+
+	@Override
+	public int getNbRow() {
+		int res = 0;
+		while (rset.hasNext()) {
+			res++;
+			rset.nextSolution();
+		}
+		return res;
+	}
+
+	@Override
+	public List<String> getNbRow(int maxK) {
+		List<String> res = new ArrayList<String>();
+		while (rset.hasNext() && res.size() <= maxK) {
+			res.add(rset.nextSolution().toString());
+		}
+		return res;
+	}
 }

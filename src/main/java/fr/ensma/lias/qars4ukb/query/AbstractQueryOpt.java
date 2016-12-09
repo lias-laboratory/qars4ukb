@@ -27,8 +27,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import fr.ensma.lias.qars4ukb.NotYetImplementedException;
 import fr.ensma.lias.qars4ukb.Session;
+import fr.ensma.lias.qars4ukb.exception.NotYetImplementedException;
 
 /**
  * @author Stephane JEAN
@@ -140,7 +140,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
     }
 
     @Override
-    public boolean isFailingAux(Session session) throws Exception {
+    public boolean isFailingAux(Session session) {
 	throw new NotYetImplementedException();
 	
 //	List<Query> connectedParts = getConnectedParts();

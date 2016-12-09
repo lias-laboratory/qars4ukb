@@ -19,7 +19,7 @@
 **********************************************************************************/
 package fr.ensma.lias.qars4ukb.triplestore.jdbcdb.database.hsqldb;
 
-import fr.ensma.lias.qars4ukb.NotYetImplementedException;
+import fr.ensma.lias.qars4ukb.exception.NotYetImplementedException;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.AbstractJDBCQueryHelper;
 

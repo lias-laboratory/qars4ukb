@@ -38,14 +38,22 @@ public interface Query {
      * @return the result
      * @throws Exception
      */
-    Result getResult(Session s) throws Exception;
+    Result getResult(Session s);
 
     /**
      * Checks whether this query has an empty result or not
      * 
      * @return True is the result of this query is empty
      */
-    boolean isFailing(Session session) throws Exception;
+    boolean isFailing(Session session);
+    
+	/**
+	 * Add a triple pattern to this query
+	 * 
+	 * @param tp
+	 *            the added triple pattern
+	 */
+	void addTriplePattern(TriplePattern tp);
 
     /**
      * Returns the triple patterns of the query
@@ -60,7 +68,7 @@ public interface Query {
      * @param session
      * @throws Exception
      */
-    public void runLBA(Session session) throws Exception;
+    public void runLBA(Session session);
 
     /**
      * Test if this query includes one of the input queries
@@ -85,15 +93,6 @@ public interface Query {
      */
     boolean isEmpty();
 
-    /**
-     * Return the inverse of this query
-     * 
-     * @param q
-     *            the query to which the returned query is the inverse
-     * @return the inverse of this query
-     */
-    Query inverseOf(Query q);
-
     
     /**
      * Compute the set of MFS of this query with a specific algorithm.
@@ -103,7 +102,7 @@ public interface Query {
      * @return
      * @throws Exception
      */
-    List<Query> computeAllMFS(Session p, ComputeMFSAndXSSAlgorithm algo) throws Exception;
+    List<Query> computeAllMFS(Session p, ComputeMFSAndXSSAlgorithm algo);
     
     /**
      * Compute the set of XSS of this query with a specific algorithm.
@@ -113,7 +112,7 @@ public interface Query {
      * @return
      * @throws Exception
      */
-    List<Query> computeAllXSS(Session p, ComputeMFSAndXSSAlgorithm algo) throws Exception;
+    List<Query> computeAllXSS(Session p, ComputeMFSAndXSSAlgorithm algo);
     
     /**
      * @return

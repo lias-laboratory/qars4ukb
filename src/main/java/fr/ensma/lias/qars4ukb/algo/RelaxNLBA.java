@@ -21,7 +21,7 @@ package fr.ensma.lias.qars4ukb.algo;
 
 import java.util.Set;
 
-import fr.ensma.lias.qars4ukb.NotYetImplementedException;
+import fr.ensma.lias.qars4ukb.exception.NotYetImplementedException;
 import fr.ensma.lias.qars4ukb.query.Query;
 
 public class RelaxNLBA implements IRelax {

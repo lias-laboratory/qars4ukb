@@ -28,21 +28,22 @@ import fr.ensma.lias.qars4ukb.Session;
 public interface QueryHelper {
 
     /**
-     * @return
+     * Computes the query compatible with the triplestore
+     * @return the query compatible with the triplestore
      */
     String toNativeQuery();
 
     /**
-     * @param session
-     * @return
+     * @param session the connection to the knowledge base
+     * @return 
      * @throws Exception
      */
-    boolean executeQuery(Session session) throws Exception;
+    boolean executeQuery(Session session);
     
     /**
      * @param session
      * @return
      * @throws Exception
      */
-    Result getResult(Session session) throws Exception;
+    Result getResult(Session session);
 }

@@ -30,45 +30,40 @@ public interface Result {
     
     /**
      * Close the result set
-     * @throws Exception
      */
-    void close() throws Exception;
+    void close();
     
     
     /**
      * Iterates to the next result
      * @return true if there is a next result
-     * @throws Exception
      */
-    boolean next() throws Exception;
+    boolean next();
     
     /**
      * Return the string value of the result for the given column
      * @param col the column
      * @return the string value of the result for the given column
-     * @throws Exception
      */
-    String getString(int col) throws Exception;
+    String getString(int col);
     
     /**
      * Return the number of rows of this result
      * @return the number of rows of this result
      * @throws Exception
      */
-    int getNbRow() throws Exception;
+    int getNbRow();
     
     /**
      * Return return a list of results ; the maximum number of element is set with maxk
      * @return the number of rows of this result with a maximum set to maxk
-     * @throws Exception
      */
-    List<String> getNbRow(int maxK) throws Exception;
+    List<String> getNbRow(int maxK);
     
     /**
      * Return the string values of the result for the given columns
      * @param cols the given columns
      * @return the string values of the result for the given columns
-     * @throws Exception
      */
-    String[] getString(String[] cols) throws Exception;
+    String[] getString(String[] cols);
 }

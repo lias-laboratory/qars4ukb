@@ -45,12 +45,12 @@ public class JenaTDBNativeQuery extends AbstractQuery {
     }
 
     @Override
-    public boolean isFailingAux(Session session) throws Exception {
+    public boolean isFailingAux(Session session) {
 	return helper.executeQuery(session);
     }
 
     @Override
-    public Result getResult(Session session) throws Exception {
+    public Result getResult(Session session)  {
 	return helper.getResult(session);
     }
 

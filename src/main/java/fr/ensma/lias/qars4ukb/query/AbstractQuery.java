@@ -27,24 +27,18 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import fr.ensma.lias.qars4ukb.AbstractSession;
-import fr.ensma.lias.qars4ukb.NotYetImplementedException;
 import fr.ensma.lias.qars4ukb.Session;
+import fr.ensma.lias.qars4ukb.exception.NotYetImplementedException;
 
 /**
  * @author Stéphane JEAN
  */
 public abstract class AbstractQuery implements Query {
 
-	public enum RelaxAlgorithm {
-		BFS, FMBS, MBS, OMBS
-	}
 
 	public enum ComputeMFSAndXSSAlgorithm {
-		LBA, DFS, ISHMAEL
+		LBA, DFS
 	}
-
-	public static final int SEARCH_MFS = 1;
-	public static final int SEARCH_XSS = 2;
 
 	protected String rdfQuery;
 
@@ -95,7 +89,7 @@ public abstract class AbstractQuery implements Query {
 		return triplePatterns;
 	}
 
-	protected abstract boolean isFailingAux(Session session) throws Exception;
+	protected abstract boolean isFailingAux(Session session);
 
 	/**
 	 * Decompose a SPARQL Query into a set of triple patterns.
@@ -131,7 +125,7 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public boolean isFailing(Session session) throws Exception {
+	public boolean isFailing(Session session) {
 		if (isEmpty())
 			return false;
 		return isFailingAux(session);
@@ -140,23 +134,10 @@ public abstract class AbstractQuery implements Query {
 	/**
 	 * Return an MFS of this query (must be failing)
 	 * 
-	 * @return an MFS
+	 * @return an MFS of this query
 	 * @throws Exception
 	 */
-	protected Query findAnMFS(Session session) throws Exception {
-		return findAnMEL(session, SEARCH_MFS);
-	}
-
-	/**
-	 * The same algorithm is applied to find an MFS or an XSS only the test
-	 * change
-	 * 
-	 * @param session
-	 * @param typeMEL
-	 * @return
-	 * @throws Exception
-	 */
-	public Query findAnMEL(Session session, int typeMEL) throws Exception {
+	protected Query findAnMFS(Session session) {
 		Query qPrim = factory.createQuery(rdfQuery);
 		Query qStar = factory.createQuery("", newInitialQuery);
 		Query qTemp;
@@ -164,47 +145,16 @@ public abstract class AbstractQuery implements Query {
 		for (int i = 0; i < nbTriplePatterns; i++) {
 			tp = ((AbstractQuery) qPrim).removeTriplePattern();
 			qTemp = ((AbstractQuery) qPrim).concat(qStar);
-			// System.out.println(qTemp);
-			if (!((AbstractQuery) qTemp).testQuery(session, typeMEL))
-				((AbstractQuery) qStar).addTriplePattern(tp);
+			if (!qTemp.isFailing(session))
+				 qStar.addTriplePattern(tp);
 		}
 		return qStar;
-	}
-
-	// the test is different if this is an XSS or an MFS
-	public boolean testQuery(Session session, int typeMEL) throws Exception {
-		if (typeMEL == SEARCH_MFS) {
-			return isFailing(session);
-		} else {
-			return this.inverseIsSucceeding(session);
-		}
-	}
-
-	/**
-	 * Return wether the inverse of query w.r.t the initial query has an empty
-	 * result or not
-	 * 
-	 * @return True is the result of this query is empty
-	 */
-	protected boolean inverseIsSucceeding(Session session) throws Exception {
-		Query inverse = inverseOf(this.getInitialQuery());
-		return !inverse.isFailing(session);
-	}
-
-	@Override
-	public Query inverseOf(Query q) {
-		// We assume that the current query is a subset of q.
-		AbstractQuery res = (AbstractQuery) factory.createQuery(q.toString(), newInitialQuery);
-		for (TriplePattern tp : triplePatterns) {
-			res.removeTriplePattern(tp);
-		}
-		return res;
 	}
 
 	/**
 	 * Remove a random triple pattern from this query
 	 * 
-	 * @return
+	 * @return the removed triple pattern
 	 */
 	protected TriplePattern removeTriplePattern() {
 		// un-comment to test the non-determinism
@@ -264,13 +214,8 @@ public abstract class AbstractQuery implements Query {
 		return createQuery;
 	}
 
-	/**
-	 * Add a triple pattern to this query
-	 * 
-	 * @param tp
-	 *            the added triple pattern
-	 */
-	protected void addTriplePattern(TriplePattern tp) {
+	@Override
+	public void addTriplePattern(TriplePattern tp) {
 		triplePatterns.add(tp);
 		nbTriplePatterns++;
 		if (rdfQuery.equals(""))
@@ -325,7 +270,7 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public List<Query> computeAllMFS(Session p, ComputeMFSAndXSSAlgorithm algo) throws Exception {
+	public List<Query> computeAllMFS(Session p, ComputeMFSAndXSSAlgorithm algo) {
 		if (allMFS == null) {
 			startAlgorithm(p, algo);
 		}
@@ -333,14 +278,14 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public List<Query> computeAllXSS(Session p, ComputeMFSAndXSSAlgorithm algo) throws Exception {
+	public List<Query> computeAllXSS(Session p, ComputeMFSAndXSSAlgorithm algo) {
 		if (allXSS == null) {
 			this.startAlgorithm(p, algo);
 		}
 		return allXSS;
 	}
 
-	protected void startAlgorithm(Session session, ComputeMFSAndXSSAlgorithm algo) throws Exception {
+	protected void startAlgorithm(Session session, ComputeMFSAndXSSAlgorithm algo) {
 		switch (algo) {
 		case LBA:
 			runLBA(session);
@@ -348,8 +293,6 @@ public abstract class AbstractQuery implements Query {
 		case DFS:
 			runDFS(session);
 			break;
-		case ISHMAEL:
-			throw new NotYetImplementedException();
 		}
 	}
 
@@ -431,7 +374,7 @@ public abstract class AbstractQuery implements Query {
 	public void initLBA() {
 	}
 
-	public void runLBA(Session session, List<Query> knownMFS) throws Exception {
+	public void runLBA(Session session, List<Query> knownMFS) {
 		((AbstractSession) session).setExecutedQueryCount(0);
 		this.setInitialQuery(this);
 		initLBA();
@@ -513,7 +456,7 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public void runLBA(Session session) throws Exception {
+	public void runLBA(Session session) {
 		runLBA(session, new ArrayList<Query>());
 	}
 
@@ -583,7 +526,7 @@ public abstract class AbstractQuery implements Query {
 		return rdfQuery;
 	}
 
-	private boolean isFailingForDFS(Map<Query, Boolean> executedQueries, Session s) throws Exception {
+	private boolean isFailingForDFS(Map<Query, Boolean> executedQueries, Session s) {
 		if (this.equals(this.getInitialQuery())) {
 			return true;
 		}
@@ -627,7 +570,7 @@ public abstract class AbstractQuery implements Query {
 		return res;
 	}
 
-	public void runDFS(Session session) throws Exception {
+	public void runDFS(Session session) {
 		allMFS = new ArrayList<Query>();
 		allXSS = new ArrayList<Query>();
 		this.setInitialQuery(this);

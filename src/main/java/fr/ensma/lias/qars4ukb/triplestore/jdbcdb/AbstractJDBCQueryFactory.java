@@ -36,24 +36,24 @@ import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.database.oracle.OracleQueryHelp
  */
 public abstract class AbstractJDBCQueryFactory extends AbstractQueryFactory {
 
-    protected QueryHelper createQueryHelper(Query q) {
-	String jdbcDatabase = this.getConfig().jdbcDatabase();
-	
-	switch(jdbcDatabase) {
-	case QARS4UKBConstants.JDBC_DB_HSQLDB: return new HSQLDBQueryHelper(q);
-	case QARS4UKBConstants.JDBC_DB_ORACLE: return new OracleQueryHelper(q);
-	default : {
-	    throw new NotYetImplementedException();
+	protected QueryHelper createQueryHelper(Query q) {
+		String jdbcDatabase = this.getConfig().jdbcDatabase();
+		switch (jdbcDatabase) {
+		case QARS4UKBConstants.JDBC_DB_HSQLDB:
+			return new HSQLDBQueryHelper(q);
+		case QARS4UKBConstants.JDBC_DB_ORACLE:
+			return new OracleQueryHelper(q);
+		default: {
+			throw new NotYetImplementedException();
+		}
+		}
 	}
+
+	@Override
+	public Session createSession() throws Exception {
+		Class.forName(this.getConfig().jdbcDriver());
+		Connection cnxJDBC = DriverManager.getConnection(this.getConfig().jdbcUrl(), this.getConfig().jdbcLogin(),
+				this.getConfig().jdbcPassword());
+		return new JDBCSession(cnxJDBC);
 	}
-    }
-    
-    @Override
-    public Session createSession() throws Exception {
-	Class.forName(this.getConfig().jdbcDriver());
-	Connection cnxJDBC = DriverManager.getConnection(
-		this.getConfig().jdbcUrl(), this.getConfig().jdbcLogin(),
-		this.getConfig().jdbcPassword());
-	return new JDBCSession(cnxJDBC);
-    }
 }

@@ -20,7 +20,6 @@
 package fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;

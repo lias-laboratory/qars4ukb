@@ -26,5 +26,13 @@ package fr.ensma.lias.qars4ukb.exception;
 public class TripleStoreException extends RuntimeException {
 
     private static final long serialVersionUID = -5005623190195013021L;
+    
+    public TripleStoreException() {
+    	super();
+    }
+    
+    public TripleStoreException(String msg) {
+    	super(msg);
+    }
 
 }

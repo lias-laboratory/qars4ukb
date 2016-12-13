@@ -22,6 +22,7 @@ package fr.ensma.lias.qars4ukb.triplestore.jdbcdb;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import fr.ensma.lias.qars4ukb.AbstractSession;
 import fr.ensma.lias.qars4ukb.Result;
@@ -29,6 +30,7 @@ import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.exception.TripleStoreException;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.QueryHelper;
+import fr.ensma.lias.qars4ukb.query.TriplePattern;
 
 /**
  * @author Stephane JEAN
@@ -70,5 +72,17 @@ public abstract class AbstractJDBCQueryHelper implements QueryHelper {
 			e.printStackTrace();
 			throw new TripleStoreException();
 		}
+	}
+	
+	@Override
+	public String toNativeQuery() {
+		String res = "select * from ";
+		List<TriplePattern> triplePatterns = q.getTriplePatterns();
+		for (int i = 0; i < triplePatterns.size(); i++) {
+		    if (i > 0)
+			res += " NATURAL JOIN ";
+		    res += "(" + triplePatterns.get(i).toSQL() + ") " + "t" + i;
+		}
+		return res;
 	}
 }

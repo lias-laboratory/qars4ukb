@@ -19,7 +19,6 @@
 **********************************************************************************/
 package fr.ensma.lias.qars4ukb.triplestore.jenatdbnative;
 
-import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -28,6 +27,7 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.tdb.TDBFactory;
 
 import fr.ensma.lias.qars4ukb.Session;
+import fr.ensma.lias.qars4ukb.exception.TripleStoreException;
 import fr.ensma.lias.qars4ukb.query.AbstractQueryFactory;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.TriplePattern;
@@ -48,11 +48,12 @@ public class JenaTDBNativeQueryFactory extends AbstractQueryFactory {
     }
 
     @Override
-    public Session createSession() throws Exception {
+    public Session createSession() {
 	final String jenatdbRepository = this.getConfig().jenanatifRepository();
 
 	if (Files.isDirectory(Paths.get(jenatdbRepository))) {
-	    throw new FileNotFoundException(
+		
+	    throw new TripleStoreException(
 		    "File:" + jenatdbRepository + " is not found.");
 	}
 

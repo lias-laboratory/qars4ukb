@@ -44,7 +44,7 @@ public class SPARQLEndpointQueryFactory extends AbstractQueryFactory {
     }
 
     @Override
-    public Session createSession() throws Exception {
+    public Session createSession() {
 	SPARQLEndpointClient virtuoso = new SPARQLEndpointClient.Builder()
 		.url(this.getConfig().sparqlendpointUrl())
 		.defaultGraphURI(

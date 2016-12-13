@@ -21,10 +21,12 @@ package fr.ensma.lias.qars4ukb.triplestore.jdbcdb;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import fr.ensma.lias.qars4ukb.QARS4UKBConstants;
 import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.exception.NotYetImplementedException;
+import fr.ensma.lias.qars4ukb.exception.TripleStoreException;
 import fr.ensma.lias.qars4ukb.query.AbstractQueryFactory;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.QueryHelper;
@@ -50,10 +52,17 @@ public abstract class AbstractJDBCQueryFactory extends AbstractQueryFactory {
 	}
 
 	@Override
-	public Session createSession() throws Exception {
+	public Session createSession() {
+		try {
 		Class.forName(this.getConfig().jdbcDriver());
 		Connection cnxJDBC = DriverManager.getConnection(this.getConfig().jdbcUrl(), this.getConfig().jdbcLogin(),
 				this.getConfig().jdbcPassword());
 		return new JDBCSession(cnxJDBC);
+		}
+		catch(Exception e) {
+			System.out.println("Unable to create session");
+			e.printStackTrace();
+			throw new TripleStoreException(e.getMessage());
+		}
 	}
 }

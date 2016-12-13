@@ -30,19 +30,7 @@ import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.AbstractJDBCQueryHelper;
  */
 public class OracleQueryHelper extends AbstractJDBCQueryHelper {
 
-    public OracleQueryHelper(Query q) {
-	super(q);
-    }
-
-    @Override
-    public String toNativeQuery() {
-	String res = "select * from ";
-	List<TriplePattern> triplePatterns = q.getTriplePatterns();
-	for (int i = 0; i < triplePatterns.size(); i++) {
-	    if (i > 0)
-		res += " NATURAL JOIN ";
-	    res += "(" + triplePatterns.get(i).toSQL() + ") " + "t" + i;
+	public OracleQueryHelper(Query q) {
+		super(q);
 	}
-	return res;
-    }
 }

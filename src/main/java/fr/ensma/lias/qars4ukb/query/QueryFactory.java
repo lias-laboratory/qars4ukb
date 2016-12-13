@@ -58,5 +58,5 @@ public interface QueryFactory {
      * @return
      * @throws Exception
      */
-    Session createSession() throws Exception;
+    Session createSession();
 }

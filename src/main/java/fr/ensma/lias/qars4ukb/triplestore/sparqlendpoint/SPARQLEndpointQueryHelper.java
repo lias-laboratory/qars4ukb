@@ -48,7 +48,7 @@ public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 	public boolean executeQuery(Session session) {
 		final Result result = this.getResult(session);
 		((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
-		return result.getNbRow() == 0;
+		return result.getNbRow() == 0 ;
 	}
 
 	@Override

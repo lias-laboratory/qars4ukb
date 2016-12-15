@@ -28,46 +28,88 @@ import fr.ensma.lias.qars4ukb.query.Query;
  * @author Stéphane JEAN
  * @author Mickael BARON
  */
-public class CacheLBA {
+public class CacheLBA implements ICache {
 
-    protected int nbRepetedQuery;
+    protected int nbCacheHits;
 
-    protected List<Query> cachedQueries;
+    protected List<Query> successfulCachedQueries;
 
     protected List<Query> failingCachedQueries;
-    
+
     private static CacheLBA instance;
 
     private CacheLBA() {
     }
 
     public static CacheLBA getInstance() {
-	if (null == instance) {
+	if (instance == null) {
 	    instance = new CacheLBA();
 	}
 	return instance;
     }
-    
+
+    /* (non-Javadoc)
+     * @see fr.ensma.lias.qars4ukb.cache.ICache#initCache()
+     */
+    @Override
     public void initCache() {
-	nbRepetedQuery = 0;
-	cachedQueries = new ArrayList<Query>();
+	nbCacheHits = 0;
+	successfulCachedQueries = new ArrayList<Query>();
 	// System.out.println("cache query empty");
 	failingCachedQueries = new ArrayList<Query>();
     }
 
     public void incrementeNbRepetedQuery() {
-	nbRepetedQuery++;
-    }
-    
-    public int getNbRepetedQuery() {
-        return nbRepetedQuery;
+	nbCacheHits++;
     }
 
-    public List<Query> getCachedQueries() {
-        return cachedQueries;
+
+    @Override
+    public int getCacheHits() {
+	return nbCacheHits;
+    }
+
+    public List<Query> getSuccessfulCachedQueries() {
+	return successfulCachedQueries;
     }
 
     public List<Query> getFailingCachedQueries() {
-        return failingCachedQueries;
+	return failingCachedQueries;
+    }
+
+
+    @Override
+    public boolean isSuccessfulByCache(Query q) {
+	for (Query qCache : getSuccessfulCachedQueries()) {
+	    if (qCache.includes(q)) {
+		nbCacheHits++;
+		return true;
+	    }
+	}
+	return false;
+    }
+
+
+    @Override
+    public boolean isFailingByCache(Query q) {
+	for (Query qCache : getFailingCachedQueries()) {
+	    if (q.includes(qCache)) {
+		nbCacheHits++;
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    @Override
+    public void addFailingQuery(Query q, boolean isCartesianProduct) {
+	if (isCartesianProduct) {
+	    getFailingCachedQueries().add(q);
+	}
+    }
+    
+    @Override
+    public void addSuccessfulQuery(Query q) {
+	    getSuccessfulCachedQueries().add(q);
     }
 }

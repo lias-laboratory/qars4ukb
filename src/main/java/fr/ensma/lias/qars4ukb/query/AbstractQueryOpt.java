@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 
 import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.cache.CacheLBA;
+import fr.ensma.lias.qars4ukb.cache.ICache;
 
 /**
  * @author Stephane JEAN
@@ -42,24 +43,60 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
      */
     private BitSet queryAsBitSet;
 
+    /**
+     * The variables of this query
+     */
     private Set<String> variables;
-
-    public AbstractQueryOpt(QueryFactory factory, String query) {
-	super(factory, query);
-    }
-
-    public AbstractQueryOpt(QueryFactory factory, List<TriplePattern> tps) {
-	super(factory, tps);
-    }
-
-    protected abstract boolean isFailingWithExecution(Query q, Session session);
     
+    /**
+     * Cache of queries 
+     * Used to avoid executing some queries
+     */
+    private ICache cache;
+
+    /**
+     * Build a query with its factory and its string
+     * @param factory the factory
+     * @param query the string of this query
+     * @param cache the query cache
+     */
+    public AbstractQueryOpt(QueryFactory factory, String query, ICache cache) {
+	super(factory, query);
+	this.cache = cache;
+    }
+
+    /**
+     * Build a query with its factory and a set of triple patterns
+     * @param factory the factory
+     * @param tps a set of triple patterns
+     * @param cache the query cache
+     */
+    public AbstractQueryOpt(QueryFactory factory, List<TriplePattern> tps, ICache cache) {
+	super(factory, tps);
+	this.cache = cache;
+    }
+
+    /**
+     * Checks if this query is failing by executing it
+     * @param q the query
+     * @param session the connection to the KB
+     * @return true iff this query is failing
+     */
+    protected abstract boolean isFailingWithExecution(Query q, Session session);
+
+    /**
+     * Get the variables of this query
+     * @return the variables of this query
+     */
     public Set<String> getVariables() {
 	if (variables == null)
 	    initVariables();
 	return variables;
     }
 
+    /**
+     * Compute the set of variables of this query
+     */
     public void initVariables() {
 	variables = new HashSet<String>();
 	for (TriplePattern t : triplePatterns) {
@@ -67,20 +104,24 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 	}
     }
 
+    /**
+     * Get the bitset representation of this query
+     * @return the bitset representation of this query
+     */
     public BitSet getQueryAsBitSet() {
 	if (queryAsBitSet == null)
 	    initQueryAsBitSet();
 	return queryAsBitSet;
     }
 
+    /**
+     * Computes the bitset representation of this query
+     */
     private void initQueryAsBitSet() {
-	// log.info("query: " + this.toString());
 	queryAsBitSet = new BitSet(nbTriplePatterns);
 	for (TriplePattern t : triplePatterns) {
-	    // System.out.println("triple: " + t + "<--" + initialQuery);
-	    // MB: initialQuery
 	    if (newInitialQuery == null) {
-		queryAsBitSet.set(this.getTriplePatterns().indexOf(t));		
+		queryAsBitSet.set(this.getTriplePatterns().indexOf(t));
 	    } else {
 		queryAsBitSet.set(newInitialQuery.getTriplePatterns().indexOf(t));
 	    }
@@ -89,21 +130,20 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     @Override
     public boolean includes(Query q) {
-	BitSet qBitSet = (BitSet) ((AbstractQueryOpt) q).getQueryAsBitSet()
-		.clone();
+	BitSet qBitSet = (BitSet) ((AbstractQueryOpt) q).getQueryAsBitSet().clone();
 	qBitSet.andNot(getQueryAsBitSet());
 	return qBitSet.isEmpty();
     }
 
     /**
      * Decompose a Cartesian Product into several connected parts
-     * @return the connected parts of a Cartesian Product 
+     * 
+     * @return the connected parts of a Cartesian Product
      */
     public List<Query> getConnectedParts() {
 	List<Query> res = new ArrayList<Query>(1);
 	// we are sure that the query has at least one TP
-	res.add(factory.createQuery(
-		"SELECT * WHERE { " + triplePatterns.get(0).toString() + " }", newInitialQuery));
+	res.add(factory.createQuery("SELECT * WHERE { " + triplePatterns.get(0).toString() + " }", newInitialQuery));
 	for (int i = 1; i < triplePatterns.size(); i++) {
 	    int isAlreadyConnected = -1;
 	    TriplePattern t = triplePatterns.get(i);
@@ -112,26 +152,29 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 		Query q = resTemp.get(j);
 		if (((AbstractQueryOpt) q).isConnectedWith(t)) {
 		    if (isAlreadyConnected == -1) {
-			((AbstractQuery)q).addTriplePattern(t);
+			((AbstractQuery) q).addTriplePattern(t);
 			isAlreadyConnected = j;
 		    } else {
 			// merge q with q' with is at the position
 			// isAlradyConnected
 			res.remove(j);
-			res.set(isAlreadyConnected,
-				((AbstractQuery)q).concat(res.get(isAlreadyConnected)));
+			res.set(isAlreadyConnected, ((AbstractQuery) q).concat(res.get(isAlreadyConnected)));
 		    }
 		}
 	    }
 	    if (isAlreadyConnected == -1) {
-		res.add(factory.createQuery(
-			"SELECT * WHERE { " + t.toString() + " }", newInitialQuery));
+		res.add(factory.createQuery("SELECT * WHERE { " + t.toString() + " }", newInitialQuery));
 	    }
 	}
 	// log.info("*************res: " + res + "<--");
 	return res;
     }
 
+    /**
+     * Checks whether this query is connected with a given triple pattern
+     * @param t a triple pattern
+     * @return true iff this query is connected with the triple pattern
+     */
     public boolean isConnectedWith(TriplePattern t) {
 	boolean res = false;
 	Set<String> queryVariables = getVariables();
@@ -144,52 +187,45 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     @Override
     public boolean isFailingAux(Session session) {
+	// System.out.println(this.toSimpleString(newInitialQuery));
 	List<Query> connectedParts = getConnectedParts();
 	boolean isCartesianProduct = (connectedParts.size() > 1);
 	boolean res = false;
 	for (Query q : connectedParts) {
 	    boolean isSuccessFullByCache = false;
-	    for (Query qCache : CacheLBA.getInstance().getCachedQueries()) {
-		if (qCache.includes(q)) {
-		    CacheLBA.getInstance().incrementeNbRepetedQuery();
-		    if (!isCartesianProduct) {
-			return false;
-		    } else {
-			isSuccessFullByCache = true;
-			break;
-		    }
+	    if (CacheLBA.getInstance().isSuccessfulByCache(q)) {
+		if (!isCartesianProduct) {
+		    return false;
+		} else {
+		    isSuccessFullByCache = true;
 		}
 	    }
-	    for (Query qCache : CacheLBA.getInstance().getFailingCachedQueries()) {
-		if (q.includes(qCache)) {
-		    CacheLBA.getInstance().incrementeNbRepetedQuery();
-		    return true;
-		}
+	    if (CacheLBA.getInstance().isFailingByCache(q)) {
+		return true;
 	    }
 	    if (!isSuccessFullByCache) {
 		res = isFailingWithExecution(q, session);
 		if (res) {
-		    if (isCartesianProduct) {
-			CacheLBA.getInstance().getFailingCachedQueries().add(q);
-		    }
+		    CacheLBA.getInstance().addFailingQuery(q, isCartesianProduct);
 		    return true;
 		} else {
-		    CacheLBA.getInstance().getCachedQueries().add(q);
+		    CacheLBA.getInstance().addSuccessfulQuery(q);
 		}
 	    }
 	}
 	return res;
     }
-    
+
     @Override
     public void initLBA() {
 	// we need to init the cache
 	CacheLBA.getInstance().initCache();
     }
 
+    @Override
     public void addTriplePattern(TriplePattern tp) {
 	super.addTriplePattern(tp);
 	if (variables != null)
 	    variables.addAll(tp.getVariables());
-    }    
+    }
 }

@@ -12,6 +12,7 @@ import org.junit.Test;
 import fr.ensma.lias.qars4ukb.Result;
 import fr.ensma.lias.qars4ukb.SQLScriptRunner;
 import fr.ensma.lias.qars4ukb.Session;
+import fr.ensma.lias.qars4ukb.cache.CacheLBA;
 import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCQueryFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCQueryOptFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCSession;
@@ -220,6 +221,32 @@ public class QueryHSQLDBTest {
 	Assert.assertTrue(expectedMFS.containsAll(q1Opt.getAllMFS()));
 	Assert.assertTrue(q1Opt.getAllXSS().containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(q1Opt.getAllXSS()));
+    }
+    
+    @Test
+    public void testCacheLBAOpt(){
+	q1Opt = factoryOpt.createQuery(
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
+	q1Opt.runLBA(session);
+	Assert.assertEquals(3,CacheLBA.getInstance().getCacheHits());
+	q3Opt = factoryOpt.createQuery(
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }");
+	q6Opt = factoryOpt.createQuery(
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
+	List<Query> expectedSuccessfulCachedQueries = new ArrayList<>();
+	expectedSuccessfulCachedQueries.add(q3Opt);
+	expectedSuccessfulCachedQueries.add(q6Opt);
+	Assert.assertTrue(CacheLBA.getInstance().getSuccessfulCachedQueries().containsAll(expectedSuccessfulCachedQueries));
+	Assert.assertTrue(expectedSuccessfulCachedQueries.containsAll(CacheLBA.getInstance().getSuccessfulCachedQueries()));
+	
+	q1Opt = factoryOpt.createQuery(
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#size> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
+	q1Opt.runLBA(session);
+	Assert.assertEquals(0,CacheLBA.getInstance().getCacheHits());
+	expectedSuccessfulCachedQueries = new ArrayList<>();
+	expectedSuccessfulCachedQueries.add(q3Opt);
+	Assert.assertTrue(CacheLBA.getInstance().getSuccessfulCachedQueries().containsAll(expectedSuccessfulCachedQueries));
+	Assert.assertTrue(expectedSuccessfulCachedQueries.containsAll(CacheLBA.getInstance().getSuccessfulCachedQueries()));
 	
     }
 

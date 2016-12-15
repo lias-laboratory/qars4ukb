@@ -46,6 +46,11 @@ public abstract class AbstractQuery implements Query {
 	 * Factory to create other queries
 	 */
 	protected QueryFactory factory;
+	
+	@Override
+	public QueryFactory getFactory() {
+	    return factory;
+	}
 
 	/**
 	 * String of this query

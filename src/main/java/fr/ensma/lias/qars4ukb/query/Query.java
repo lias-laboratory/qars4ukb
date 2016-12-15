@@ -145,4 +145,9 @@ public interface Query {
 	 * @return True if the input query is included in this query
 	 */
 	boolean includes(Query q);
+	
+	/**
+	 * Get the factory of this query
+	 */
+	QueryFactory getFactory();
 }

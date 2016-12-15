@@ -212,7 +212,7 @@ public abstract class AbstractQuery implements Query {
 
 	@Override
 	public Query findAnMFS(Session session) {
-		Query qPrim = factory.createQuery(rdfQuery);
+		Query qPrim = factory.createQuery(rdfQuery, newInitialQuery);
 		Query qStar = factory.createQuery("", newInitialQuery);
 		Query qTemp;
 		TriplePattern tp;
@@ -377,14 +377,8 @@ public abstract class AbstractQuery implements Query {
 		return queries.get(0);
 	}
 
-	/**
-	 * Test if the input query is included in this query
-	 * 
-	 * @param q
-	 *            the input query
-	 * @return True if the input query is included in this query
-	 */
-	protected boolean includes(Query q) {
+	@Override
+	public boolean includes(Query q) {
 		for (TriplePattern tp : q.getTriplePatterns()) {
 			if (!includes(tp))
 				return false;
@@ -466,9 +460,7 @@ public abstract class AbstractQuery implements Query {
 		if (knownMFS.size() == 0) {
 			Query qStar = (AbstractQuery) findAnMFS(session);
 			allMFS.add(qStar);
-			// System.out.println("MFS : " + qStar.toSimpleString(this));
 			pxss = computePotentialXSS(qStar);
-			// System.out.println("Size of PXSS : " + pxss.size());
 		} else {
 			allMFS.addAll(knownMFS);
 			Query firstMFS = knownMFS.get(0);
@@ -478,24 +470,13 @@ public abstract class AbstractQuery implements Query {
 			}
 		}
 		while (!pxss.isEmpty()) {
-			// System.out.println("********** Liste des PXSS *************");
-			// System.out.println(this.toSimpleString(pxss));
-			// System.out.println("***************************************");
 			qPrim = element(pxss);
-			// System.out.println("Test of the PXSS : " +
-			// System.out.println(qPrim.toSimpleString(this));
-			// System.out.println(qPrim);
 			if (!qPrim.isFailing(session)) { // Q' is an XSS
-				// System.out.println("Added to the XSS !");
 				allXSS.add(qPrim);
 				pxss.remove(qPrim);
 			} else { // Q' contains an MFS
-				qStarStar = ((AbstractQuery) qPrim).findAnMFS(session);
-				// System.out.println("Empty, its MFS : " +
-				// qStarStar.toSimpleString(this));
+				qStarStar = qPrim.findAnMFS(session);
 				allMFS.add(qStarStar);
-				// System.out.println("-- browse PXSS to replace the one that
-				// include the mfs : -- ");
 				refactor(qStarStar, pxss);
 			}
 		}

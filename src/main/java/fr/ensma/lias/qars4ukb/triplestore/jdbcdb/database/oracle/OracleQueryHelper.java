@@ -19,10 +19,7 @@
 **********************************************************************************/
 package fr.ensma.lias.qars4ukb.triplestore.jdbcdb.database.oracle;
 
-import java.util.List;
-
 import fr.ensma.lias.qars4ukb.query.Query;
-import fr.ensma.lias.qars4ukb.query.TriplePattern;
 import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.AbstractJDBCQueryHelper;
 
 /**

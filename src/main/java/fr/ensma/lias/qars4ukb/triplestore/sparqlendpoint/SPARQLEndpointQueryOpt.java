@@ -51,7 +51,7 @@ public class SPARQLEndpointQueryOpt extends AbstractQueryOpt {
 	}
 
 	@Override
-	protected boolean executeQuery(Query q, Session session) throws Exception {
+	protected boolean isFailingWithExecution(Query q, Session session) {
 		return new SPARQLEndpointQueryHelper(q).executeQuery(session);
 	}
 

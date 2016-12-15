@@ -38,7 +38,7 @@ public class JDBCQueryOpt extends AbstractQueryOpt {
 		helper = factory.createQueryHelper(this);
 	}
 
-	protected boolean executeQuery(Query q, Session session) {
+	protected boolean isFailingWithExecution(Query q, Session session) {
 		return ((JDBCQueryFactory) this.factory).createQueryHelper(q).executeQuery(session);
 	}
 

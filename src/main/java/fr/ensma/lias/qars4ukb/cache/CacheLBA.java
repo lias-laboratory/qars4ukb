@@ -17,41 +17,57 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with QARS.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************/
-package fr.ensma.lias.qars4ukb.query;
+package fr.ensma.lias.qars4ukb.cache;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.aeonbits.owner.ConfigFactory;
-
-import fr.ensma.lias.qars4ukb.cfg.QARS4UKBConfig;
+import fr.ensma.lias.qars4ukb.query.Query;
 
 /**
- * @author Stephane JEAN
+ * @author Stéphane JEAN
  * @author Mickael BARON
  */
-public abstract class AbstractQueryFactory implements QueryFactory {
+public class CacheLBA {
 
-    private QARS4UKBConfig config;
+    protected int nbRepetedQuery;
 
-    public AbstractQueryFactory() {
-	config = ConfigFactory.create(QARS4UKBConfig.class); 
+    protected List<Query> cachedQueries;
+
+    protected List<Query> failingCachedQueries;
+    
+    private static CacheLBA instance;
+
+    private CacheLBA() {
     }
 
-    protected QARS4UKBConfig getConfig() {
-	return this.config;
+    public static CacheLBA getInstance() {
+	if (null == instance) {
+	    instance = new CacheLBA();
+	}
+	return instance;
+    }
+    
+    public void initCache() {
+	nbRepetedQuery = 0;
+	cachedQueries = new ArrayList<Query>();
+	// System.out.println("cache query empty");
+	failingCachedQueries = new ArrayList<Query>();
     }
 
-    @Override
-    public Query createQuery(String rdfQuery, Query initialQuery) {
-	final Query createQuery = this.createQuery(rdfQuery);
-	((AbstractQuery) createQuery).setInitialQuery(initialQuery);
-	return createQuery;
+    public void incrementeNbRepetedQuery() {
+	nbRepetedQuery++;
+    }
+    
+    public int getNbRepetedQuery() {
+        return nbRepetedQuery;
     }
 
-    @Override
-    public Query createQuery(List<TriplePattern> tp, Query initialQuery) {
-	final Query createQuery = this.createQuery(tp);
-	((AbstractQuery) createQuery).setInitialQuery(initialQuery);
-	return createQuery;
+    public List<Query> getCachedQueries() {
+        return cachedQueries;
+    }
+
+    public List<Query> getFailingCachedQueries() {
+        return failingCachedQueries;
     }
 }

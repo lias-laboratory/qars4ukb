@@ -28,7 +28,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import fr.ensma.lias.qars4ukb.Session;
-import fr.ensma.lias.qars4ukb.exception.NotYetImplementedException;
+import fr.ensma.lias.qars4ukb.cache.CacheLBA;
 
 /**
  * @author Stephane JEAN
@@ -52,8 +52,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 	super(factory, tps);
     }
 
-    protected abstract boolean executeQuery(Query q, Session session)
-	    throws Exception;
+    protected abstract boolean isFailingWithExecution(Query q, Session session);
     
     public Set<String> getVariables() {
 	if (variables == null)
@@ -96,11 +95,15 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 	return qBitSet.isEmpty();
     }
 
+    /**
+     * Decompose a Cartesian Product into several connected parts
+     * @return the connected parts of a Cartesian Product 
+     */
     public List<Query> getConnectedParts() {
 	List<Query> res = new ArrayList<Query>(1);
 	// we are sure that the query has at least one TP
 	res.add(factory.createQuery(
-		"SELECT * WHERE { " + triplePatterns.get(0).toString() + " }"));
+		"SELECT * WHERE { " + triplePatterns.get(0).toString() + " }", newInitialQuery));
 	for (int i = 1; i < triplePatterns.size(); i++) {
 	    int isAlreadyConnected = -1;
 	    TriplePattern t = triplePatterns.get(i);
@@ -122,7 +125,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 	    }
 	    if (isAlreadyConnected == -1) {
 		res.add(factory.createQuery(
-			"SELECT * WHERE { " + t.toString() + " }"));
+			"SELECT * WHERE { " + t.toString() + " }", newInitialQuery));
 	    }
 	}
 	// log.info("*************res: " + res + "<--");
@@ -141,54 +144,47 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     @Override
     public boolean isFailingAux(Session session) {
-	throw new NotYetImplementedException();
-	
-//	List<Query> connectedParts = getConnectedParts();
-//	boolean isCartesianProduct = (connectedParts.size() > 1);
-//	boolean res = false;
-//	for (Query q : connectedParts) {
-//	    // log.debug(q.toSimpleString(initialQuery));
-//	    boolean isSuccessFullByCache = false;
-//	    for (Query qCache : CacheLBA.getInstance().getCachedQueries()) {
-//		if (((AbstractQuery)qCache).includes(q)) {
-//		    // System.out.println(qCache.toSimpleString(initialQuery));
-//		    // System.out.println(qCache);
-//		    // System.out.println("cache success");
-//		    CacheLBA.getInstance().incrementeNbRepetedQuery();
-//		    // log.debug("cache [success]: " +
-//		    // q.toSimpleString(initialQuery));
-//		    if (!isCartesianProduct) {
-//			return false;
-//		    } else {
-//			isSuccessFullByCache = true;
-//			break;
-//		    }
-//		}
-//	    }
-//	    for (Query qCache : CacheLBA.getInstance().getFailingCachedQueries()) {
-//		if (((AbstractQuery)q).includes(qCache)) {
-//		    // log.debug("cache [failure]: " +
-//		    // q.toSimpleString(initialQuery));
-//		    CacheLBA.getInstance().incrementeNbRepetedQuery();
-//		    return true;
-//		}
-//	    }
-//	    if (!isSuccessFullByCache) {
-//		// log.debug("execution");
-//		// log.debug(q.toNativeQuery());
-//		res = executeQuery(q, session);
-//		// log.debug("fin execution");
-//		if (res) {
-//		    if (isCartesianProduct) {
-//			CacheLBA.getInstance().getFailingCachedQueries().add(q);
-//		    }
-//		    return true;
-//		} else {
-//		    CacheLBA.getInstance().getCachedQueries().add(q);
-//		}
-//	    }
-//	}
-//	return res;
+	List<Query> connectedParts = getConnectedParts();
+	boolean isCartesianProduct = (connectedParts.size() > 1);
+	boolean res = false;
+	for (Query q : connectedParts) {
+	    boolean isSuccessFullByCache = false;
+	    for (Query qCache : CacheLBA.getInstance().getCachedQueries()) {
+		if (qCache.includes(q)) {
+		    CacheLBA.getInstance().incrementeNbRepetedQuery();
+		    if (!isCartesianProduct) {
+			return false;
+		    } else {
+			isSuccessFullByCache = true;
+			break;
+		    }
+		}
+	    }
+	    for (Query qCache : CacheLBA.getInstance().getFailingCachedQueries()) {
+		if (q.includes(qCache)) {
+		    CacheLBA.getInstance().incrementeNbRepetedQuery();
+		    return true;
+		}
+	    }
+	    if (!isSuccessFullByCache) {
+		res = isFailingWithExecution(q, session);
+		if (res) {
+		    if (isCartesianProduct) {
+			CacheLBA.getInstance().getFailingCachedQueries().add(q);
+		    }
+		    return true;
+		} else {
+		    CacheLBA.getInstance().getCachedQueries().add(q);
+		}
+	    }
+	}
+	return res;
+    }
+    
+    @Override
+    public void initLBA() {
+	// we need to init the cache
+	CacheLBA.getInstance().initCache();
     }
 
     public void addTriplePattern(TriplePattern tp) {

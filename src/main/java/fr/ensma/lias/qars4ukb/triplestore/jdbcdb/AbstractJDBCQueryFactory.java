@@ -21,7 +21,6 @@ package fr.ensma.lias.qars4ukb.triplestore.jdbcdb;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 import fr.ensma.lias.qars4ukb.QARS4UKBConstants;
 import fr.ensma.lias.qars4ukb.Session;

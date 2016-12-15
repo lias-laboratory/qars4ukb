@@ -136,4 +136,13 @@ public interface Query {
 	 * @return the XSSs of this query
 	 */
 	List<Query> getAllXSS();
+	
+	/**
+	 * Test if the input query is included in this query
+	 * 
+	 * @param q
+	 *            the input query
+	 * @return True if the input query is included in this query
+	 */
+	boolean includes(Query q);
 }

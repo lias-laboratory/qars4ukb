@@ -21,6 +21,7 @@ package fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint;
 
 import java.util.List;
 
+import fr.ensma.lias.qars4ukb.cache.CacheLBA;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.TriplePattern;
 
@@ -31,11 +32,11 @@ public class SPARQLEndpointQueryOptFactory extends SPARQLEndpointQueryFactory {
 
     @Override
     public Query createQuery(String rdfQuery) {
-	return new SPARQLEndpointQueryOpt(this, rdfQuery);
+	return new SPARQLEndpointQueryOpt(this, rdfQuery, CacheLBA.getInstance());
     }
 
     @Override
     public Query createQuery(List<TriplePattern> tps) {
-	return new SPARQLEndpointQueryOpt(this, tps);
+	return new SPARQLEndpointQueryOpt(this, tps, CacheLBA.getInstance());
     }
 }

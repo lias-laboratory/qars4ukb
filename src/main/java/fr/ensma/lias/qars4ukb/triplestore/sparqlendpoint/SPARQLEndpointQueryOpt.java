@@ -23,6 +23,7 @@ import java.util.List;
 
 import fr.ensma.lias.qars4ukb.Result;
 import fr.ensma.lias.qars4ukb.Session;
+import fr.ensma.lias.qars4ukb.cache.ICache;
 import fr.ensma.lias.qars4ukb.query.AbstractQueryOpt;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.QueryFactory;
@@ -35,13 +36,13 @@ public class SPARQLEndpointQueryOpt extends AbstractQueryOpt {
 
 	protected SPARQLEndpointQueryHelper helper;
 
-	public SPARQLEndpointQueryOpt(QueryFactory factory, String query) {
-		super(factory, query);
+	public SPARQLEndpointQueryOpt(QueryFactory factory, String query, ICache cache) {
+		super(factory, query,cache);
 		this.helper = new SPARQLEndpointQueryHelper(this);
 	}
 
-	public SPARQLEndpointQueryOpt(QueryFactory factory, List<TriplePattern> tps) {
-		super(factory, tps);
+	public SPARQLEndpointQueryOpt(QueryFactory factory, List<TriplePattern> tps, ICache cache) {
+		super(factory, tps, cache);
 		this.helper = new SPARQLEndpointQueryHelper(this);
 	}
 

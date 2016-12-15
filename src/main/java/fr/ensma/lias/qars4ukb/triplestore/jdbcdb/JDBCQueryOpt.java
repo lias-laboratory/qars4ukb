@@ -21,6 +21,7 @@ package fr.ensma.lias.qars4ukb.triplestore.jdbcdb;
 
 import fr.ensma.lias.qars4ukb.Result;
 import fr.ensma.lias.qars4ukb.Session;
+import fr.ensma.lias.qars4ukb.cache.ICache;
 import fr.ensma.lias.qars4ukb.query.AbstractQueryOpt;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.QueryHelper;
@@ -32,9 +33,8 @@ public class JDBCQueryOpt extends AbstractQueryOpt {
 
 	protected QueryHelper helper;
 
-	public JDBCQueryOpt(JDBCQueryFactory factory, String query) {
-		super(factory, query);
-
+	public JDBCQueryOpt(JDBCQueryFactory factory, String query, ICache cache) {
+		super(factory, query, cache);
 		helper = factory.createQueryHelper(this);
 	}
 

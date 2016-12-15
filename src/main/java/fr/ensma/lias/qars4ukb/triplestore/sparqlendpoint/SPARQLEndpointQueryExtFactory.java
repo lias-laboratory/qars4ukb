@@ -17,48 +17,26 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with QARS4UKB.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************/
-package fr.ensma.lias.qars4ukb.triplestore.jenatdbnative;
+package fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint;
 
 import java.util.List;
 
-import fr.ensma.lias.qars4ukb.Result;
-import fr.ensma.lias.qars4ukb.Session;
-import fr.ensma.lias.qars4ukb.cache.ICache;
-import fr.ensma.lias.qars4ukb.query.AbstractQueryOpt;
+import fr.ensma.lias.qars4ukb.cache.ExtendedCacheLBA;
 import fr.ensma.lias.qars4ukb.query.Query;
-import fr.ensma.lias.qars4ukb.query.QueryFactory;
 import fr.ensma.lias.qars4ukb.query.TriplePattern;
 
 /**
- * @author Stephane JEAN
+ * @author Mickael BARON
  */
-public class JenaTDBNativeQueryOpt extends AbstractQueryOpt {
+public class SPARQLEndpointQueryExtFactory extends SPARQLEndpointQueryFactory {
 
-    protected JenaTDBNativeQueryHelper jenaHelper;
-
-    public JenaTDBNativeQueryOpt(QueryFactory factory, String query, ICache cache) {
-	super(factory, query, cache);
-	this.jenaHelper = new JenaTDBNativeQueryHelper(this);
-    }
-
-    public JenaTDBNativeQueryOpt(QueryFactory factory, List<TriplePattern> tps, ICache cache) {
-	super(factory, tps, cache);
-	this.jenaHelper = new JenaTDBNativeQueryHelper(this);
+    @Override
+    public Query createQuery(String rdfQuery) {
+	return new SPARQLEndpointQueryOpt(this, rdfQuery, ExtendedCacheLBA.getInstance());
     }
 
     @Override
-    public String toNativeQuery() {
-	return jenaHelper.toNativeQuery();
+    public Query createQuery(List<TriplePattern> tps) {
+	return new SPARQLEndpointQueryOpt(this, tps, ExtendedCacheLBA.getInstance());
     }
-
-    @Override
-    protected boolean isFailingWithExecution(Query q, Session session)  {
-	return new JenaTDBNativeQueryHelper(q).executeQuery(session);
-    }
-
-    @Override
-    public Result getResult(Session session) {
-	return jenaHelper.getResult(session);
-    }
-
 }

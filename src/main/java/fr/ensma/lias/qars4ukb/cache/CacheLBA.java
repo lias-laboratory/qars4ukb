@@ -65,7 +65,7 @@ public class CacheLBA implements ICache {
 
 
     @Override
-    public int getCacheHits() {
+    public int getNbCacheHits() {
 	return nbCacheHits;
     }
 

@@ -17,27 +17,18 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with QARS4UKB.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************/
-package fr.ensma.lias.qars4ukb.triplestore.jenatdbnative;
+package fr.ensma.lias.qars4ukb.triplestore.jdbcdb;
 
-import java.util.List;
-
-import fr.ensma.lias.qars4ukb.cache.CacheLBA;
+import fr.ensma.lias.qars4ukb.cache.ExtendedCacheLBA;
 import fr.ensma.lias.qars4ukb.query.Query;
-import fr.ensma.lias.qars4ukb.query.TriplePattern;
 
 /**
  * @author Stephane JEAN
  */
-public class JenaTDBNativeQueryOptFactory extends JenaTDBNativeQueryFactory {
+public class JDBCQueryExtFactory extends JDBCQueryFactory {
 
     @Override
     public Query createQuery(String rdfQuery) {
-	return new JenaTDBNativeQueryOpt(this, rdfQuery, CacheLBA.getInstance());
+	return new JDBCQueryOpt(this, rdfQuery, ExtendedCacheLBA.getInstance());
     }
-
-    @Override
-    public Query createQuery(List<TriplePattern> tps) {
-	return new JenaTDBNativeQueryOpt(this, tps, CacheLBA.getInstance());
-    }
-
 }

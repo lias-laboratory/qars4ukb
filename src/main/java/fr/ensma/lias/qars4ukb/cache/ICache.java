@@ -13,7 +13,7 @@ public interface ICache {
      * 
      * @return
      */
-    int getCacheHits();
+    int getNbCacheHits();
 
     /**
      * Check in the cache whether this query is successful

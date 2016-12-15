@@ -228,7 +228,7 @@ public class QueryHSQLDBTest {
 	q1Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
 	q1Opt.runLBA(session);
-	Assert.assertEquals(3,CacheLBA.getInstance().getCacheHits());
+	Assert.assertEquals(3,CacheLBA.getInstance().getNbCacheHits());
 	q3Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }");
 	q6Opt = factoryOpt.createQuery(
@@ -242,7 +242,7 @@ public class QueryHSQLDBTest {
 	q1Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#size> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
 	q1Opt.runLBA(session);
-	Assert.assertEquals(0,CacheLBA.getInstance().getCacheHits());
+	Assert.assertEquals(0,CacheLBA.getInstance().getNbCacheHits());
 	expectedSuccessfulCachedQueries = new ArrayList<>();
 	expectedSuccessfulCachedQueries.add(q3Opt);
 	Assert.assertTrue(CacheLBA.getInstance().getSuccessfulCachedQueries().containsAll(expectedSuccessfulCachedQueries));

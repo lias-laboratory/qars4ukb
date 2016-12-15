@@ -19,6 +19,7 @@
 **********************************************************************************/
 package fr.ensma.lias.qars4ukb.triplestore.jdbcdb;
 
+import fr.ensma.lias.qars4ukb.cache.CacheLBA;
 import fr.ensma.lias.qars4ukb.query.Query;
 
 /**
@@ -28,6 +29,6 @@ public class JDBCQueryOptFactory extends JDBCQueryFactory {
 
     @Override
     public Query createQuery(String rdfQuery) {
-	return new JDBCQueryOpt(this, rdfQuery);
+	return new JDBCQueryOpt(this, rdfQuery, CacheLBA.getInstance());
     }
 }

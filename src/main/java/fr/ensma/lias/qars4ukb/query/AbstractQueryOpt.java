@@ -28,7 +28,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import fr.ensma.lias.qars4ukb.Session;
-import fr.ensma.lias.qars4ukb.cache.CacheLBA;
 import fr.ensma.lias.qars4ukb.cache.ICache;
 
 /**
@@ -193,23 +192,23 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 	boolean res = false;
 	for (Query q : connectedParts) {
 	    boolean isSuccessFullByCache = false;
-	    if (CacheLBA.getInstance().isSuccessfulByCache(q)) {
+	    if (cache.isSuccessfulByCache(q)) {
 		if (!isCartesianProduct) {
 		    return false;
 		} else {
 		    isSuccessFullByCache = true;
 		}
 	    }
-	    if (CacheLBA.getInstance().isFailingByCache(q)) {
+	    if (cache.isFailingByCache(q)) {
 		return true;
 	    }
 	    if (!isSuccessFullByCache) {
 		res = isFailingWithExecution(q, session);
 		if (res) {
-		    CacheLBA.getInstance().addFailingQuery(q, isCartesianProduct);
+		    cache.addFailingQuery(q, isCartesianProduct);
 		    return true;
 		} else {
-		    CacheLBA.getInstance().addSuccessfulQuery(q);
+		    cache.addSuccessfulQuery(q);
 		}
 	    }
 	}
@@ -219,7 +218,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
     @Override
     public void initLBA() {
 	// we need to init the cache
-	CacheLBA.getInstance().initCache();
+	cache.initCache();
     }
 
     @Override

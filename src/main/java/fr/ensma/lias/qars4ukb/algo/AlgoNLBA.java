@@ -18,8 +18,8 @@ public class AlgoNLBA extends AbstractAlgo {
 	    result.addAlphaXSSs(alpha, q.getAllXSS());
 	    // this query must used the CacheLBA (and not the extended cache)
 	    nbCacheHits += CacheLBA.getInstance().getNbCacheHits();
+	    nbExecutedQuery += session.getExecutedQueryCount();
 	}
-	nbExecutedQuery = session.getExecutedQueryCount();
 	return result;
     }
 

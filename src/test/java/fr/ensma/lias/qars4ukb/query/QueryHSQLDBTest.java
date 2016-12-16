@@ -225,6 +225,20 @@ public class QueryHSQLDBTest {
 	Assert.assertTrue(q1.getAllXSS().containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(q1.getAllXSS()));
 	
+	// with a higher threshold
+	expectedMFS = new ArrayList<>();
+	expectedMFS.add(q2);
+	expectedMFS.add(q4);
+	expectedMFS.add(q3);
+	expectedMFS.add(q6);
+	expectedXSS = new ArrayList<>();
+	q1.runLBA(session,0.8);
+	Assert.assertTrue(q1.getAllMFS().containsAll(expectedMFS));
+	Assert.assertTrue(expectedMFS.containsAll(q1.getAllMFS()));
+	Assert.assertTrue(q1.getAllXSS().containsAll(expectedXSS));
+	Assert.assertTrue(expectedXSS.containsAll(q1.getAllXSS()));
+	
+	
 	// we check again that LBAOpt returns the same result
 	q1Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
@@ -245,6 +259,19 @@ public class QueryHSQLDBTest {
 	expectedXSS.add(q3Opt);
 	expectedXSS.add(q6Opt);
 	q1Opt.runLBA(session,0.4);
+	Assert.assertTrue(q1Opt.getAllMFS().containsAll(expectedMFS));
+	Assert.assertTrue(expectedMFS.containsAll(q1Opt.getAllMFS()));
+	Assert.assertTrue(q1Opt.getAllXSS().containsAll(expectedXSS));
+	Assert.assertTrue(expectedXSS.containsAll(q1Opt.getAllXSS()));
+	
+	// with a higher threshold
+	expectedMFS = new ArrayList<>();
+	expectedMFS.add(q2Opt);
+	expectedMFS.add(q4Opt);
+	expectedMFS.add(q3Opt);
+	expectedMFS.add(q6Opt);
+	expectedXSS = new ArrayList<>();
+	q1Opt.runLBA(session,0.8);
 	Assert.assertTrue(q1Opt.getAllMFS().containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(q1Opt.getAllMFS()));
 	Assert.assertTrue(q1Opt.getAllXSS().containsAll(expectedXSS));

@@ -45,17 +45,17 @@ public class SPARQLEndpointQuery extends AbstractQuery {
     }
 
     @Override
-    public Result getResult(Session session) {
-	return helper.getResult(session);
+    public Result getResult(Session session, Double alpha) {
+	return helper.getResult(session, alpha);
     }
 
     @Override
-    protected boolean isFailingAux(Session session) {
-	return helper.executeQuery(session);
+    protected boolean isFailingAux(Session session, Double alpha) {
+	return helper.executeQuery(session, alpha);
     }
 
     @Override
-    public String toNativeQuery() {
-	return helper.toNativeQuery();
+    public String toNativeQuery(Double alpha) {
+	return helper.toNativeQuery(alpha);
     }
 }

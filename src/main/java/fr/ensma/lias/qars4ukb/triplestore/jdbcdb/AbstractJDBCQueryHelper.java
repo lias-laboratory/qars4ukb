@@ -44,11 +44,11 @@ public abstract class AbstractJDBCQueryHelper implements QueryHelper {
 	}
 
 	@Override
-	public boolean executeQuery(Session session) {
+	public boolean executeQuery(Session session, Double alpha) {
 		Statement stmt;
 		try {
 			stmt = ((JDBCSession) session).getConnection().createStatement();
-			ResultSet rset = stmt.executeQuery(q.toNativeQuery());
+			ResultSet rset = stmt.executeQuery(q.toNativeQuery(alpha));
 			((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
 			boolean isEmpty = !rset.next();
 			rset.close();
@@ -62,10 +62,10 @@ public abstract class AbstractJDBCQueryHelper implements QueryHelper {
 	}
 
 	@Override
-	public Result getResult(Session s) {
+	public Result getResult(Session s, Double alpha) {
 		try {
 			Statement reqOracle = ((JDBCSession) s).getConnection().createStatement();
-			ResultSet rset = reqOracle.executeQuery(toNativeQuery());
+			ResultSet rset = reqOracle.executeQuery(toNativeQuery(alpha));
 			return new JDBCResult(rset);
 		} catch (SQLException e) {
 			System.out.println("Unable to execute the query: " + e.getMessage());
@@ -75,13 +75,13 @@ public abstract class AbstractJDBCQueryHelper implements QueryHelper {
 	}
 	
 	@Override
-	public String toNativeQuery() {
+	public String toNativeQuery(Double alpha) {
 		String res = "select * from ";
 		List<TriplePattern> triplePatterns = q.getTriplePatterns();
 		for (int i = 0; i < triplePatterns.size(); i++) {
 		    if (i > 0)
 			res += " NATURAL JOIN ";
-		    res += "(" + triplePatterns.get(i).toSQL() + ") " + "t" + i;
+		    res += "(" + triplePatterns.get(i).toSQL(alpha) + ") " + "t" + i;
 		}
 		return res;
 	}

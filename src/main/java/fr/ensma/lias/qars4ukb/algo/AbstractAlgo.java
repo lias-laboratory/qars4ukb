@@ -2,7 +2,6 @@ package fr.ensma.lias.qars4ukb.algo;
 
 import java.util.List;
 
-import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.query.Query;
 
 public abstract class AbstractAlgo implements IAlgo {

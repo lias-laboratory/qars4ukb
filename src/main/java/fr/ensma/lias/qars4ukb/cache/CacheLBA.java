@@ -48,9 +48,6 @@ public class CacheLBA implements ICache {
 	return instance;
     }
 
-    /* (non-Javadoc)
-     * @see fr.ensma.lias.qars4ukb.cache.ICache#initCache()
-     */
     @Override
     public void initCache() {
 	nbCacheHits = 0;
@@ -79,7 +76,7 @@ public class CacheLBA implements ICache {
 
 
     @Override
-    public boolean isSuccessfulByCache(Query q) {
+    public boolean isSuccessfulByCache(Query q, Double alpha) {
 	for (Query qCache : getSuccessfulCachedQueries()) {
 	    if (qCache.includes(q)) {
 		nbCacheHits++;
@@ -91,7 +88,7 @@ public class CacheLBA implements ICache {
 
 
     @Override
-    public boolean isFailingByCache(Query q) {
+    public boolean isFailingByCache(Query q, Double alpha) {
 	for (Query qCache : getFailingCachedQueries()) {
 	    if (q.includes(qCache)) {
 		nbCacheHits++;
@@ -102,14 +99,14 @@ public class CacheLBA implements ICache {
     }
 
     @Override
-    public void addFailingQuery(Query q, boolean isCartesianProduct) {
+    public void addFailingQuery(Query q, boolean isCartesianProduct, Double alpha) {
 	if (isCartesianProduct) {
 	    getFailingCachedQueries().add(q);
 	}
     }
     
     @Override
-    public void addSuccessfulQuery(Query q) {
+    public void addSuccessfulQuery(Query q, Double alpha) {
 	    getSuccessfulCachedQueries().add(q);
     }
 }

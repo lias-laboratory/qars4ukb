@@ -35,18 +35,20 @@ public interface Query {
 	 * 
 	 * @param s
 	 *            the connection to the triplestore
+	 * @param alpha the threshold
 	 * @return the result
 	 */
-	Result getResult(Session s);
+	Result getResult(Session s, Double alpha);
 
 	/**
 	 * Checks whether this query has an empty result or not
 	 * 
 	 * @param s
 	 *            the connection to the triplestore
+	 * @param alpha the threshold
 	 * @return True is the result of this query is empty
 	 */
-	boolean isFailing(Session session);
+	boolean isFailing(Session session, Double alpha);
 
 	/**
 	 * Add a triple pattern to this query
@@ -68,17 +70,19 @@ public interface Query {
 	 * 
 	 * @param s
 	 *            the connection to the triplestore
+	 * @param alpha the threshold
 	 * @return an MFS of this query
 	 */
-	Query findAnMFS(Session session);
+	Query findAnMFS(Session session, Double alpha);
 
 	/**
 	 * Run the LBA algorithm. It fills the allMFS and allXSS variable
 	 * 
 	 * @param s
 	 *            the connection to the triplestore
+	 * @param alpha the threshold
 	 */
-	public void runLBA(Session session);
+	public void runLBA(Session session, Double alpha);
 
 	/**
 	 * Test if this query includes one of the input queries
@@ -91,10 +95,10 @@ public interface Query {
 
 	/**
 	 * Get the query executed on the target platform
-	 * 
+	 * @param alpha the threshold
 	 * @return the query executed on the target platform
 	 */
-	String toNativeQuery();
+	String toNativeQuery(Double alpha);
 
 	/**
 	 * Return true if this query is empty
@@ -110,9 +114,10 @@ public interface Query {
 	 *            the connection to the triplestore
 	 * @param algo
 	 *            the chosen algorithms
+	 * @param alpha the threshold
 	 * @return the set of MFSs of this query
 	 */
-	List<Query> computeAllMFS(Session s, ComputeMFSAndXSSAlgorithm algo);
+	List<Query> computeAllMFS(Session s, ComputeMFSAndXSSAlgorithm algo, Double alpha);
 
 	/**
 	 * Compute the set of XSSs of this query with a specific algorithm.
@@ -121,18 +126,19 @@ public interface Query {
 	 *            the connection to the triplestore
 	 * @param algo
 	 *            the chosen algorithms
+	 * @param alpha the threshold
 	 * @return the set of XSSs of this query
 	 */
-	List<Query> computeAllXSS(Session s, ComputeMFSAndXSSAlgorithm algo);
+	List<Query> computeAllXSS(Session s, ComputeMFSAndXSSAlgorithm algo, Double alpha);
 
 	/**
-	 * Return the MFSs of this query
+	 * Return the current MFSs of this query (for the last given alpha)
 	 * @return the MFSs of this query
 	 */
 	List<Query> getAllMFS();
 
 	/** 
-	 * Return the XSSs of this query
+	 * Return the current XSSs of this query (for the last given alpha)
 	 * @return the XSSs of this query
 	 */
 	List<Query> getAllXSS();

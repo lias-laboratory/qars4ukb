@@ -31,7 +31,7 @@ public abstract class SPARQLQueryHelper implements QueryHelper {
     }
 
     @Override
-    public String toNativeQuery() {
+    public String toNativeQuery(Double alpha) {
 	return q.toString();
     }
 }

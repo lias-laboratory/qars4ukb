@@ -207,16 +207,16 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public boolean isFailing(Session session) {
+	public boolean isFailing(Session session, Double alpha) {
 		if (isEmpty())
 			return false;
-		return isFailingAux(session);
+		return isFailingAux(session, alpha);
 	}
 
-	protected abstract boolean isFailingAux(Session session);
+	protected abstract boolean isFailingAux(Session session, Double alpha);
 
 	@Override
-	public Query findAnMFS(Session session) {
+	public Query findAnMFS(Session session, Double alpha) {
 		Query qPrim = factory.createQuery(rdfQuery, newInitialQuery);
 		Query qStar = factory.createQuery("", newInitialQuery);
 		Query qTemp;
@@ -224,7 +224,7 @@ public abstract class AbstractQuery implements Query {
 		for (int i = 0; i < nbTriplePatterns; i++) {
 			tp = ((AbstractQuery) qPrim).removeTriplePattern();
 			qTemp = ((AbstractQuery) qPrim).concat(qStar);
-			if (!qTemp.isFailing(session))
+			if (!qTemp.isFailing(session, alpha))
 				qStar.addTriplePattern(tp);
 		}
 		return qStar;
@@ -331,19 +331,19 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public List<Query> computeAllMFS(Session p, ComputeMFSAndXSSAlgorithm algo) {
+	public List<Query> computeAllMFS(Session p, ComputeMFSAndXSSAlgorithm algo, Double alpha) {
 		// we only computes the MFSs if it was not already done
 		if (allMFS == null) {
-			startAlgorithm(p, algo);
+			startAlgorithm(p, algo, alpha);
 		}
 		return allMFS;
 	}
 
 	@Override
-	public List<Query> computeAllXSS(Session p, ComputeMFSAndXSSAlgorithm algo) {
+	public List<Query> computeAllXSS(Session p, ComputeMFSAndXSSAlgorithm algo, Double alpha) {
 		// we only computes the XSSs if it was not already done
 		if (allXSS == null) {
-			this.startAlgorithm(p, algo);
+			this.startAlgorithm(p, algo, alpha);
 		}
 		return allXSS;
 	}
@@ -356,13 +356,13 @@ public abstract class AbstractQuery implements Query {
 	 * @param algo
 	 *            the chosen algorithm
 	 */
-	protected void startAlgorithm(Session session, ComputeMFSAndXSSAlgorithm algo) {
+	protected void startAlgorithm(Session session, ComputeMFSAndXSSAlgorithm algo, Double alpha) {
 		switch (algo) {
 		case LBA:
-			runLBA(session);
+			runLBA(session,alpha);
 			break;
 		case DFS:
-			runDFS(session);
+			runDFS(session,alpha);
 			break;
 		default:
 			throw new NotYetImplementedException();
@@ -453,7 +453,7 @@ public abstract class AbstractQuery implements Query {
 	 * @param session the connection to the KB
 	 * @param knownMFS the known MFSs
 	 */
-	public void runLBA(Session session, List<Query> knownMFS) {
+	public void runLBA(Session session, List<Query> knownMFS, Double alpha) {
 		((AbstractSession) session).setExecutedQueryCount(0);
 		this.setInitialQuery(this);
 		initLBA();
@@ -463,7 +463,7 @@ public abstract class AbstractQuery implements Query {
 		allXSS = new ArrayList<Query>();
 		List<Query> pxss = null;
 		if (knownMFS.size() == 0) {
-			Query qStar = (AbstractQuery) findAnMFS(session);
+			Query qStar = (AbstractQuery) findAnMFS(session, alpha);
 			allMFS.add(qStar);
 			pxss = computePotentialXSS(qStar);
 		} else {
@@ -476,11 +476,11 @@ public abstract class AbstractQuery implements Query {
 		}
 		while (!pxss.isEmpty()) {
 			qPrim = element(pxss);
-			if (!qPrim.isFailing(session)) { // Q' is an XSS
+			if (!qPrim.isFailing(session, alpha)) { // Q' is an XSS
 				allXSS.add(qPrim);
 				pxss.remove(qPrim);
 			} else { // Q' contains an MFS
-				qStarStar = qPrim.findAnMFS(session);
+				qStarStar = qPrim.findAnMFS(session,alpha);
 				allMFS.add(qStarStar);
 				refactor(qStarStar, pxss);
 			}
@@ -511,8 +511,8 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public void runLBA(Session session) {
-		runLBA(session, new ArrayList<Query>());
+	public void runLBA(Session session, Double alpha) {
+		runLBA(session, new ArrayList<Query>(), alpha);
 	}
 
 	/**
@@ -582,7 +582,7 @@ public abstract class AbstractQuery implements Query {
 	}
 
 	@Override
-	public String toNativeQuery() {
+	public String toNativeQuery(Double alpha) {
 		return rdfQuery;
 	}
 
@@ -592,13 +592,13 @@ public abstract class AbstractQuery implements Query {
 	 * @param s connection to the KB
 	 * @return true iff this query is failing
 	 */
-	private boolean isFailingForDFS(Map<Query, Boolean> executedQueries, Session s) {
+	private boolean isFailingForDFS(Map<Query, Boolean> executedQueries, Session s, Double alpha) {
 		if (this.equals(this.getInitialQuery())) {
 			return true;
 		}
 		Boolean val = executedQueries.get(this);
 		if (val == null) {
-			val = isFailing(s);
+			val = isFailing(s, alpha);
 			executedQueries.put(this, val);
 		}
 		return val;
@@ -640,7 +640,7 @@ public abstract class AbstractQuery implements Query {
 	 * Run the DFS algorithm
 	 * @param session connection to the KB
 	 */
-	public void runDFS(Session session) {
+	public void runDFS(Session session, Double alpha) {
 		allMFS = new ArrayList<Query>();
 		allXSS = new ArrayList<Query>();
 		this.setInitialQuery(this);
@@ -654,10 +654,10 @@ public abstract class AbstractQuery implements Query {
 			if (!markedQueries.containsKey(qTemp)) {
 				markedQueries.put(qTemp, true);
 				List<Query> subqueries = ((AbstractQuery) qTemp).getSubQueries();
-				if (((AbstractQuery) qTemp).isFailingForDFS(executedQueries, session)) {
+				if (((AbstractQuery) qTemp).isFailingForDFS(executedQueries, session, alpha)) {
 					boolean isMFS = true;
 					for (Query subquery : subqueries) {
-						if (((AbstractQuery) subquery).isFailingForDFS(executedQueries, session))
+						if (((AbstractQuery) subquery).isFailingForDFS(executedQueries, session, alpha))
 							isMFS = false;
 					}
 					if (isMFS)
@@ -666,7 +666,7 @@ public abstract class AbstractQuery implements Query {
 					List<Query> superqueries = ((AbstractQuery) qTemp).getSuperQueries();
 					boolean isXSS = true;
 					for (Query superquery : superqueries) {
-						if (!((AbstractQuery) superquery).isFailingForDFS(executedQueries, session))
+						if (!((AbstractQuery) superquery).isFailingForDFS(executedQueries, session, alpha))
 							isXSS = false;
 					}
 					if (isXSS && !qTemp.isEmpty())

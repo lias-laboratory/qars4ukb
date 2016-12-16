@@ -278,10 +278,11 @@ public class TriplePattern {
 	}
 
 	/**
-	 * Computes the SQL query corresponding to this triple pattern on a table t(s,p,o)
+	 * Computes the SQL query corresponding to this triple pattern on a table t(s,p,o,tv)
+	 * @param alpha the threshold
 	 * @return the SQL query corresponding to this triple pattern
 	 */
-	public String toSQL() {
+	public String toSQL(Double alpha) {
 		String res = "select ";
 		List<String> valSelect = new ArrayList<String>();
 		List<String> valWhere = new ArrayList<String>();
@@ -302,6 +303,8 @@ public class TriplePattern {
 		else
 			res += listWithSeparator(valSelect, ", ");
 		res += " from t";
+		// we add the trust value. We only code the min for the moment
+		valWhere.add("tv>=" + alpha);
 		if (!valWhere.isEmpty())
 			res += " where " + listWithSeparator(valWhere, " and ");
 		return res;

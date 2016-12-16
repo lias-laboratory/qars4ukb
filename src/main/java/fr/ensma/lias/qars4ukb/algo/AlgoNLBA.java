@@ -13,7 +13,7 @@ public class AlgoNLBA extends AbstractAlgo {
 	Session session = q.getFactory().createSession();
 	AlgoResult result = new AlgoResult();
 	for (Double alpha : listOfAlpha) {
-	    q.runLBA(session);
+	    q.runLBA(session, alpha);
 	    result.addAlphaMFSs(alpha, q.getAllMFS());
 	    result.addAlphaXSSs(alpha, q.getAllXSS());
 	    // this query must used the CacheLBA (and not the extended cache)

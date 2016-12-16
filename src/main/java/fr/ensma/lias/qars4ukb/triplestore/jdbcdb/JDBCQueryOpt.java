@@ -38,17 +38,18 @@ public class JDBCQueryOpt extends AbstractQueryOpt {
 		helper = factory.createQueryHelper(this);
 	}
 
-	protected boolean isFailingWithExecution(Query q, Session session) {
-		return ((JDBCQueryFactory) this.factory).createQueryHelper(q).executeQuery(session);
+	@Override
+	protected boolean isFailingWithExecution(Query q, Session session, Double alpha) {
+		return ((JDBCQueryFactory) this.factory).createQueryHelper(q).executeQuery(session, alpha);
 	}
 
 	@Override
-	public String toNativeQuery() {
-		return helper.toNativeQuery();
+	public String toNativeQuery(Double alpha) {
+		return helper.toNativeQuery(alpha);
 	}
 
 	@Override
-	public Result getResult(Session session) {
-		return helper.getResult(session);
+	public Result getResult(Session session, Double alpha) {
+		return helper.getResult(session, alpha);
 	}
 }

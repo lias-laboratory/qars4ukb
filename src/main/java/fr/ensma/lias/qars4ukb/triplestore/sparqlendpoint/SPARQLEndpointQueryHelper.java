@@ -45,18 +45,18 @@ public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 	}
 
 	@Override
-	public boolean executeQuery(Session session) {
-		final Result result = this.getResult(session);
+	public boolean executeQuery(Session session, Double alpha) {
+		final Result result = this.getResult(session, alpha);
 		((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
 		return result.getNbRow() == 0 ;
 	}
 
 	@Override
-	public Result getResult(Session session) {
+	public Result getResult(Session session, Double alpha) {
 		SPARQLEndpointSession currentJenaSession = (SPARQLEndpointSession) session;
 		String query;
 		try {
-			query = currentJenaSession.getSPARQLEndpointClient().query(this.toNativeQuery());
+			query = currentJenaSession.getSPARQLEndpointClient().query(this.toNativeQuery(alpha));
 			return new SPARQLEndpointResult(query);
 		} catch (IOException e) {
 			System.out.println("Unable to get the result of the query: " + e.getMessage());
@@ -66,7 +66,7 @@ public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 	}
 
 	@Override
-	public String toNativeQuery() {
+	public String toNativeQuery(Double alpha) {
 		prefixes = new HashMap<String, String>();
 		prefixes.put("http://www.w3.org/1999/02/22-rdf-syntax-ns", "rdf");
 		prefixes.put("http://swat.cse.lehigh.edu/onto/univ-bench.owl", "lubm");

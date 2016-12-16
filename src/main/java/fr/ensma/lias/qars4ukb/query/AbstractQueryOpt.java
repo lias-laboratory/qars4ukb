@@ -79,9 +79,10 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
      * Checks if this query is failing by executing it
      * @param q the query
      * @param session the connection to the KB
+     * @param alpha the threshold
      * @return true iff this query is failing
      */
-    protected abstract boolean isFailingWithExecution(Query q, Session session);
+    protected abstract boolean isFailingWithExecution(Query q, Session session, Double alpha);
 
     /**
      * Get the variables of this query
@@ -185,30 +186,30 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
     }
 
     @Override
-    public boolean isFailingAux(Session session) {
+    public boolean isFailingAux(Session session, Double alpha) {
 	// System.out.println(this.toSimpleString(newInitialQuery));
 	List<Query> connectedParts = getConnectedParts();
 	boolean isCartesianProduct = (connectedParts.size() > 1);
 	boolean res = false;
 	for (Query q : connectedParts) {
 	    boolean isSuccessFullByCache = false;
-	    if (cache.isSuccessfulByCache(q)) {
+	    if (cache.isSuccessfulByCache(q, alpha)) {
 		if (!isCartesianProduct) {
 		    return false;
 		} else {
 		    isSuccessFullByCache = true;
 		}
 	    }
-	    if (cache.isFailingByCache(q)) {
+	    if (cache.isFailingByCache(q, alpha)) {
 		return true;
 	    }
 	    if (!isSuccessFullByCache) {
-		res = isFailingWithExecution(q, session);
+		res = isFailingWithExecution(q, session, alpha);
 		if (res) {
-		    cache.addFailingQuery(q, isCartesianProduct);
+		    cache.addFailingQuery(q, isCartesianProduct, alpha);
 		    return true;
 		} else {
-		    cache.addSuccessfulQuery(q);
+		    cache.addSuccessfulQuery(q, alpha);
 		}
 	    }
 	}

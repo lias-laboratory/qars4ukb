@@ -47,18 +47,18 @@ public class JenaTDBNativeQueryOpt extends AbstractQueryOpt {
     }
 
     @Override
-    public String toNativeQuery() {
-	return jenaHelper.toNativeQuery();
+    public String toNativeQuery(Double alpha) {
+	return jenaHelper.toNativeQuery(alpha);
     }
 
     @Override
-    protected boolean isFailingWithExecution(Query q, Session session)  {
-	return new JenaTDBNativeQueryHelper(q).executeQuery(session);
+    protected boolean isFailingWithExecution(Query q, Session session, Double alpha)  {
+	return new JenaTDBNativeQueryHelper(q).executeQuery(session, alpha);
     }
 
     @Override
-    public Result getResult(Session session) {
-	return jenaHelper.getResult(session);
+    public Result getResult(Session session, Double alpha) {
+	return jenaHelper.getResult(session, alpha);
     }
 
 }

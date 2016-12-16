@@ -39,8 +39,8 @@ public class JenaTDBNativeQueryHelper extends SPARQLQueryHelper {
     }
 
     @Override
-    public boolean executeQuery(Session session) {
-	String sparqlQueryString = toNativeQuery();
+    public boolean executeQuery(Session session, Double alpha) {
+	String sparqlQueryString = toNativeQuery(alpha);
 	org.apache.jena.query.Query query = org.apache.jena.query.QueryFactory
 		.create(sparqlQueryString);
 	QueryExecution qexec = QueryExecutionFactory.create(query,
@@ -55,8 +55,8 @@ public class JenaTDBNativeQueryHelper extends SPARQLQueryHelper {
     }
 
     @Override
-    public Result getResult(Session s) {
-	QueryExecution qexec = QueryExecutionFactory.create(toNativeQuery(),
+    public Result getResult(Session s, Double alpha) {
+	QueryExecution qexec = QueryExecutionFactory.create(toNativeQuery(alpha),
 		((JenaTDBNativeSession) s).getDataset());
 	ResultSet results = qexec.execSelect();
 	return new JenaTDBNativeResult(results);

@@ -50,10 +50,10 @@ public class JDBCQuery extends AbstractQuery {
 	}
 
 	@Override
-	public boolean isFailingAux(Session session) {
+	public boolean isFailingAux(Session session, Double alpha) {
 		try {
 			Statement stmt = ((JDBCSession) session).getConnection().createStatement();
-			ResultSet rset = stmt.executeQuery(toNativeQuery());
+			ResultSet rset = stmt.executeQuery(toNativeQuery(alpha));
 			((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
 			boolean res = !rset.next();
 			rset.close();
@@ -67,12 +67,12 @@ public class JDBCQuery extends AbstractQuery {
 	}
 
 	@Override
-	public String toNativeQuery() {
-		return helper.toNativeQuery();
+	public String toNativeQuery(Double alpha) {
+		return helper.toNativeQuery(alpha);
 	}
 
 	@Override
-	public Result getResult(Session session) {
-		return helper.getResult(session);
+	public Result getResult(Session session, Double alpha) {
+		return helper.getResult(session, alpha);
 	}
 }

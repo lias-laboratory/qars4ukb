@@ -57,22 +57,22 @@ public class ExtendedCacheLBA implements ICache {
     }
 
     @Override
-    public boolean isSuccessfulByCache(Query q) {
+    public boolean isSuccessfulByCache(Query q, Double alpha) {
 	throw new NotYetImplementedException();
     }
 
     @Override
-    public boolean isFailingByCache(Query q) {
+    public boolean isFailingByCache(Query q, Double alpha) {
 	throw new NotYetImplementedException();
     }
 
     @Override
-    public void addFailingQuery(Query q, boolean isCartesianProduct) {
+    public void addFailingQuery(Query q, boolean isCartesianProduct, Double alpha) {
 	throw new NotYetImplementedException();
     }
 
     @Override
-    public void addSuccessfulQuery(Query q) {
+    public void addSuccessfulQuery(Query q, Double alpha) {
 	throw new NotYetImplementedException();
     }
 

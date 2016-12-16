@@ -122,10 +122,10 @@ public class TriplePatternTest {
     
     @Test
     public void testToSQL() {
-    	String sqlT1 = "select s as p from t where p='type' and o='p'";
-    	Assert.assertEquals(sqlT1, t1.toSQL());
-    	String sqlT2 = "select s as p, o as s from t where p='advises'";
-    	Assert.assertEquals(sqlT2, t2.toSQL());
+    	String sqlT1 = "select s as p from t where p='type' and o='p' and tv>=0.2";
+    	Assert.assertEquals(sqlT1, t1.toSQL(0.2));
+    	String sqlT2 = "select s as p, o as s from t where p='advises' and tv>=0.4";
+    	Assert.assertEquals(sqlT2, t2.toSQL(0.4));
     }
 
 }

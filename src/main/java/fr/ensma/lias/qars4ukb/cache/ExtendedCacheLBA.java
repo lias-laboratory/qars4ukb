@@ -1,6 +1,7 @@
 package fr.ensma.lias.qars4ukb.cache;
 
 import java.util.Map;
+import java.util.Set;
 
 import fr.ensma.lias.qars4ukb.exception.NotYetImplementedException;
 import fr.ensma.lias.qars4ukb.query.Query;
@@ -68,7 +69,16 @@ public class ExtendedCacheLBA implements ICache {
 
     @Override
     public void addFailingQuery(Query q, boolean isCartesianProduct, Double alpha) {
-	throw new NotYetImplementedException();
+	// its better to remove all superqueries of q with the same or greater alpha
+	Set<Query> queriesInCache = failingCachedQueries.keySet();
+	for (Query qCache : queriesInCache) {
+	    if (qCache.includes(q)) {
+		Double alphaCache = failingCachedQueries.get(qCache);
+		throw new NotYetImplementedException();
+	    }
+	}
+	failingCachedQueries.put(q, alpha);
+	
     }
 
     @Override

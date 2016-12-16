@@ -19,8 +19,10 @@
 **********************************************************************************/
 package fr.ensma.lias.qars4ukb.query;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import fr.ensma.lias.qars4ukb.AbstractSession;
 import fr.ensma.lias.qars4ukb.Result;
 import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.query.AbstractQuery.ComputeMFSAndXSSAlgorithm;
@@ -83,6 +85,8 @@ public interface Query {
 	 * @param alpha the threshold
 	 */
 	public void runLBA(Session session, Double alpha);
+	
+	
 
 	/**
 	 * Test if this query includes one of the input queries
@@ -144,7 +148,7 @@ public interface Query {
 	List<Query> getAllXSS();
 	
 	/**
-	 * Test if the input query is included in this query
+	 * Test if the input query is included or equals to this query
 	 * 
 	 * @param q
 	 *            the input query
@@ -156,4 +160,21 @@ public interface Query {
 	 * Get the factory of this query
 	 */
 	QueryFactory getFactory();
+
+	/**
+	 * Run the DFS algorithm and fills allMFS and XSS
+	 * @param session connection to the KB
+	 * @param alpha the threshold
+	 */
+	void runDFS(Session session, Double alpha);
+
+	
+	/**
+	 * Launch the LBA algorithm with a set of known MFSs
+	 * @param session the connection to the KB
+	 * @param knownMFS the known MFSs
+	 * @param knownXSS the known XSSs
+	 * @param alpha the threshold
+	 */
+	void runLBA(Session session, List<Query> knownMFS, List<Query> knownXSS, Double alpha);
 }

@@ -8,6 +8,10 @@ import fr.ensma.lias.qars4ukb.query.Query;
 
 public class AlgoNLBA extends AbstractAlgo {
     
+    public AlgoNLBA(){
+	super();
+    }
+    
     @Override
     public AlgoResult computesAlphaMFSsAndXSSsAux(Query q, List<Double> listOfAlpha) {
 	Session session = q.getFactory().createSession();

@@ -152,7 +152,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 		Query q = resTemp.get(j);
 		if (((AbstractQueryOpt) q).isConnectedWith(t)) {
 		    if (isAlreadyConnected == -1) {
-			((AbstractQuery) q).addTriplePattern(t);
+			((Query) q).addTriplePattern(t);
 			isAlreadyConnected = j;
 		    } else {
 			// merge q with q' with is at the position
@@ -187,7 +187,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     @Override
     public boolean isFailingAux(Session session, Double alpha) {
-	// System.out.println(this.toSimpleString(newInitialQuery));
+	System.out.println(this.toSimpleString(newInitialQuery));
 	List<Query> connectedParts = getConnectedParts();
 	boolean isCartesianProduct = (connectedParts.size() > 1);
 	boolean res = false;
@@ -214,6 +214,12 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 	    }
 	}
 	return res;
+    }
+    
+    @Override
+    public void initDFS() {
+	// we need to init the cache
+	cache.initCache();
     }
 
     @Override

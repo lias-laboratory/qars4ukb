@@ -21,6 +21,11 @@ public abstract class AbstractAlgo implements IAlgo {
      */
     protected float computingTime;
     
+    public AbstractAlgo() {
+	nbExecutedQuery = 0;
+	nbCacheHits = 0;
+    }
+    
     
     @Override
     public int getNbExecutedQuery() {

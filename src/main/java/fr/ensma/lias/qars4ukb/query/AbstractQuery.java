@@ -426,7 +426,7 @@ public abstract class AbstractQuery implements Query {
 	 */
 	protected boolean isIncludedInAQueryOf(List<Query> queries) {
 		for (Query q : queries) {
-			if (((AbstractQuery) q).includes(this)) {
+			if (((Query) q).includes(this)) {
 				return true;
 			}
 		}
@@ -448,22 +448,17 @@ public abstract class AbstractQuery implements Query {
 	public void initLBA() {
 	}
 
-	/**
-	 * Launch the LBA algorithm with a set of known MFSs
-	 * @param session the connection to the KB
-	 * @param knownMFS the known MFSs
-	 */
-	public void runLBA(Session session, List<Query> knownMFS, Double alpha) {
+	@Override
+	public void runLBA(Session session, List<Query> knownMFS, List<Query> knownXSS, Double alpha) {
 		((AbstractSession) session).setExecutedQueryCount(0);
 		this.setInitialQuery(this);
 		initLBA();
-		// List<Query> pxssPrim;
 		Query qPrim, qStarStar;
 		allMFS = new ArrayList<Query>();
 		allXSS = new ArrayList<Query>();
 		List<Query> pxss = null;
 		if (knownMFS.size() == 0) {
-			Query qStar = (AbstractQuery) findAnMFS(session, alpha);
+			Query qStar = (Query) findAnMFS(session, alpha);
 			allMFS.add(qStar);
 			pxss = computePotentialXSS(qStar);
 		} else {
@@ -474,6 +469,9 @@ public abstract class AbstractQuery implements Query {
 				refactor(knownMFS.get(i), pxss);
 			}
 		}
+		// if the pxss includes an xss, it is failing and we need to keep it to find other MFSs
+		// otherwise the pxss is equals to the xss and we can remove it
+		pxss.removeAll(knownXSS);
 		while (!pxss.isEmpty()) {
 			qPrim = element(pxss);
 			if (!qPrim.isFailing(session, alpha)) { // Q' is an XSS
@@ -497,7 +495,7 @@ public abstract class AbstractQuery implements Query {
 		List<Query> pxssPrim;
 		for (ListIterator<Query> itQPrimPrim = pxss.listIterator(); itQPrimPrim.hasNext();) {
 			Query qPrimPrim = itQPrimPrim.next();
-			if (((AbstractQuery) qPrimPrim).includes(qStar)) {
+			if (((Query) qPrimPrim).includes(qStar)) {
 				itQPrimPrim.remove();
 				pxssPrim = ((AbstractQuery) qPrimPrim).computePotentialXSS(qStar);
 				for (Query qJ : pxssPrim) {
@@ -512,7 +510,7 @@ public abstract class AbstractQuery implements Query {
 
 	@Override
 	public void runLBA(Session session, Double alpha) {
-		runLBA(session, new ArrayList<Query>(), alpha);
+		runLBA(session, new ArrayList<Query>(), new ArrayList<Query>(), alpha);
 	}
 
 	/**
@@ -629,18 +627,22 @@ public abstract class AbstractQuery implements Query {
 		for (TriplePattern tp : this.getInitialQuery().getTriplePatterns()) {
 			if (!includes(tp)) {
 				Query qNew = factory.createQuery(toString(), newInitialQuery);
-				((AbstractQuery) qNew).addTriplePattern(tp);
+				((Query) qNew).addTriplePattern(tp);
 				res.add(qNew);
 			}
 		}
 		return res;
 	}
-
+	
 	/**
-	 * Run the DFS algorithm
-	 * @param session connection to the KB
+	 * Enable us to do some initialization in subclass
 	 */
+	protected void initDFS() {  
+	}
+
+	@Override
 	public void runDFS(Session session, Double alpha) {
+	    	initDFS();
 		allMFS = new ArrayList<Query>();
 		allXSS = new ArrayList<Query>();
 		this.setInitialQuery(this);

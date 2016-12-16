@@ -32,7 +32,7 @@ public interface IAlgo {
     /**
      * Computes the AlphaMFSs and XSSs for a set of alpha
      * @param q a query
-     * @param listOfAlpha a list of thresholds
+     * @param listOfAlpha a list of thresholds in the ascending order
      * @return the AlphaMFSs and XSSs
      */
     AlgoResult computesAlphaMFSsAndXSSs(Query q, List<Double> listOfAlpha);

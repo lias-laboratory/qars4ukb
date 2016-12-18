@@ -187,7 +187,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     @Override
     public boolean isFailingAux(Session session, Double alpha) {
-	System.out.println(this.toSimpleString(newInitialQuery));
+	//System.out.println(this.toSimpleString(newInitialQuery));
 	List<Query> connectedParts = getConnectedParts();
 	boolean isCartesianProduct = (connectedParts.size() > 1);
 	boolean res = false;
@@ -219,13 +219,13 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
     @Override
     public void initDFS() {
 	// we need to init the cache
-	cache.initCache();
+	cache.initCacheBeforeLBA();
     }
 
     @Override
     public void initLBA() {
 	// we need to init the cache
-	cache.initCache();
+	cache.initCacheBeforeLBA();
     }
 
     @Override

@@ -3,11 +3,16 @@ package fr.ensma.lias.qars4ukb.cache;
 import fr.ensma.lias.qars4ukb.query.Query;
 
 public interface ICache {
+    
+    /**
+     * empty the cache
+     */
+    void clearCache();
 
     /**
      * Initialize the cache
      */
-    void initCache();
+    void initCacheBeforeLBA();
 
     /**
      * Get the number of cache hits

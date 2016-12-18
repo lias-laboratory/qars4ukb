@@ -47,16 +47,23 @@ public class CacheLBA implements ICache {
 	}
 	return instance;
     }
+    
+    @Override
+    public void clearCache(){
+	nbCacheHits = 0;
+	successfulCachedQueries.clear();
+	failingCachedQueries.clear();;
+    }
 
     @Override
-    public void initCache() {
+    public void initCacheBeforeLBA() {
 	nbCacheHits = 0;
 	successfulCachedQueries = new ArrayList<Query>();
 	// System.out.println("cache query empty");
 	failingCachedQueries = new ArrayList<Query>();
     }
 
-    public void incrementeNbRepetedQuery() {
+    public void incrementeCacheHits() {
 	nbCacheHits++;
     }
 

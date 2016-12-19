@@ -187,7 +187,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     @Override
     public boolean isFailingAux(Session session, Double alpha) {
-	System.out.println(this.toSimpleString(newInitialQuery) + " -> " + alpha);
+	//System.out.println(this.toSimpleString(newInitialQuery) + " -> " + alpha);
 	List<Query> connectedParts = getConnectedParts();
 	boolean isCartesianProduct = (connectedParts.size() > 1);
 	boolean res = false;

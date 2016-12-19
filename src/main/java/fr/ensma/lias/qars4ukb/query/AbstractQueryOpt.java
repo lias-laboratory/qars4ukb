@@ -207,7 +207,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 		res = isFailingWithExecution(q, session, alpha);
 		if (res) {
 		    cache.addFailingQuery(q, isCartesianProduct, alpha);
-		    return true;
+		    return true;  
 		} else {
 		    cache.addSuccessfulQuery(q, alpha);
 		}

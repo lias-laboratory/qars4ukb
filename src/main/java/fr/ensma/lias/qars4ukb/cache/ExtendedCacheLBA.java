@@ -39,7 +39,7 @@ public class ExtendedCacheLBA implements ICache {
      * successful
      */
     private Map<Query, Double> successfulCachedQueries;
-    
+
     /**
      * Getter of successful cached queries
      * 
@@ -100,8 +100,8 @@ public class ExtendedCacheLBA implements ICache {
 		nbCacheHits++;
 		res = true;
 	    } else {
-		// no need to search for a superQuery (they will be with the same
-		// or lower degree)
+		// no need to search for a superQuery (they will be with the
+		// same or lower degree)
 		res = false;
 	    }
 	} else {
@@ -165,7 +165,8 @@ public class ExtendedCacheLBA implements ICache {
 	    }
 	    if (res) { // we add it with the minimum degree
 		failingCachedQueries.put(q, minAlpha);
-		// there cannot be a superquery in the cache with a greater degree
+		// there cannot be a superquery in the cache with a greater
+		// degree
 		nbCacheHits++;
 	    }
 	}
@@ -175,7 +176,8 @@ public class ExtendedCacheLBA implements ICache {
     @Override
     public void addFailingQuery(Query q, boolean isCartesianProduct, Double alpha) {
 	// this query could be in the cache with a greater degree
-	// or not in the cache (and we are sure there is no subquery with a lower or equals degree to alpha)
+	// or not in the cache (and we are sure there is no subquery with a
+	// lower or equals degree to alpha)
 	// in both cases we add it to the cache with the degree alpha
 	failingCachedQueries.put(q, alpha);
 	// all its superqueries should have the same min degree (or lower)
@@ -184,8 +186,11 @@ public class ExtendedCacheLBA implements ICache {
 
     /**
      * Update all the superqueries of the query q with the given threshold
-     * @param q the query
-     * @param alpha the threshold
+     * 
+     * @param q
+     *            the query
+     * @param alpha
+     *            the threshold
      */
     private void updateSuperqueriesFailing(Query q, Double alpha) {
 	Double alphaCache;
@@ -202,16 +207,21 @@ public class ExtendedCacheLBA implements ICache {
     @Override
     public void addSuccessfulQuery(Query q, Double alpha) {
 	// this query could be in the cache with a lower degree
-	// or not in the cache (and we are sure there is no subquery with a lower or equals degree to alpha)
+	// or not in the cache (and we are sure there is no subquery with a
+	// lower or equals degree to alpha)
 	// in both cases we add it to the cache with the degree alpha
 	successfulCachedQueries.put(q, alpha);
 	// all its subqueries should have the same max degree (or greater)
 	updateSubqueriesSuccessful(q, alpha);
     }
+
     /**
      * Update all the subqueries of the query q with the given threshold
-     * @param q the query
-     * @param alpha the threshold
+     * 
+     * @param q
+     *            the query
+     * @param alpha
+     *            the threshold
      */
     private void updateSubqueriesSuccessful(Query q, Double alpha) {
 	Double alphaCache;
@@ -224,7 +234,5 @@ public class ExtendedCacheLBA implements ICache {
 	    }
 	}
     }
-    
-    
 
 }

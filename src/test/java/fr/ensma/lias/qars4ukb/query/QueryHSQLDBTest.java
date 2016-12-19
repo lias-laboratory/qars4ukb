@@ -37,20 +37,20 @@ public class QueryHSQLDBTest {
     public void isFailing() {
 	q1 = factory.createQuery(
 		"SELECT ?p WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }");
-	Assert.assertFalse(q1.isFailing(session,0.4));
-	Assert.assertTrue(q1.isFailing(session,0.8));
+	Assert.assertFalse(q1.isFailing(session, 0.4));
+	Assert.assertTrue(q1.isFailing(session, 0.8));
 	q1 = factory.createQuery(
 		"SELECT ?p WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course0034' }");
-	Assert.assertTrue(q1.isFailing(session,0.1));
+	Assert.assertTrue(q1.isFailing(session, 0.1));
     }
 
     @Test
     public void testGetResult() {
 	q1 = factory.createQuery(
 		"SELECT ?p WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }");
-	Result res = q1.getResult(session,0.4);
+	Result res = q1.getResult(session, 0.4);
 	Assert.assertEquals(1, res.getNbRow());
-	res = q1.getResult(session,0.5);
+	res = q1.getResult(session, 0.5);
 	Assert.assertTrue(res.next());
 	Assert.assertEquals("http://www.Department11.University0.edu/Course33", res.getString(1));
     }
@@ -126,8 +126,22 @@ public class QueryHSQLDBTest {
 		"SELECT ?p WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e }");
 	q2 = factory
 		.createQuery("SELECT ?p WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e }");
-	Assert.assertEquals(q2, q1.findAnMFS(session,0.4));
-	Assert.assertEquals(q2, q1.findAnMFS(session,0.8));
+	Assert.assertEquals(q2, q1.findAnMFS(session, 0.4));
+	Assert.assertEquals(q2, q1.findAnMFS(session, 0.8));
+    }
+
+    @Test
+    public void testFindAnXSS() {
+	q1 = factory.createQuery(
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
+	q2 = factory.createQuery(
+		"SELECT ?p WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }");
+	q3 = factory.createQuery(
+		"SELECT ?p WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
+	q4 = factory.createQuery("", q1);
+	Assert.assertEquals(q2, q1.findAnXSS(session, 0.4, q4));
+	Assert.assertEquals(q3, q1.findAnXSS(session, 0.4, q3));	
+	Assert.assertEquals(q4, q1.findAnXSS(session, 0.8,q4));
     }
 
     @Test
@@ -147,12 +161,12 @@ public class QueryHSQLDBTest {
 	expectedMFS.add(q4);
 	List<Query> expectedXSS = new ArrayList<>();
 	expectedXSS.add(q5);
-	q1.runLBA(session,0.4);
+	q1.runLBA(session, 0.4);
 	Assert.assertTrue(q1.getAllMFS().containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(q1.getAllMFS()));
 	Assert.assertTrue(q1.getAllXSS().containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(q1.getAllXSS()));
-	
+
 	// Test with a higher threshold
 	expectedMFS = new ArrayList<>();
 	expectedMFS.add(q2);
@@ -160,12 +174,12 @@ public class QueryHSQLDBTest {
 	expectedMFS.add(q4);
 	expectedMFS.add(q5);
 	expectedXSS = new ArrayList<>();
-	q1.runLBA(session,0.7);
+	q1.runLBA(session, 0.7);
 	Assert.assertTrue(q1.getAllMFS().containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(q1.getAllMFS()));
 	Assert.assertTrue(q1.getAllXSS().containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(q1.getAllXSS()));
-	
+
 	// we check that LBAOpt returns the same MFSs and XSSs
 	q1Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#size> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
@@ -173,7 +187,8 @@ public class QueryHSQLDBTest {
 		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e }");
 	q3Opt = factoryOpt
 		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#size> ?t }");
-	q4Opt = factoryOpt.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
+	q4Opt = factoryOpt
+		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
 	q5Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }");
 	expectedMFS = new ArrayList<>();
@@ -182,12 +197,12 @@ public class QueryHSQLDBTest {
 	expectedMFS.add(q4Opt);
 	expectedXSS = new ArrayList<>();
 	expectedXSS.add(q5Opt);
-	q1Opt.runLBA(session,0.4);
+	q1Opt.runLBA(session, 0.4);
 	Assert.assertTrue(q1Opt.getAllMFS().containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(q1Opt.getAllMFS()));
 	Assert.assertTrue(q1Opt.getAllXSS().containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(q1Opt.getAllXSS()));
-	
+
 	// with higher threshold
 	expectedMFS = new ArrayList<>();
 	expectedMFS.add(q2Opt);
@@ -195,7 +210,7 @@ public class QueryHSQLDBTest {
 	expectedMFS.add(q4Opt);
 	expectedMFS.add(q5Opt);
 	expectedXSS = new ArrayList<>();
-	q1Opt.runLBA(session,0.7);
+	q1Opt.runLBA(session, 0.7);
 	Assert.assertTrue(q1Opt.getAllMFS().containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(q1Opt.getAllMFS()));
 	Assert.assertTrue(q1Opt.getAllXSS().containsAll(expectedXSS));
@@ -219,12 +234,12 @@ public class QueryHSQLDBTest {
 	expectedXSS = new ArrayList<>();
 	expectedXSS.add(q3);
 	expectedXSS.add(q6);
-	q1.runLBA(session,0.4);
+	q1.runLBA(session, 0.4);
 	Assert.assertTrue(q1.getAllMFS().containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(q1.getAllMFS()));
 	Assert.assertTrue(q1.getAllXSS().containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(q1.getAllXSS()));
-	
+
 	// with a higher threshold
 	expectedMFS = new ArrayList<>();
 	expectedMFS.add(q2);
@@ -232,19 +247,19 @@ public class QueryHSQLDBTest {
 	expectedMFS.add(q3);
 	expectedMFS.add(q6);
 	expectedXSS = new ArrayList<>();
-	q1.runLBA(session,0.8);
+	q1.runLBA(session, 0.8);
 	Assert.assertTrue(q1.getAllMFS().containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(q1.getAllMFS()));
 	Assert.assertTrue(q1.getAllXSS().containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(q1.getAllXSS()));
-	
-	
+
 	// we check again that LBAOpt returns the same result
 	q1Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
 	q2Opt = factoryOpt
 		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e }");
-	q4Opt = factoryOpt.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
+	q4Opt = factoryOpt
+		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
 	q5Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
 	q3Opt = factoryOpt.createQuery(
@@ -258,12 +273,12 @@ public class QueryHSQLDBTest {
 	expectedXSS = new ArrayList<>();
 	expectedXSS.add(q3Opt);
 	expectedXSS.add(q6Opt);
-	q1Opt.runLBA(session,0.4);
+	q1Opt.runLBA(session, 0.4);
 	Assert.assertTrue(q1Opt.getAllMFS().containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(q1Opt.getAllMFS()));
 	Assert.assertTrue(q1Opt.getAllXSS().containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(q1Opt.getAllXSS()));
-	
+
 	// with a higher threshold
 	expectedMFS = new ArrayList<>();
 	expectedMFS.add(q2Opt);
@@ -271,19 +286,19 @@ public class QueryHSQLDBTest {
 	expectedMFS.add(q3Opt);
 	expectedMFS.add(q6Opt);
 	expectedXSS = new ArrayList<>();
-	q1Opt.runLBA(session,0.8);
+	q1Opt.runLBA(session, 0.8);
 	Assert.assertTrue(q1Opt.getAllMFS().containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(q1Opt.getAllMFS()));
 	Assert.assertTrue(q1Opt.getAllXSS().containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(q1Opt.getAllXSS()));
     }
-    
+
     @Test
-    public void testCacheLBAOpt(){
+    public void testCacheLBAOpt() {
 	q1Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
-	q1Opt.runLBA(session,0.4);
-	Assert.assertEquals(3,CacheLBA.getInstance().getNbCacheHits());
+	q1Opt.runLBA(session, 0.4);
+	Assert.assertEquals(3, CacheLBA.getInstance().getNbCacheHits());
 	q3Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }");
 	q6Opt = factoryOpt.createQuery(
@@ -291,18 +306,22 @@ public class QueryHSQLDBTest {
 	List<Query> expectedSuccessfulCachedQueries = new ArrayList<>();
 	expectedSuccessfulCachedQueries.add(q3Opt);
 	expectedSuccessfulCachedQueries.add(q6Opt);
-	Assert.assertTrue(CacheLBA.getInstance().getSuccessfulCachedQueries().containsAll(expectedSuccessfulCachedQueries));
-	Assert.assertTrue(expectedSuccessfulCachedQueries.containsAll(CacheLBA.getInstance().getSuccessfulCachedQueries()));
-	
+	Assert.assertTrue(
+		CacheLBA.getInstance().getSuccessfulCachedQueries().containsAll(expectedSuccessfulCachedQueries));
+	Assert.assertTrue(
+		expectedSuccessfulCachedQueries.containsAll(CacheLBA.getInstance().getSuccessfulCachedQueries()));
+
 	q1Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#size> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
-	q1Opt.runLBA(session,0.4);
-	Assert.assertEquals(0,CacheLBA.getInstance().getNbCacheHits());
+	q1Opt.runLBA(session, 0.4);
+	Assert.assertEquals(0, CacheLBA.getInstance().getNbCacheHits());
 	expectedSuccessfulCachedQueries = new ArrayList<>();
 	expectedSuccessfulCachedQueries.add(q3Opt);
-	Assert.assertTrue(CacheLBA.getInstance().getSuccessfulCachedQueries().containsAll(expectedSuccessfulCachedQueries));
-	Assert.assertTrue(expectedSuccessfulCachedQueries.containsAll(CacheLBA.getInstance().getSuccessfulCachedQueries()));
-	
+	Assert.assertTrue(
+		CacheLBA.getInstance().getSuccessfulCachedQueries().containsAll(expectedSuccessfulCachedQueries));
+	Assert.assertTrue(
+		expectedSuccessfulCachedQueries.containsAll(CacheLBA.getInstance().getSuccessfulCachedQueries()));
+
     }
 
     @Test
@@ -315,18 +334,34 @@ public class QueryHSQLDBTest {
 	q3 = factory
 		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#size> ?e }");
 	Assert.assertFalse(q1.includes(q3));
-	
+
 	// Test with QueryOpt
 	q1Opt = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
-	q2Opt = factoryOpt
-		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e }", q1Opt);
+	q2Opt = factoryOpt.createQuery(
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e }", q1Opt);
 	Assert.assertTrue(q1Opt.includes(q2Opt));
-	q3Opt = factoryOpt
-		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }", q1Opt);
+	q3Opt = factoryOpt.createQuery(
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }", q1Opt);
 	Assert.assertFalse(q2Opt.includes(q3Opt));
 	Assert.assertFalse(q3Opt.includes(q2Opt));
     }
-    
-   
+
+    @Test
+    public void testRemoveTriplePattern() {
+	q2 = factory
+		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e }");
+	TriplePattern tp1 = q2.getTriplePatterns().get(0);
+	q2.removeTriplePattern(tp1);
+	Assert.assertTrue(q2.isEmpty());
+	q1 = factory.createQuery(
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
+	tp1 = q1.getTriplePatterns().get(0);
+	TriplePattern tp2 = q1.getTriplePatterns().get(1);
+	q2 = factory.createQuery(
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
+	q1.removeTriplePattern(tp1);
+	q1.removeTriplePattern(tp2);
+	Assert.assertEquals(q1, q2);
+    }
 }

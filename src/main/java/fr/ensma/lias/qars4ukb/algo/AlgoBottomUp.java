@@ -46,9 +46,10 @@ public class AlgoBottomUp extends AbstractAlgo {
 	return result;
     }
     
+
+    
     /**
-     * Discover a set of MFSs for a degree alpha from a set of MFSs from a lower threshold
-     * (Algorithm DiscoverMFSXSS of the publication)
+     * Discover a set of MFSs for a degree alpha from a set of MFSs from a greater threshold
      * @param discoveredMFS the previous set of MFSs
      * @param alpha the threshold
      * @param session the connection to the KB
@@ -76,9 +77,8 @@ public class AlgoBottomUp extends AbstractAlgo {
     }
     
     /**
-     * Discover a set of XSSs for a degree alpha from a set of XSSs from a lower threshold
-     * (Algorithm DiscoverMFSXSS of the publication)
-     * @param discoveredXSS the previous set of MFSs
+     * Discover a set of XSSs for a degree alpha from a set of XSSs from a greater threshold
+     * @param discoveredXSS the previous set of XSSs
      * @param alpha the threshold
      * @param session the connection to the KB
      */

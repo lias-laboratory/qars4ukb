@@ -194,6 +194,27 @@ public class AlgoBottomUpTest {
 	Assert.assertEquals(7,algo.getNbCacheHits());
 	Assert.assertEquals(13,algo.getNbExecutedQuery());
 	
+	// with only one treshold
+	listOfAlpha = new ArrayList<>();
+	listOfAlpha.add(0.4);
+        result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
+	
+	// Test with 0.4
+	expectedMFS = new ArrayList<>();
+	expectedMFS.add(q2);
+	expectedMFS.add(q4);
+	expectedMFS.add(q5);
+	expectedXSS = new ArrayList<>();
+	expectedXSS.add(q3);
+	expectedXSS.add(q6);
+	obtainedMFS = result.getAlphaMFSs(0.4);
+	obtainedXSS = result.getAlphaXSSs(0.4);
+	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
+	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
+	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
+	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
+	Assert.assertEquals(3,algo.getNbCacheHits());
+	Assert.assertEquals(9,algo.getNbExecutedQuery());
     }
 
 }

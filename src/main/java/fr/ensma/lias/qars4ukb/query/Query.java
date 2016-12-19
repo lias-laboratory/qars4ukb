@@ -74,6 +74,17 @@ public interface Query {
 	 * @return an MFS of this query
 	 */
 	Query findAnMFS(Session session, Double alpha);
+	
+	/**
+	 * Return an XSS of this query that contains the input query
+	 * 
+	 * @param s
+	 *            the connection to the triplestore
+	 * @param alpha the threshold
+	 * @param inputQuery the input query
+	 * @return an XSS of the intialquery that contains the input query
+	 */
+	Query findAnXSS(Session session, Double alpha, Query inputQuery);
 
 	/**
 	 * Run the LBA algorithm. It fills the allMFS and allXSS variable
@@ -181,4 +192,12 @@ public interface Query {
 	 * @param alpha the threshold
 	 */
 	void runLBA(Session session, List<Query> knownMFS, List<Query> knownXSS, Double alpha);
+	
+	/**
+	 * Remove the input triple pattern from this query
+	 * 
+	 * @param the
+	 *            triple pattern to remove
+	 */
+	void removeTriplePattern(TriplePattern t);
 }

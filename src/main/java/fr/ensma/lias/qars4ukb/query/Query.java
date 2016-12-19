@@ -19,10 +19,8 @@
 **********************************************************************************/
 package fr.ensma.lias.qars4ukb.query;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import fr.ensma.lias.qars4ukb.AbstractSession;
 import fr.ensma.lias.qars4ukb.Result;
 import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.query.AbstractQuery.ComputeMFSAndXSSAlgorithm;
@@ -110,6 +108,12 @@ public interface Query {
 	 * @return true if this query is empty
 	 */
 	boolean isEmpty();
+	
+	/**
+	 * Return the number of triple patterns of this query
+	 * @return the number of triple patterns of this query
+	 */
+	int size();
 
 	/**
 	 * Compute the set of MFSs of this query with a specific algorithm.

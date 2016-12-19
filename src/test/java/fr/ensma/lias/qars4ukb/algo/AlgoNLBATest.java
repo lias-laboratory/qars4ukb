@@ -1,7 +1,5 @@
 package fr.ensma.lias.qars4ukb.algo;
 
-import static org.junit.Assert.*;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -13,10 +11,8 @@ import org.junit.Test;
 
 import fr.ensma.lias.qars4ukb.SQLScriptRunner;
 import fr.ensma.lias.qars4ukb.Session;
-import fr.ensma.lias.qars4ukb.cache.CacheLBA;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.QueryFactory;
-import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCQueryFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCQueryOptFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCSession;
 

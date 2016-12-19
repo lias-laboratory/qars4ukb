@@ -1,5 +1,6 @@
 package fr.ensma.lias.qars4ukb.algo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.ensma.lias.qars4ukb.Session;
@@ -14,6 +15,7 @@ public class AlgoBottomUp extends AbstractAlgo {
 
     @Override
     protected AlgoResult computesAlphaMFSsAndXSSsAux(Query q, List<Double> listOfAlpha) {
+	ExtendedCacheLBA.getInstance().clearCache();
 	Session session = q.getFactory().createSession();
 	AlgoResult result = new AlgoResult();
 
@@ -28,9 +30,12 @@ public class AlgoBottomUp extends AbstractAlgo {
 
 	for (int i = 1; i < listOfAlpha.size(); i++) {
 	    Double currentAlpha = listOfAlpha.get(i);
-	    discoverMFSs = discoverMFS(discoverMFSs, currentAlpha);
-	    discoverXSSs = discoverXSS(discoverXSSs, currentAlpha);
-	    q.runLBA(session, discoverMFSs, discoverXSSs, firstAlpha);
+	    // we clear the number of executed queries by the previous run of LBA
+	    session.clearExecutedQueryCount();
+	    discoverMFSs = discoverMFS(discoverMFSs, currentAlpha, session);
+	    discoverXSSs = discoverXSS(discoverXSSs, currentAlpha, session);
+	    nbExecutedQuery += session.getExecutedQueryCount();
+	    q.runLBA(session, discoverMFSs, discoverXSSs, currentAlpha);
 	    nbExecutedQuery += session.getExecutedQueryCount();
 	    discoverMFSs = q.getAllMFS();
 	    discoverXSSs = q.getAllXSS();
@@ -44,17 +49,47 @@ public class AlgoBottomUp extends AbstractAlgo {
     /**
      * Discover a set of MFSs for a degree alpha from a set of MFSs from a lower threshold
      * (Algorithm DiscoverMFSXSS of the publication)
+     * @param discoveredMFS the previous set of MFSs
+     * @param alpha the threshold
+     * @param session the connection to the KB
      */
-    private List<Query> discoverMFS(List<Query> discoveredMFS, Double alpha) {
-	return null;
+    protected List<Query> discoverMFS(List<Query> discoveredMFS, Double alpha, Session session) {
+	List<Query> res = new ArrayList<Query>();
+	List<Query> fq = new ArrayList<Query>(discoveredMFS);
+	// we could start by removing the atomic MFSs, but I dont think it's worth
+	while (!fq.isEmpty()) {
+	    Query previousMFS = fq.remove(0);
+	    if (previousMFS.size() == 1) { // this an MFS for this alpha
+		res.add(previousMFS);
+	    }
+	    else { // we search an MFS
+		Query newMFS = previousMFS.findAnMFS(session, alpha);
+		res.add(newMFS);
+		for (Query qPrim : fq) {
+		    if (qPrim.includes(newMFS)) {
+			fq.remove(qPrim);
+		    }
+		}
+	    }
+	}
+	return res;
     }
     
     /**
      * Discover a set of XSSs for a degree alpha from a set of XSSs from a lower threshold
      * (Algorithm DiscoverMFSXSS of the publication)
+     * @param discoveredXSS the previous set of MFSs
+     * @param alpha the threshold
+     * @param session the connection to the KB
      */
-    private List<Query> discoverXSS(List<Query> discoveredXSS, Double alpha) {
-	return null;
+    protected List<Query> discoverXSS(List<Query> discoveredXSS, Double alpha, Session session) {
+	List<Query> res = new ArrayList<Query>();
+	for (Query previousXSS : discoveredXSS) {
+	    if (!previousXSS.isFailing(session, alpha)) {
+		res.add(previousXSS);
+	    }
+	}
+	return res;
     }
 
 }

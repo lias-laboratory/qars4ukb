@@ -35,4 +35,9 @@ public interface Session {
      * @return
      */
     int getExecutedQueryCount();
+    
+    /**
+     * Clear the number of executed queries
+     */
+    void clearExecutedQueryCount();
 }

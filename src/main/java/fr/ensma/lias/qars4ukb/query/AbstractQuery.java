@@ -471,6 +471,7 @@ public abstract class AbstractQuery implements Query {
 		}
 		// if the pxss includes an xss, it is failing and we need to keep it to find other MFSs
 		// otherwise the pxss is equals to the xss and we can remove it
+		allXSS.addAll(knownXSS);
 		pxss.removeAll(knownXSS);
 		while (!pxss.isEmpty()) {
 			qPrim = element(pxss);
@@ -555,6 +556,11 @@ public abstract class AbstractQuery implements Query {
 			res.add(initialQuery.getTriplePatterns().indexOf(temp));
 		}
 		return res;
+	}
+	
+	@Override
+	public int size() {
+	    return nbTriplePatterns;
 	}
 
 	/**

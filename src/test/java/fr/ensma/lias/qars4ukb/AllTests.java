@@ -9,6 +9,7 @@ import fr.ensma.lias.qars4ukb.algo.AlgoNLBATest;
 import fr.ensma.lias.qars4ukb.algo.AlgoTopDownTest;
 import fr.ensma.lias.qars4ukb.cache.ExtendedCacheLBATest;
 import fr.ensma.lias.qars4ukb.query.QueryHSQLDBTest;
+import fr.ensma.lias.qars4ukb.query.QueryJenaTDBGraphTest;
 import fr.ensma.lias.qars4ukb.query.TriplePatternTest;
 
 /**
@@ -16,7 +17,7 @@ import fr.ensma.lias.qars4ukb.query.TriplePatternTest;
  */
 @RunWith(Suite.class)
 @SuiteClasses(value = {
-	QueryHSQLDBTest.class, TriplePatternTest.class, AlgoNLBATest.class, ExtendedCacheLBATest.class, AlgoBottomUpTest.class, AlgoTopDownTest.class}
+	QueryHSQLDBTest.class, TriplePatternTest.class, AlgoNLBATest.class, ExtendedCacheLBATest.class, AlgoBottomUpTest.class, AlgoTopDownTest.class, QueryJenaTDBGraphTest.class}
 	)
 public class AllTests {
 

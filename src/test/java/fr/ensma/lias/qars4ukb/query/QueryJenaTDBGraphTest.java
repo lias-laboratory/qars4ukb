@@ -22,7 +22,6 @@ import fr.ensma.lias.qars4ukb.cache.CacheLBA;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryOptFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphResult;
-import triplestore.JenaTDBGraphQueryFactoryTest;
 
 /**
  * @author Ibrahim DELLAL

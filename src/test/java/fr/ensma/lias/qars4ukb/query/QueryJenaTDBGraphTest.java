@@ -38,10 +38,10 @@ public class QueryJenaTDBGraphTest {
     @Before
     public void setUp() throws Exception {
 	FileManager fm = FileManager.get();
-	fm.addLocatorClassLoader(JenaTDBGraphQueryFactoryTest.class.getClassLoader());
+	fm.addLocatorClassLoader(QueryJenaTDBGraphTest.class.getClassLoader());
 	Location locationMemory = Location.mem("test");
 	DatasetGraph currentGraph = TDBFactory.createDatasetGraph(locationMemory);
-	InputStream in = fm.open("data/test_jena_quad.nq");
+	InputStream in = fm.open("test_jena_quad.nq");
 	TDBLoader.load(TDBInternal.getBaseDatasetGraphTDB(currentGraph), in, true);
 	Dataset dataset = TDBFactory.createDataset(locationMemory);
 	dataset.begin(ReadWrite.READ);
@@ -66,15 +66,14 @@ public class QueryJenaTDBGraphTest {
     @Test
     public void testGetResult() {
 	q1 = factory.createQuery(
-		"SELECT ?p WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }");
+		"SELECT ?X WHERE { ?X <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }");
 	JenaTDBGraphResult res = (JenaTDBGraphResult) q1.getResult(session, 0.4);
 	Assert.assertEquals(1, res.getNbRow());
 	res = (JenaTDBGraphResult) q1.getResult(session, 0.5);
 	// res.getString(1);
-	Assert.assertTrue(res.next());
+	//Assert.assertTrue(res.next());
 	// ResultSetFormatter.out(res.rset);;
-	// Assert.assertEquals("http://www.Department11.University0.edu/Course33",
-	// res.getString(1));
+	 Assert.assertEquals("http://www.Department11.University0.edu/Course33", res.getString(1));
     }
 
     @Test

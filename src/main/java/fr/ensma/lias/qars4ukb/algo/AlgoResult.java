@@ -1,9 +1,10 @@
 package fr.ensma.lias.qars4ukb.algo;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import fr.ensma.lias.qars4ukb.query.AbstractQuery;
 import fr.ensma.lias.qars4ukb.query.Query;
 
 /**
@@ -17,12 +18,12 @@ public class AlgoResult {
     /**
      * Set of alphaMFSs for different alpha
      */
-    private Map<Double, List<Query>> alphaMFSs;
+    private Map<Double, Set<Query>> alphaMFSs;
     
     /**
      * Set of alphaXSSs for different alpha
      */
-    private Map<Double, List<Query>> alphaXSSs; 
+    private Map<Double, Set<Query>> alphaXSSs; 
     
     /**
      * Initialize this result
@@ -37,7 +38,7 @@ public class AlgoResult {
      * @param alpha a given threshold
      * @param mfs a list of MFSs
      */
-    public void addAlphaMFSs(Double alpha, List<Query> mfs) {
+    public void addAlphaMFSs(Double alpha, Set<Query> mfs) {
 	alphaMFSs.put(alpha, mfs);
     }
     
@@ -46,7 +47,7 @@ public class AlgoResult {
      * @param alpha a given threshold
      * @param mfs a list of XSSs
      */
-    public void addAlphaXSSs(Double alpha, List<Query> xss) {
+    public void addAlphaXSSs(Double alpha, Set<Query> xss) {
 	alphaXSSs.put(alpha, xss);
     }
     
@@ -55,7 +56,7 @@ public class AlgoResult {
      * @param alpha a given threshold
      * @return the alphaMFSs
      */
-    public List<Query> getAlphaMFSs(Double alpha) {
+    public Set<Query> getAlphaMFSs(Double alpha) {
 	return alphaMFSs.get(alpha);
     }
     
@@ -64,7 +65,7 @@ public class AlgoResult {
      * @param alpha a given threshold
      * @return the alphaXSSs
      */
-    public List<Query> getAlphaXSSs(Double alpha) {
+    public Set<Query> getAlphaXSSs(Double alpha) {
 	return alphaXSSs.get(alpha);
     }
 
@@ -99,16 +100,31 @@ public class AlgoResult {
 	return true;
     }
     
-//    @Override
-//    public String toString() {
-//	StringBuffer res = new StringBuffer();
-//	
-//	for(Double alpha : alphaMFSs.keySet()) {
-//	    res.append(alpha + ": ");
-//	    List<Query> 
-//	}
-//	return res.toString();
-//    }
+    @Override
+    public String toString() {
+	StringBuffer res = new StringBuffer();
+	res.append("------------- Alpha-MFSs -------------\n");
+	toStringAux(res, alphaMFSs);
+	res.append("------------- Alpha-XSSs -------------\n");
+	toStringAux(res, alphaXSSs);
+	return res.toString();
+    }
+
+    private void toStringAux(StringBuffer res, Map<Double, Set<Query>> mapQueries) {
+	for(Double alpha : mapQueries.keySet()) {
+	    res.append(alpha + ": ");
+	    Set<Query> queries = mapQueries.get(alpha);
+	    int i = 0;
+	    for (Query query : queries) {
+		if (i>0)
+		    res.append(", ");
+		AbstractQuery aQuery = (AbstractQuery)query;
+		res.append( aQuery.toSimpleString(aQuery.getInitialQuery()));
+		i++;
+	    }
+	    res.append("\n");
+	}
+    }
     
     
 }

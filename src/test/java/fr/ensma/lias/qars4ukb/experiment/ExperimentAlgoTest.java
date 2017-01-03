@@ -407,11 +407,15 @@ public class ExperimentAlgoTest {
 		QueryExplain qExplain = newTestResultPairList.get(i);
 		Query q = qExplain.getQuery();
 		String description = qExplain.getDescription();
-		System.out.print("Query (" + description + "): ");
+		System.out.println("Query (" + description + "): ");
 		// NLBA
 		factory = new JDBCQueryOptFactory();
 		algo = new AlgoNLBA();
 		AlgoResult algoResultNLBA = algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
+		// HYBRID
+		factory = new JDBCQueryExtFactory();
+		algo = new AlgoHybrid();
+		AlgoResult algoResultHybrid = algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
 		// BOTTOM UP
 		factory = new JDBCQueryExtFactory();
 		algo = new AlgoBottomUp();
@@ -420,13 +424,15 @@ public class ExperimentAlgoTest {
 		factory = new JDBCQueryExtFactory();
 		algo = new AlgoTopDown();
 		AlgoResult algoResultTopDown = algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
-		// HYBRID
-		factory = new JDBCQueryExtFactory();
-		algo = new AlgoHybrid();
-		AlgoResult algoResultHybrid = algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
+
 
 		Assert.assertEquals(algoResultNLBA, algoResultBottomUp);
 		Assert.assertEquals(algoResultTopDown, algoResultBottomUp);
+		System.out.println("=============== RESULT TOP DOWN =============");
+		System.out.println(algoResultTopDown);
+		System.out.println("=============== RESULT HYBRID =============");
+		System.out.println(algoResultHybrid);
+		
 		Assert.assertEquals(algoResultTopDown, algoResultHybrid);
 
 	    }

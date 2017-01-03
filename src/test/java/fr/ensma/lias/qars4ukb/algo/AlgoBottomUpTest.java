@@ -3,7 +3,9 @@ package fr.ensma.lias.qars4ukb.algo;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -49,17 +51,17 @@ public class AlgoBottomUpTest {
     public void testDiscoverXSS() {
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
-	List<Query> discoveredXSS = new ArrayList<>();
+	Set<Query> discoveredXSS = new HashSet<>();
 	discoveredXSS.add(q3);
 	discoveredXSS.add(q6);
-	List<Query> res = algo.discoverXSS(discoveredXSS, 0.5, session);
+	Set<Query> res = algo.discoverXSS(discoveredXSS, 0.5, session);
 	Assert.assertTrue(res.containsAll(discoveredXSS));
 	Assert.assertTrue(discoveredXSS.containsAll(res));
 	Assert.assertEquals(2, session.getExecutedQueryCount());
 	
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
-	discoveredXSS = new ArrayList<>();
+	discoveredXSS = new HashSet<>();
 	discoveredXSS.add(q3);
 	discoveredXSS.add(q6);
 	res = algo.discoverXSS(discoveredXSS, 0.7, session);
@@ -71,12 +73,12 @@ public class AlgoBottomUpTest {
     public void testDiscoverMFS() {
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
-	List<Query> discoveredMFS = new ArrayList<>();
+	Set<Query> discoveredMFS = new HashSet<>();
 	discoveredMFS.add(q2);
 	discoveredMFS.add(q4);
 	discoveredMFS.add(q5);
-	List<Query> res = algo.discoverMFS(discoveredMFS, 0.5, session);
-	List<Query> expectedMFS = new ArrayList<>();
+	Set<Query> res = algo.discoverMFS(discoveredMFS, 0.5, session);
+	Set<Query> expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q5);
@@ -87,7 +89,7 @@ public class AlgoBottomUpTest {
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
 	res = algo.discoverMFS(discoveredMFS, 0.7, session);
-	expectedMFS = new ArrayList<>();
+	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q6);
@@ -104,27 +106,27 @@ public class AlgoBottomUpTest {
 	AlgoResult result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
 	
 	// Test with 0.4
-	List<Query> expectedMFS = new ArrayList<>();
+	Set<Query> expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q5);
-	List<Query> expectedXSS = new ArrayList<>();
+	Set<Query> expectedXSS = new HashSet<>();
 	expectedXSS.add(q3);
 	expectedXSS.add(q6);
-	List<Query> obtainedMFS = result.getAlphaMFSs(0.4);
-	List<Query> obtainedXSS = result.getAlphaXSSs(0.4);
+	Set<Query> obtainedMFS = result.getAlphaMFSs(0.4);
+	Set<Query> obtainedXSS = result.getAlphaXSSs(0.4);
 	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
 	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
 
 	// Test with 0.8
-	expectedMFS = new ArrayList<>();
+	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q3);
 	expectedMFS.add(q6);
-	expectedXSS = new ArrayList<>();
+	expectedXSS = new HashSet<>();
 	obtainedMFS = result.getAlphaMFSs(0.8);
 	obtainedXSS = result.getAlphaXSSs(0.8);
 	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
@@ -146,11 +148,11 @@ public class AlgoBottomUpTest {
 	result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
 	
 	// Test with 0.4
-	expectedMFS = new ArrayList<>();
+	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q5);
-	expectedXSS = new ArrayList<>();
+	expectedXSS = new HashSet<>();
 	expectedXSS.add(q3);
 	expectedXSS.add(q6);	
 	obtainedMFS = result.getAlphaMFSs(0.4);
@@ -169,12 +171,12 @@ public class AlgoBottomUpTest {
 	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
 	
 	// Test with 0.8
-	expectedMFS = new ArrayList<>();
+	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q3);
 	expectedMFS.add(q6);
-	expectedXSS = new ArrayList<>();
+	expectedXSS = new HashSet<>();
 	obtainedMFS = result.getAlphaMFSs(0.8);
 	obtainedXSS = result.getAlphaXSSs(0.8);
 	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
@@ -200,11 +202,11 @@ public class AlgoBottomUpTest {
         result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
 	
 	// Test with 0.4
-	expectedMFS = new ArrayList<>();
+	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q5);
-	expectedXSS = new ArrayList<>();
+	expectedXSS = new HashSet<>();
 	expectedXSS.add(q3);
 	expectedXSS.add(q6);
 	obtainedMFS = result.getAlphaMFSs(0.4);

@@ -3,7 +3,9 @@ package fr.ensma.lias.qars4ukb.algo;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -52,18 +54,18 @@ public class AlgoNLBATest {
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }");
 	q6 = factoryOpt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
-	List<Query> expectedMFS = new ArrayList<>();
+	Set<Query> expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q5);
-	List<Query> expectedXSS = new ArrayList<>();
+	Set<Query> expectedXSS = new HashSet<>();
 	expectedXSS.add(q3);
 	expectedXSS.add(q6);
 	
 
 	
-	List<Query> obtainedMFS = result.getAlphaMFSs(0.4);
-	List<Query> obtainedXSS = result.getAlphaXSSs(0.4);
+	Set<Query> obtainedMFS = result.getAlphaMFSs(0.4);
+	Set<Query> obtainedXSS = result.getAlphaXSSs(0.4);
 	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
 	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
@@ -78,12 +80,12 @@ public class AlgoNLBATest {
 	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
 	
-	expectedMFS = new ArrayList<>();
+	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q3);
 	expectedMFS.add(q6);
-	expectedXSS = new ArrayList<>();
+	expectedXSS = new HashSet<>();
 	obtainedMFS = result.getAlphaMFSs(0.8);
 	obtainedXSS = result.getAlphaXSSs(0.8);
 	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));

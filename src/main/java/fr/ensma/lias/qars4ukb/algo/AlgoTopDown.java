@@ -1,14 +1,16 @@
 package fr.ensma.lias.qars4ukb.algo;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.cache.ExtendedCacheLBA;
 import fr.ensma.lias.qars4ukb.query.Query;
 
 public class AlgoTopDown extends AbstractAlgo {
-    
+
     public AlgoTopDown() {
 	super();
     }
@@ -21,17 +23,18 @@ public class AlgoTopDown extends AbstractAlgo {
 
 	// first executes the normal version of LBA for the last alpha
 	int nbAlpha = listOfAlpha.size();
-	Double lastAlpha = listOfAlpha.get(nbAlpha-1);
+	Double lastAlpha = listOfAlpha.get(nbAlpha - 1);
 	q.runLBA(session, lastAlpha);
 	nbExecutedQuery = session.getExecutedQueryCount();
-	List<Query> discoverMFSs = q.getAllMFS();
-	List<Query> discoverXSSs = q.getAllXSS();
+	Set<Query> discoverMFSs = q.getAllMFS();
+	Set<Query> discoverXSSs = q.getAllXSS();
 	result.addAlphaMFSs(lastAlpha, discoverMFSs);
 	result.addAlphaXSSs(lastAlpha, discoverXSSs);
 
-	for (int i = nbAlpha-2; i >= 0; i--) {
+	for (int i = nbAlpha - 2; i >= 0; i--) {
 	    Double currentAlpha = listOfAlpha.get(i);
-	    // we clear the number of executed queries by the previous run of LBA
+	    // we clear the number of executed queries by the previous run of
+	    // LBA
 	    session.clearExecutedQueryCount();
 	    discoverMFSs = discoverMFS(discoverMFSs, currentAlpha, session);
 	    discoverXSSs = discoverXSS(q, discoverXSSs, currentAlpha, session);
@@ -46,16 +49,20 @@ public class AlgoTopDown extends AbstractAlgo {
 	nbCacheHits = ExtendedCacheLBA.getInstance().getNbCacheHits();
 	return result;
     }
-    
+
     /**
-     * Discover a set of MFSs for a degree alpha from a set of MFSs from a lower threshold
-     * (Algorithm DiscoverMFSXSS of the publication)
-     * @param discoveredMFS the previous set of MFSs
-     * @param alpha the threshold
-     * @param session the connection to the KB
+     * Discover a set of MFSs for a degree alpha from a set of MFSs from a lower
+     * threshold (Algorithm DiscoverMFSXSS of the publication)
+     * 
+     * @param discoveredMFS
+     *            the previous set of MFSs
+     * @param alpha
+     *            the threshold
+     * @param session
+     *            the connection to the KB
      */
-    protected List<Query> discoverMFS(List<Query> discoveredMFS, Double alpha, Session session) {
-	List<Query> res = new ArrayList<Query>();
+    protected Set<Query> discoverMFS(Set<Query> discoveredMFS, Double alpha, Session session) {
+	Set<Query> res = new HashSet<Query>();
 	for (Query previousMFS : discoveredMFS) {
 	    if (previousMFS.isFailing(session, alpha)) {
 		res.add(previousMFS);
@@ -63,30 +70,39 @@ public class AlgoTopDown extends AbstractAlgo {
 	}
 	return res;
     }
-    
+
     /**
-     * Discover a set of XSSs for a degree alpha from a set of XSSs from a lower threshold
-     * (Algorithm DiscoverMFSXSS of the publication)
+     * Discover a set of XSSs for a degree alpha from a set of XSSs from a lower
+     * threshold (Algorithm DiscoverMFSXSS of the publication)
+     * 
      * @parm initialQuery the query on which the algorithm is executed
-     * @param discoveredXSS the previous set of XSSs
-     * @param alpha the threshold
-     * @param session the connection to the KB
+     * @param discoveredXSS
+     *            the previous set of XSSs
+     * @param alpha
+     *            the threshold
+     * @param session
+     *            the connection to the KB
      */
-    protected List<Query> discoverXSS(Query initialQuery, List<Query> discoveredXSS, Double alpha, Session session) {
-	List<Query> res = new ArrayList<Query>();
-	List<Query> sq = new ArrayList<Query>(discoveredXSS);
+    protected Set<Query> discoverXSS(Query initialQuery, Set<Query> discoveredXSS, Double alpha, Session session) {
+	Set<Query> res = new HashSet<Query>();
+	Set<Query> sq = new HashSet<Query>(discoveredXSS);
 	int sizeInitialQuery = initialQuery.size();
-	while (!sq.isEmpty()) {
-	    Query previousXSS = sq.remove(0);
-	    if (previousXSS.size() == (sizeInitialQuery - 1)) { // this an MFS for this alpha
+	Iterator<Query> iter = sq.iterator();
+	Set<Query> toRemove = new HashSet<Query>();
+	while (iter.hasNext()) {
+	    Query previousXSS = iter.next();
+	    iter.remove();
+	    if (previousXSS.size() == (sizeInitialQuery - 1)) { 
+		// this an MFS for this alpha
 		res.add(previousXSS);
-	    }
-	    else { // we search an XSS
-		Query newXSS = initialQuery.findAnXSS(session, alpha, previousXSS);
-		res.add(newXSS);
-		for (Query qPrim : sq) {
-		    if (newXSS.includes(qPrim)) {
-			sq.remove(qPrim);
+	    } else { // we search an XSS
+		if (!toRemove.contains(previousXSS)) {
+		    Query newXSS = initialQuery.findAnXSS(session, alpha, previousXSS);
+		    res.add(newXSS);
+		    for (Query qPrim : sq) {
+			if (newXSS.includes(qPrim)) {
+			    toRemove.add(qPrim);
+			}
 		    }
 		}
 	    }

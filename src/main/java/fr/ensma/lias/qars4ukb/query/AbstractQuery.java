@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 
 import fr.ensma.lias.qars4ukb.AbstractSession;
 import fr.ensma.lias.qars4ukb.Session;
@@ -70,12 +71,12 @@ public abstract class AbstractQuery implements Query {
     /**
      * List of the MFSs of this query
      */
-    public List<Query> allMFS;
+    public Set<Query> allMFS;
 
     /**
      * List of the XSSs of this query
      */
-    public List<Query> allXSS;
+    public Set<Query> allXSS;
 
     /**
      * Most queries will be created during the execution of LBA the
@@ -182,12 +183,12 @@ public abstract class AbstractQuery implements Query {
     }
 
     @Override
-    public List<Query> getAllMFS() {
+    public Set<Query> getAllMFS() {
 	return this.allMFS;
     }
 
     @Override
-    public List<Query> getAllXSS() {
+    public Set<Query> getAllXSS() {
 	return this.allXSS;
     }
 
@@ -345,7 +346,7 @@ public abstract class AbstractQuery implements Query {
     }
 
     @Override
-    public List<Query> computeAllMFS(Session p, ComputeMFSAndXSSAlgorithm algo, Double alpha) {
+    public Set<Query> computeAllMFS(Session p, ComputeMFSAndXSSAlgorithm algo, Double alpha) {
 	// we only computes the MFSs if it was not already done
 	if (allMFS == null) {
 	    startAlgorithm(p, algo, alpha);
@@ -354,7 +355,7 @@ public abstract class AbstractQuery implements Query {
     }
 
     @Override
-    public List<Query> computeAllXSS(Session p, ComputeMFSAndXSSAlgorithm algo, Double alpha) {
+    public Set<Query> computeAllXSS(Session p, ComputeMFSAndXSSAlgorithm algo, Double alpha) {
 	// we only computes the XSSs if it was not already done
 	if (allXSS == null) {
 	    this.startAlgorithm(p, algo, alpha);
@@ -441,6 +442,22 @@ public abstract class AbstractQuery implements Query {
      *            the input queries
      * @return true if this query is included in one of the input queries
      */
+    public boolean isIncludedInAQueryOf(Set<Query> queries) {
+	for (Query q : queries) {
+	    if (((Query) q).includes(this)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+    
+    /**
+     * Check whether this query is included in one of the input queries
+     * 
+     * @param queries
+     *            the input queries
+     * @return true if this query is included in one of the input queries
+     */
     public boolean isIncludedInAQueryOf(List<Query> queries) {
 	for (Query q : queries) {
 	    if (((Query) q).includes(this)) {
@@ -450,6 +467,15 @@ public abstract class AbstractQuery implements Query {
 	return false;
     }
 
+    @Override
+    public boolean includesAQueryOf(Set<Query> queries) {
+	for (Query q : queries) {
+	    if (this.includesSimple(q))
+		return true;
+	}
+	return false;
+    }
+    
     @Override
     public boolean includesAQueryOf(List<Query> queries) {
 	for (Query q : queries) {
@@ -466,13 +492,13 @@ public abstract class AbstractQuery implements Query {
     }
 
     @Override
-    public void runLBA(Session session, List<Query> knownMFS, List<Query> knownXSS, Double alpha) {
+    public void runLBA(Session session, Set<Query> knownMFS, Set<Query> knownXSS, Double alpha) {
 	((AbstractSession) session).setExecutedQueryCount(0);
 	this.setInitialQuery(this);
 	initLBA();
 	Query qPrim, qStarStar;
-	allMFS = new ArrayList<Query>();
-	allXSS = new ArrayList<Query>();
+	allMFS = new HashSet<Query>();
+	allXSS = new HashSet<Query>();
 	List<Query> pxss = null;
 	if (knownMFS.size() == 0) {
 	    Query qStar = (Query) findAnMFS(session, alpha);
@@ -480,10 +506,13 @@ public abstract class AbstractQuery implements Query {
 	    pxss = computePotentialXSS(qStar);
 	} else {
 	    allMFS.addAll(knownMFS);
-	    Query firstMFS = knownMFS.get(0);
-	    pxss = computePotentialXSS(firstMFS);
-	    for (int i = 1; i < knownMFS.size(); i++) {
-		refactor(knownMFS.get(i), pxss);
+	    for (Query query : knownMFS) {
+		if (pxss == null) {
+		    pxss = computePotentialXSS(query);
+		}
+		else {
+		    refactor(query, pxss);
+		}
 	    }
 	}
 	// if the pxss includes an xss, it is failing and we need to keep it to
@@ -531,7 +560,7 @@ public abstract class AbstractQuery implements Query {
 
     @Override
     public void runLBA(Session session, Double alpha) {
-	runLBA(session, new ArrayList<Query>(), new ArrayList<Query>(), alpha);
+	runLBA(session, new HashSet<Query>(), new HashSet<Query>(), alpha);
     }
 
     /**
@@ -677,8 +706,8 @@ public abstract class AbstractQuery implements Query {
     @Override
     public void runDFS(Session session, Double alpha) {
 	initDFS();
-	allMFS = new ArrayList<Query>();
-	allXSS = new ArrayList<Query>();
+	allMFS = new HashSet<Query>();
+	allXSS = new HashSet<Query>();
 	this.setInitialQuery(this);
 	((AbstractSession) session).setExecutedQueryCount(0);
 	List<Query> listQuery = new ArrayList<Query>();

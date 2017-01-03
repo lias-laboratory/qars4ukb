@@ -1,7 +1,10 @@
 package fr.ensma.lias.qars4ukb.algo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.cache.ExtendedCacheLBA;
@@ -13,6 +16,7 @@ public class AlgoHybrid extends AbstractAlgo {
     public AlgoHybrid() {
 	super();
     }
+
     /**
      * return the common queries into two list of query
      * 
@@ -22,8 +26,8 @@ public class AlgoHybrid extends AbstractAlgo {
      *            list of queries
      * @return a list containing the common queries into two list of query
      */
-    public List<Query> getCommonQueries(List<Query> a, List<Query> b) {
-	List<Query> res = new ArrayList<>();
+    public Set<Query> getCommonQueries(Set<Query> a, Set<Query> b) {
+	Set<Query> res = new HashSet<>();
 	if (a != null) {
 	    for (Query q : a) {
 		if (b.contains(q))
@@ -42,7 +46,7 @@ public class AlgoHybrid extends AbstractAlgo {
      *            collection to remove from the initial
      * @return the initial list with out including toRemove elements
      */
-    public List<Query> removeASetOfQueries(List<Query> initial, List<Query> toRemove) {
+    public Set<Query> removeASetOfQueries(Set<Query> initial, Set<Query> toRemove) {
 	initial.removeAll(toRemove);
 	return initial;
     }
@@ -54,8 +58,8 @@ public class AlgoHybrid extends AbstractAlgo {
      *            of queries
      * @return the atomic queries founded in the list
      */
-    public List<Query> getAtomicQueries(List<Query> list) {
-	List<Query> res = new ArrayList<>();
+    public Set<Query> getAtomicQueries(Set<Query> list) {
+	Set<Query> res = new HashSet<>();
 	for (Query q : list) {
 	    if (q.size() == 1) {
 		res.add(q);
@@ -71,9 +75,9 @@ public class AlgoHybrid extends AbstractAlgo {
      *            of queries
      * @return the proper sub queries of the initialQuery
      */
-    public List<Query> getProperSubQueries(Query initialQuery, List<Query> list) {
+    public Set<Query> getProperSubQueries(Query initialQuery, Set<Query> list) {
 	int sizeInitialQuery = initialQuery.size();
-	List<Query> res = new ArrayList<>();
+	Set<Query> res = new HashSet<>();
 	for (Query q : list) {
 	    if (q.size() == (sizeInitialQuery - 1)) {
 		res.add(q);
@@ -90,8 +94,8 @@ public class AlgoHybrid extends AbstractAlgo {
      *            proper sub queries of the initial query
      * @return the list of queries with out queries included in properSubQueries
      */
-    public List<Query> removeQueriesIncludedInQuery(List<Query> properSubQueries, List<Query> list) {
-	List<Query> res = new ArrayList<>();
+    public Set<Query> removeQueriesIncludedInQuery(Set<Query> properSubQueries, Set<Query> list) {
+	Set<Query> res = new HashSet<>();
 
 	for (Query q : list) {
 	    if (!((AbstractQuery) q).isIncludedInAQueryOf(properSubQueries)) {
@@ -110,8 +114,8 @@ public class AlgoHybrid extends AbstractAlgo {
      * @return the initial list of queries with out including queries witch
      *         contains atomic one
      */
-    public List<Query> removeQueriesIncludingAQuery(List<Query> initial, List<Query> atomicQ) {
-	List<Query> res = new ArrayList<>();
+    public Set<Query> removeQueriesIncludingAQuery(Set<Query> initial, Set<Query> atomicQ) {
+	Set<Query> res = new HashSet<>();
 
 	for (Query q : initial) {
 	    if (!q.includesAQueryOf(atomicQ)) {
@@ -132,8 +136,8 @@ public class AlgoHybrid extends AbstractAlgo {
      * @param session
      *            the connection to the KB
      */
-    protected List<Query> getSuccessXSS(List<Query> discoveredXSS, Double alpha, Session session) {
-	List<Query> res = new ArrayList<Query>();
+    protected Set<Query> getSuccessXSS(Set<Query> discoveredXSS, Double alpha, Session session) {
+	Set<Query> res = new HashSet<Query>();
 	for (Query previousXSS : discoveredXSS) {
 	    if (!previousXSS.isFailing(session, alpha)) {
 		res.add(previousXSS);
@@ -153,8 +157,8 @@ public class AlgoHybrid extends AbstractAlgo {
      * @param session
      *            the connection to the KB
      */
-    protected List<Query> GetFailingMFS(List<Query> discoveredMFS, Double alpha, Session session) {
-	List<Query> res = new ArrayList<Query>();
+    protected Set<Query> GetFailingMFS(Set<Query> discoveredMFS, Double alpha, Session session) {
+	Set<Query> res = new HashSet<Query>();
 	for (Query previousMFS : discoveredMFS) {
 	    if (previousMFS.isFailing(session, alpha)) {
 		res.add(previousMFS);
@@ -174,21 +178,25 @@ public class AlgoHybrid extends AbstractAlgo {
      * @param session
      *            the connection to the KB
      */
-    protected List<Query> findAnMFSInEachQuery(List<Query> discoveredMFS, Double alpha, Session session) {
-	List<Query> res = new ArrayList<Query>();
-	List<Query> fq = new ArrayList<Query>(discoveredMFS);
-
-	while (!fq.isEmpty()) {
-	    Query previousMFS = fq.remove(0);
-	    Query newMFS = previousMFS.findAnMFS(session, alpha);
-	    res.add(newMFS);
-	    for (Query qPrim : discoveredMFS) {
-		if (qPrim.includes(newMFS)) {
-		    fq.remove(qPrim);
+    protected Set<Query> findAnMFSInEachQuery(Set<Query> discoveredMFS, Double alpha, Session session) {
+	Set<Query> res = new HashSet<Query>();
+	Set<Query> fq = new HashSet<Query>(discoveredMFS);
+	Iterator<Query> iter = fq.iterator();
+	Set<Query> toRemove = new HashSet<Query>();
+	while (iter.hasNext()) {
+	    Query previousMFS = iter.next();
+	    iter.remove();
+	    if (!toRemove.contains(previousMFS)) {
+		Query newMFS = previousMFS.findAnMFS(session, alpha);
+		res.add(newMFS);
+		for (Query qPrim : discoveredMFS) {
+		    if (qPrim.includes(newMFS)) {
+			toRemove.add(qPrim);
+		    }
 		}
 	    }
 	}
-	
+
 	return res;
     }
 
@@ -205,18 +213,22 @@ public class AlgoHybrid extends AbstractAlgo {
      * @param session
      *            the connection to the KB
      */
-    protected List<Query> findAnXSSInEachQuery(Query initialQuery, List<Query> discoveredXSS, Double alpha,
+    protected Set<Query> findAnXSSInEachQuery(Query initialQuery, Set<Query> discoveredXSS, Double alpha,
 	    Session session) {
-	List<Query> res = new ArrayList<Query>();
-	List<Query> sq = new ArrayList<Query>(discoveredXSS);
-
-	while (!sq.isEmpty()) {
-	    Query previousXSS = sq.remove(0);
-	    Query newXSS = initialQuery.findAnXSS(session, alpha, previousXSS);
-	    res.add(newXSS);
-	    for (Query qPrim : sq) {
-		if (newXSS.includes(qPrim)) {
-		    discoveredXSS.remove(qPrim);
+	Set<Query> res = new HashSet<Query>();
+	Set<Query> sq = new HashSet<Query>(discoveredXSS);
+	Iterator<Query> iter = sq.iterator();
+	Set<Query> toRemove = new HashSet<Query>();
+	while (iter.hasNext()) {
+	    Query previousXSS = iter.next();
+	    iter.remove();
+	    if (!toRemove.contains(previousXSS)) {
+		Query newXSS = initialQuery.findAnXSS(session, alpha, previousXSS);
+		res.add(newXSS);
+		for (Query qPrim : sq) {
+		    if (newXSS.includes(qPrim)) {
+			toRemove.add(qPrim);
+		    }
 		}
 	    }
 
@@ -272,15 +284,15 @@ public class AlgoHybrid extends AbstractAlgo {
 	HybridAlgorithmElement firstAlpha = listOfAlpha.get(0);
 	q.runLBA(session, firstAlpha.getAlpha());
 	nbExecutedQuery = session.getExecutedQueryCount();
-	List<Query> discoverMFSs = q.getAllMFS();
-	List<Query> discoverXSSs = q.getAllXSS();
+	Set<Query> discoverMFSs = q.getAllMFS();
+	Set<Query> discoverXSSs = q.getAllXSS();
 	result.addAlphaMFSs(firstAlpha.getAlpha(), discoverMFSs);
 	result.addAlphaXSSs(firstAlpha.getAlpha(), discoverXSSs);
 
-	List<Query> discoverMFSsLeft = new ArrayList<>();
-	List<Query> discoverXSSsLeft = new ArrayList<>();
-	List<Query> discoverMFSsRight = new ArrayList<>();
-	List<Query> discoverXSSsRight = new ArrayList<>();
+	Set<Query> discoverMFSsLeft = new HashSet<>();
+	Set<Query> discoverXSSsLeft = new HashSet<>();
+	Set<Query> discoverMFSsRight = new HashSet<>();
+	Set<Query> discoverXSSsRight = new HashSet<>();
 	Double left;
 	Double right;
 	for (int i = 1; i < listOfAlpha.size(); i++) {
@@ -292,19 +304,17 @@ public class AlgoHybrid extends AbstractAlgo {
 	    right = currentAlpha.getRight();
 
 	    if (left != null) {
-		discoverMFSsLeft = new ArrayList<>(result.getAlphaMFSs(left));
-		discoverXSSsLeft = new ArrayList<>(result.getAlphaXSSs(left));
+		discoverMFSsLeft = new HashSet<>(result.getAlphaMFSs(left));
+		discoverXSSsLeft = new HashSet<>(result.getAlphaXSSs(left));
 	    }
 	    if (right != null) {
-		discoverMFSsRight = new ArrayList<>(result.getAlphaMFSs(right));
-		discoverXSSsRight = new ArrayList<>(result.getAlphaXSSs(right));
+		discoverMFSsRight = new HashSet<>(result.getAlphaMFSs(right));
+		discoverXSSsRight = new HashSet<>(result.getAlphaXSSs(right));
 	    }
-	   
+
 	    runHybrid(session, q, discoverMFSsLeft, discoverXSSsLeft, discoverMFSsRight, discoverXSSsRight,
 		    currentAlpha, result);
 	    nbExecutedQuery += session.getExecutedQueryCount();
-	    
-	    
 
 	}
 	nbCacheHits = ExtendedCacheLBA.getInstance().getNbCacheHits();
@@ -321,15 +331,15 @@ public class AlgoHybrid extends AbstractAlgo {
      * @param currentAlpha
      * @param result
      */
-    private void runHybrid(Session session, Query q, List<Query> discoverMFSsLeft, List<Query> discoverXSSsLeft,
-	    List<Query> discoverMFSsRight, List<Query> discoverXSSsRight, HybridAlgorithmElement currentAlpha,
+    private void runHybrid(Session session, Query q, Set<Query> discoverMFSsLeft, Set<Query> discoverXSSsLeft,
+	    Set<Query> discoverMFSsRight, Set<Query> discoverXSSsRight, HybridAlgorithmElement currentAlpha,
 	    AlgoResult result) {
 
-	List<Query> discoverMFSs = new ArrayList<>();
-	List<Query> discoverXSSs = new ArrayList<>();
+	Set<Query> discoverMFSs = new HashSet<>();
+	Set<Query> discoverXSSs = new HashSet<>();
 
 	// add common left and right MFS to the discoverMFSs
-	List<Query> tmp = getCommonQueries(discoverMFSsLeft, discoverMFSsRight);
+	Set<Query> tmp = getCommonQueries(discoverMFSsLeft, discoverMFSsRight);
 	discoverMFSs.addAll(tmp);
 	discoverMFSsLeft.removeAll(tmp);
 	discoverMFSsLeft.removeAll(tmp);
@@ -354,15 +364,16 @@ public class AlgoHybrid extends AbstractAlgo {
 	discoverMFSs.addAll(tmp);
 	discoverMFSsRight.removeAll(tmp);
 
-	// remove discoverMFSsRight queries witch contains failing discoverMFSsLeft
+	// remove discoverMFSsRight queries witch contains failing
 	// discoverMFSsLeft
-	//removeQueriesIncludingAQuery(discoverMFSsRight, tmp);
-	
-	// Find  MFSs in the rest of discoverMFSsLeft
+	// discoverMFSsLeft
+	// removeQueriesIncludingAQuery(discoverMFSsRight, tmp);
+
+	// Find MFSs in the rest of discoverMFSsLeft
 	tmp = findAnMFSInEachQuery(discoverMFSsLeft, currentAlpha.getAlpha(), session);
 	discoverMFSs.addAll(tmp);
 	discoverMFSsLeft.removeAll(tmp);
-	
+
 	// add founded proper sub queries in the discoverXSSsRight to the
 	// discoverXSSs
 	tmp = getProperSubQueries(q, discoverXSSsRight);
@@ -372,26 +383,26 @@ public class AlgoHybrid extends AbstractAlgo {
 	// remove discoverXSSsLeft queries Included In the founded proper sub
 	// queries
 	removeQueriesIncludedInQuery(discoverXSSsLeft, tmp);
-	
-	// add successful  discoverXSSsLeft for the currentAlpha to discoverXSSs
+
+	// add successful discoverXSSsLeft for the currentAlpha to discoverXSSs
 	tmp = getSuccessXSS(discoverXSSsLeft, currentAlpha.getAlpha(), session);
 	discoverXSSs.addAll(tmp);
 	discoverXSSsLeft.removeAll(tmp);
-	
-	// remove successful discoverXSSsLeft queries Included In the founded proper sub
-		// queries
-	//removeQueriesIncludedInQuery(discoverXSSsLeft, tmp);
-	
-	// Find  XSSs in the rest of discoverXSSLeft
+
+	// remove successful discoverXSSsLeft queries Included In the founded
+	// proper sub
+	// queries
+	// removeQueriesIncludedInQuery(discoverXSSsLeft, tmp);
+
+	// Find XSSs in the rest of discoverXSSLeft
 	tmp = findAnXSSInEachQuery(q, discoverXSSsRight, currentAlpha.getAlpha(), session);
 	discoverXSSs.addAll(tmp);
 	// add result
 	q.runLBA(session, discoverMFSs, discoverXSSs, currentAlpha.getAlpha());
-	    nbExecutedQuery += session.getExecutedQueryCount();
-	    result.addAlphaMFSs(currentAlpha.getAlpha(), q.getAllMFS());
-	    result.addAlphaXSSs(currentAlpha.getAlpha(), q.getAllXSS());
-	
+	nbExecutedQuery += session.getExecutedQueryCount();
+	result.addAlphaMFSs(currentAlpha.getAlpha(), q.getAllMFS());
+	result.addAlphaXSSs(currentAlpha.getAlpha(), q.getAllXSS());
+
     }
 
-    
 }

@@ -20,6 +20,7 @@
 package fr.ensma.lias.qars4ukb.query;
 
 import java.util.List;
+import java.util.Set;
 
 import fr.ensma.lias.qars4ukb.Result;
 import fr.ensma.lias.qars4ukb.Session;
@@ -105,6 +106,15 @@ public interface Query {
 	 * @return true if this query includes one of the input queries
 	 */
 	public boolean includesAQueryOf(List<Query> queries);
+	
+	/**
+	 * Test if this query includes one of the input queries
+	 * 
+	 * @param queries
+	 *            the input queries
+	 * @return true if this query includes one of the input queries
+	 */
+	public boolean includesAQueryOf(Set<Query> queries);
 
 	/**
 	 * Get the query executed on the target platform
@@ -136,7 +146,7 @@ public interface Query {
 	 * @param alpha the threshold
 	 * @return the set of MFSs of this query
 	 */
-	List<Query> computeAllMFS(Session s, ComputeMFSAndXSSAlgorithm algo, Double alpha);
+	Set<Query> computeAllMFS(Session s, ComputeMFSAndXSSAlgorithm algo, Double alpha);
 
 	/**
 	 * Compute the set of XSSs of this query with a specific algorithm.
@@ -148,19 +158,19 @@ public interface Query {
 	 * @param alpha the threshold
 	 * @return the set of XSSs of this query
 	 */
-	List<Query> computeAllXSS(Session s, ComputeMFSAndXSSAlgorithm algo, Double alpha);
+	Set<Query> computeAllXSS(Session s, ComputeMFSAndXSSAlgorithm algo, Double alpha);
 
 	/**
 	 * Return the current MFSs of this query (for the last given alpha)
 	 * @return the MFSs of this query
 	 */
-	List<Query> getAllMFS();
+	Set<Query> getAllMFS();
 
 	/** 
 	 * Return the current XSSs of this query (for the last given alpha)
 	 * @return the XSSs of this query
 	 */
-	List<Query> getAllXSS();
+	Set<Query> getAllXSS();
 	
 	/**
 	 * Test if the input query is included or equals to this query
@@ -191,7 +201,7 @@ public interface Query {
 	 * @param knownXSS the known XSSs
 	 * @param alpha the threshold
 	 */
-	void runLBA(Session session, List<Query> knownMFS, List<Query> knownXSS, Double alpha);
+	void runLBA(Session session, Set<Query> knownMFS, Set<Query> knownXSS, Double alpha);
 	
 	/**
 	 * Remove the input triple pattern from this query

@@ -7,7 +7,9 @@ import static org.junit.Assert.assertTrue;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -52,18 +54,18 @@ public class AlgoHybridTest {
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
 	q6 = factoryExt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
-	List<Query> firstList = new ArrayList<>();
+	Set<Query> firstList = new HashSet<>();
 	firstList.add(q1);
 	firstList.add(q2);
 	firstList.add(q3);
 	firstList.add(q6);
-	List<Query> secondList = new ArrayList<>();
+	Set<Query> secondList = new HashSet<>();
 	secondList.add(q2);
 	secondList.add(q4);
 	secondList.add(q6);
 
 	// **************** when ******************
-	List<Query> res = algo.getCommonQueries(firstList, secondList);
+	Set<Query> res = algo.getCommonQueries(firstList, secondList);
 
 	// **************** then ******************
 	assertEquals(res.size(), 2);
@@ -86,18 +88,18 @@ public class AlgoHybridTest {
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
 	q6 = factoryExt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
-	List<Query> initial = new ArrayList<>();
+	Set<Query> initial = new HashSet<>();
 	initial.add(q1);
 	initial.add(q2);
 	initial.add(q3);
 	initial.add(q6);
-	List<Query> toRemove = new ArrayList<>();
+	Set<Query> toRemove = new HashSet<>();
 	toRemove.add(q2);
 	toRemove.add(q4);
 	toRemove.add(q6);
 
 	// **************** when ******************
-	List<Query> res = algo.removeASetOfQueries(initial, toRemove);
+	Set<Query> res = algo.removeASetOfQueries(initial, toRemove);
 
 	// **************** then ******************
 	assertEquals(res.size(), 2);
@@ -121,7 +123,7 @@ public class AlgoHybridTest {
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
 	q6 = factoryExt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
-	List<Query> initial = new ArrayList<>();
+	Set<Query> initial = new HashSet<>();
 	initial.add(q1);
 	initial.add(q2);
 	initial.add(q3);
@@ -130,7 +132,7 @@ public class AlgoHybridTest {
 	initial.add(q6);
 
 	// **************** when ******************
-	List<Query> res = algo.getAtomicQueries(initial);
+	Set<Query> res = algo.getAtomicQueries(initial);
 
 	// **************** then ******************
 	assertEquals(res.size(), 4);
@@ -161,7 +163,7 @@ public class AlgoHybridTest {
 	q6 = factoryExt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }",
 		q1);
-	List<Query> initial = new ArrayList<>();
+	Set<Query> initial = new HashSet<>();
 
 	initial.add(q2);
 	initial.add(q3);
@@ -170,7 +172,7 @@ public class AlgoHybridTest {
 	initial.add(q6);
 
 	// **************** when ******************
-	List<Query> res = algo.getProperSubQueries(q1, initial);
+	Set<Query> res = algo.getProperSubQueries(q1, initial);
 
 	// **************** then ******************
 	assertEquals(res.size(), 3);
@@ -198,18 +200,18 @@ public class AlgoHybridTest {
 	q6 = factoryExt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
 
-	List<Query> initial = new ArrayList<>();
+	Set<Query> initial = new HashSet<>();
 	initial.add(q1);
 	initial.add(q2);
 	initial.add(q5);
 	initial.add(q6);
 
-	List<Query> atomic = new ArrayList<>();
+	Set<Query> atomic = new HashSet<>();
 	atomic.add(q2);
 	atomic.add(q4);
 
 	// **************** when ******************
-	List<Query> res = algo.removeQueriesIncludingAQuery(initial, atomic);
+	Set<Query> res = algo.removeQueriesIncludingAQuery(initial, atomic);
 
 	// **************** then ******************
 	System.out.println(q5.includes(q2));
@@ -238,17 +240,17 @@ public class AlgoHybridTest {
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }",
 		q1);
 
-	List<Query> proper = new ArrayList<>();
+	Set<Query> proper = new HashSet<>();
 	proper.add(q2);
 	proper.add(q3);
 
-	List<Query> queries = new ArrayList<>();
+	Set<Query> queries = new HashSet<>();
 	queries.add(q4);
 	queries.add(q5);
 	queries.add(q6);
 
 	// **************** when ******************
-	List<Query> res = algo.removeQueriesIncludedInQuery(proper, queries);
+	Set<Query> res = algo.removeQueriesIncludedInQuery(proper, queries);
 
 	// **************** then ******************
 	assertEquals(res.size(), 1);
@@ -268,11 +270,11 @@ public class AlgoHybridTest {
 
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
-	List<Query> discoveredXSS = new ArrayList<>();
+	Set<Query> discoveredXSS = new HashSet<>();
 	discoveredXSS.add(q3);
 	discoveredXSS.add(q6);
 	// **************** when ******************
-	List<Query> res = algo.getSuccessXSS(discoveredXSS, 0.5, session);
+	Set<Query> res = algo.getSuccessXSS(discoveredXSS, 0.5, session);
 
 	// **************** then ******************
 	Assert.assertTrue(res.containsAll(discoveredXSS));
@@ -282,7 +284,7 @@ public class AlgoHybridTest {
 	// **************** given ******************
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
-	discoveredXSS = new ArrayList<>();
+	discoveredXSS = new HashSet<>();
 	discoveredXSS.add(q3);
 	discoveredXSS.add(q6);
 
@@ -305,12 +307,12 @@ public class AlgoHybridTest {
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }", q1);
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
-	List<Query> discoveredMFS = new ArrayList<>();
+	Set<Query> discoveredMFS = new HashSet<>();
 	discoveredMFS.add(q3);
 	discoveredMFS.add(q6);
 
 	// **************** when ******************
-	List<Query> res = algo.GetFailingMFS(discoveredMFS, 0.7, session);
+	Set<Query> res = algo.GetFailingMFS(discoveredMFS, 0.7, session);
 
 	// **************** then ******************
 	Assert.assertTrue(res.containsAll(discoveredMFS));
@@ -320,7 +322,7 @@ public class AlgoHybridTest {
 	// **************** given ******************
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
-	discoveredMFS = new ArrayList<>();
+	discoveredMFS = new HashSet<>();
 	discoveredMFS.add(q3);
 	discoveredMFS.add(q6);
 
@@ -344,13 +346,13 @@ public class AlgoHybridTest {
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }");
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
-	List<Query> discoveredMFS = new ArrayList<>();
+	Set<Query> discoveredMFS = new HashSet<>();
 	discoveredMFS.add(q1);
-	List<Query> expectedMFS = new ArrayList<>();
+	Set<Query> expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 
 	// **************** when ******************
-	List<Query> res = algo.findAnMFSInEachQuery(discoveredMFS, 0.7, session);
+	Set<Query> res = algo.findAnMFSInEachQuery(discoveredMFS, 0.7, session);
 
 	// **************** then ******************
 	Assert.assertTrue(res.containsAll(expectedMFS));
@@ -373,11 +375,11 @@ public class AlgoHybridTest {
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }", q1);
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
-	List<Query> discoveredXSS = new ArrayList<>();
+	Set<Query> discoveredXSS = new HashSet<>();
 	discoveredXSS.add(q2);
 	discoveredXSS.add(q3);
-	List<Query> res = algo.findAnXSSInEachQuery(q1, discoveredXSS, 0.4, session);
-	List<Query> expectedXSS = new ArrayList<>();
+	Set<Query> res = algo.findAnXSSInEachQuery(q1, discoveredXSS, 0.4, session);
+	Set<Query> expectedXSS = new HashSet<>();
 	expectedXSS.add(q2);
 	expectedXSS.add(q3);
 	Assert.assertTrue(res.containsAll(expectedXSS));
@@ -387,9 +389,9 @@ public class AlgoHybridTest {
 
 	ExtendedCacheLBA.getInstance().clearCache();
 	session.clearExecutedQueryCount();
-	discoveredXSS = new ArrayList<>();
+	discoveredXSS = new HashSet<>();
 	res = algo.findAnXSSInEachQuery(q1, discoveredXSS, 0.7, session);
-	expectedXSS = new ArrayList<>();
+	expectedXSS = new HashSet<>();
 	Assert.assertTrue(res.containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(res));
     }
@@ -522,27 +524,27 @@ public class AlgoHybridTest {
 	AlgoResult result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
 	
 	// Test with 0.4
-	List<Query> expectedMFS = new ArrayList<>();
+	Set<Query> expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q5);
-	List<Query> expectedXSS = new ArrayList<>();
+	Set<Query> expectedXSS = new HashSet<>();
 	expectedXSS.add(q3);
 	expectedXSS.add(q6);
-	List<Query> obtainedMFS = result.getAlphaMFSs(0.4);
-	List<Query> obtainedXSS = result.getAlphaXSSs(0.4);
+	Set<Query> obtainedMFS = result.getAlphaMFSs(0.4);
+	Set<Query> obtainedXSS = result.getAlphaXSSs(0.4);
 	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
 	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
 	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
 
 	// Test with 0.8
-	expectedMFS = new ArrayList<>();
+	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q3);
 	expectedMFS.add(q6);
-	expectedXSS = new ArrayList<>();
+	expectedXSS = new HashSet<>();
 	obtainedMFS = result.getAlphaMFSs(0.8);
 	obtainedXSS = result.getAlphaXSSs(0.8);
 	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
@@ -565,11 +567,11 @@ public class AlgoHybridTest {
 	result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
 	
 	// Test with 0.4
-	expectedMFS = new ArrayList<>();
+	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q5);
-	expectedXSS = new ArrayList<>();
+	expectedXSS = new HashSet<>();
 	expectedXSS.add(q3);
 	expectedXSS.add(q6);	
 	obtainedMFS = result.getAlphaMFSs(0.4);
@@ -588,12 +590,12 @@ public class AlgoHybridTest {
 	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
 	
 	// Test with 0.8
-	expectedMFS = new ArrayList<>();
+	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q3);
 	expectedMFS.add(q6);
-	expectedXSS = new ArrayList<>();
+	expectedXSS = new HashSet<>();
 	obtainedMFS = result.getAlphaMFSs(0.8);
 	obtainedXSS = result.getAlphaXSSs(0.8);
 	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
@@ -620,11 +622,11 @@ public class AlgoHybridTest {
         result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
 	
 	// Test with 0.4
-	expectedMFS = new ArrayList<>();
+	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
 	expectedMFS.add(q4);
 	expectedMFS.add(q5);
-	expectedXSS = new ArrayList<>();
+	expectedXSS = new HashSet<>();
 	expectedXSS.add(q3);
 	expectedXSS.add(q6);
 	obtainedMFS = result.getAlphaMFSs(0.4);

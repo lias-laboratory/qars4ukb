@@ -402,7 +402,6 @@ public abstract class AbstractQuery implements Query {
 	    if (!includes(tp))
 		return false;
 	}
-	System.out.println("include yes");
 	return true;
     }
 
@@ -468,14 +467,6 @@ public abstract class AbstractQuery implements Query {
 
     @Override
     public void runLBA(Session session, List<Query> knownMFS, List<Query> knownXSS, Double alpha) {
-	if(knownMFS.size()==0)
-	    System.out.println("0 discover MFS");
-	else
-	    System.out.println("Some discover MFS");
-	if(knownXSS.size()==0)
-	    System.out.println("0 discover XSS");
-	else
-	    System.out.println("Some discover XSS");
 	((AbstractSession) session).setExecutedQueryCount(0);
 	this.setInitialQuery(this);
 	initLBA();

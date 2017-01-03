@@ -438,7 +438,6 @@ public class AlgoHybridTest {
 	List<HybridAlgorithmElement> res3 = new ArrayList<>();
 	List<HybridAlgorithmElement> res4 = new ArrayList<>();
 	List<HybridAlgorithmElement> res5 = new ArrayList<>();
-	List<HybridAlgorithmElement> res6 = new ArrayList<>();
 	
 	// **************** when ******************
 	algo.executionOrder( res1, listOfAlpha1);

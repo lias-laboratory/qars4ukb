@@ -22,12 +22,10 @@ package fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph;
 import java.util.function.Predicate;
 
 import org.apache.jena.atlas.lib.Tuple;
-import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.tdb.store.NodeId;
 import org.apache.jena.tdb.sys.SystemTDB;
 import org.apache.jena.tdb.sys.TDBInternal;
@@ -75,8 +73,6 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
      * @return A filter function depending on alpha
      */
     private static Predicate<Tuple<NodeId>> createFilter(final Dataset ds, Double alpha) {
-	// Need to know the internal identifier for the trust value (alpha).
-	final NodeId target = TDBInternal.getNodeId(ds, NodeFactory.createURI(alpha.toString()));
 	// Filter for accept/reject as quad as being visible.
 	// Return true for "accept", false for "reject"
 	Predicate<Tuple<NodeId>> filter = new Predicate<Tuple<NodeId>>() {

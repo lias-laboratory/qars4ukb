@@ -67,4 +67,48 @@ public class AlgoResult {
     public List<Query> getAlphaXSSs(Double alpha) {
 	return alphaXSSs.get(alpha);
     }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((alphaMFSs == null) ? 0 : alphaMFSs.hashCode());
+	result = prime * result + ((alphaXSSs == null) ? 0 : alphaXSSs.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	AlgoResult other = (AlgoResult) obj;
+	if (alphaMFSs == null) {
+	    if (other.alphaMFSs != null)
+		return false;
+	} else if (!alphaMFSs.equals(other.alphaMFSs))
+	    return false;
+	if (alphaXSSs == null) {
+	    if (other.alphaXSSs != null)
+		return false;
+	} else if (!alphaXSSs.equals(other.alphaXSSs))
+	    return false;
+	return true;
+    }
+    
+//    @Override
+//    public String toString() {
+//	StringBuffer res = new StringBuffer();
+//	
+//	for(Double alpha : alphaMFSs.keySet()) {
+//	    res.append(alpha + ": ");
+//	    List<Query> 
+//	}
+//	return res.toString();
+//    }
+    
+    
 }

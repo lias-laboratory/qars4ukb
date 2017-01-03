@@ -31,7 +31,6 @@ import fr.ensma.lias.qars4ukb.exception.TripleStoreException;
 import fr.ensma.lias.qars4ukb.query.AbstractQueryFactory;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.TriplePattern;
-import fr.ensma.lias.qars4ukb.triplestore.jenatdbnative.JenaTDBNativeSession;
 
 /**
  * @author Stephane JEAN

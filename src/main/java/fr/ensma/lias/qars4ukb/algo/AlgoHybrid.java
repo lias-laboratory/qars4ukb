@@ -96,7 +96,6 @@ public class AlgoHybrid extends AbstractAlgo {
 	for (Query q : list) {
 	    if (!((AbstractQuery) q).isIncludedInAQueryOf(properSubQueries)) {
 		res.add(q);
-		System.out.println("garder");
 	    }
 	}
 	return res;
@@ -117,7 +116,6 @@ public class AlgoHybrid extends AbstractAlgo {
 	for (Query q : initial) {
 	    if (!q.includesAQueryOf(atomicQ)) {
 		res.add(q);
-		System.out.println("garder");
 	    }
 	}
 	return res;
@@ -218,7 +216,6 @@ public class AlgoHybrid extends AbstractAlgo {
 	    res.add(newXSS);
 	    for (Query qPrim : sq) {
 		if (newXSS.includes(qPrim)) {
-		    System.out.println("We are removing from the list");
 		    discoveredXSS.remove(qPrim);
 		}
 	    }
@@ -267,7 +264,6 @@ public class AlgoHybrid extends AbstractAlgo {
 	AlgoResult result = new AlgoResult();
 
 	// first executes the normal version of LBA for the last alpha
-	int nbAlpha = listOfAlphaNotOrdred.size();
 	List<HybridAlgorithmElement> listOfAlpha = new ArrayList<>();
 	executionOrder(listOfAlpha, listOfAlphaNotOrdred);
 
@@ -287,7 +283,6 @@ public class AlgoHybrid extends AbstractAlgo {
 	List<Query> discoverXSSsRight = new ArrayList<>();
 	Double left;
 	Double right;
-	 System.out.println("execute runLBA " +firstAlpha.getAlpha());
 	for (int i = 1; i < listOfAlpha.size(); i++) {
 	    HybridAlgorithmElement currentAlpha = listOfAlpha.get(i);
 	    // we clear the number of executed queries by the previous run of
@@ -307,7 +302,6 @@ public class AlgoHybrid extends AbstractAlgo {
 	   
 	    runHybrid(session, q, discoverMFSsLeft, discoverXSSsLeft, discoverMFSsRight, discoverXSSsRight,
 		    currentAlpha, result);
-	    System.out.println("execute runHybrid wiith " +currentAlpha.getAlpha());
 	    nbExecutedQuery += session.getExecutedQueryCount();
 	    
 	    

@@ -414,6 +414,7 @@ public class ExperimentAlgoTest {
 		AlgoResult algoResultNLBA = algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
 		// HYBRID
 		factory = new JDBCQueryExtFactory();
+		q= factory.createQuery(q.toString());
 		algo = new AlgoHybrid();
 		AlgoResult algoResultHybrid = algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
 		// BOTTOM UP

@@ -113,7 +113,7 @@ public class ExperimentAlgoTest {
 	/*************************
 	 * Test with an HSQL Database in-memory
 	 *************************/
-
+/*	
 	@Test
 	public void testHSQLDB() throws Exception {
 		testHSQLDBNLBA();
@@ -122,7 +122,7 @@ public class ExperimentAlgoTest {
 		testHSQLDBHybrid();
 	}
 
-	@Test
+@Test
 	public void testHSQLDBNLBA() throws Exception {
 		factory = new JDBCQueryOptFactory();
 		Session session = factory.createSession();
@@ -149,7 +149,7 @@ public class ExperimentAlgoTest {
 		factory = new JDBCQueryExtFactory();
 		testAlgo(Algorithm.HYBRID, PLAT_JENA, listOfAlpha);
 	}
-
+*/
 	/************************************
 	 * Main method to test the algorithms
 	 ************************************/

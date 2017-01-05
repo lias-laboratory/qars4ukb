@@ -27,8 +27,8 @@ import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.AbstractJDBCQueryHelper;
  */
 public class HSQLDBQueryHelper extends AbstractJDBCQueryHelper {
 
-	public HSQLDBQueryHelper(Query q) {
-		super(q);
-	}
+    public HSQLDBQueryHelper(Query q) {
+	super(q);
+    }
 
 }

@@ -38,65 +38,65 @@ import fr.ensma.lias.qars4ukb.query.SPARQLQueryHelper;
  */
 public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 
-	private Map<String, String> prefixes;
+    private Map<String, String> prefixes;
 
-	public SPARQLEndpointQueryHelper(Query q) {
-		super(q);
+    public SPARQLEndpointQueryHelper(Query q) {
+	super(q);
+    }
+
+    @Override
+    public boolean executeQuery(Session session, Double alpha) {
+	final Result result = this.getResult(session, alpha);
+	((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
+	return result.getNbRow() == 0;
+    }
+
+    @Override
+    public Result getResult(Session session, Double alpha) {
+	SPARQLEndpointSession currentJenaSession = (SPARQLEndpointSession) session;
+	String query;
+	try {
+	    query = currentJenaSession.getSPARQLEndpointClient().query(this.toNativeQuery(alpha));
+	    return new SPARQLEndpointResult(query);
+	} catch (IOException e) {
+	    System.out.println("Unable to get the result of the query: " + e.getMessage());
+	    e.printStackTrace();
+	    throw new TripleStoreException();
 	}
+    }
 
-	@Override
-	public boolean executeQuery(Session session, Double alpha) {
-		final Result result = this.getResult(session, alpha);
-		((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
-		return result.getNbRow() == 0 ;
-	}
+    @Override
+    public String toNativeQuery(Double alpha) {
+	prefixes = new HashMap<String, String>();
+	prefixes.put("http://www.w3.org/1999/02/22-rdf-syntax-ns", "rdf");
+	prefixes.put("http://swat.cse.lehigh.edu/onto/univ-bench.owl", "lubm");
 
-	@Override
-	public Result getResult(Session session, Double alpha) {
-		SPARQLEndpointSession currentJenaSession = (SPARQLEndpointSession) session;
-		String query;
-		try {
-			query = currentJenaSession.getSPARQLEndpointClient().query(this.toNativeQuery(alpha));
-			return new SPARQLEndpointResult(query);
-		} catch (IOException e) {
-			System.out.println("Unable to get the result of the query: " + e.getMessage());
-			e.printStackTrace();
-			throw new TripleStoreException();
+	StringBuffer newQuery = new StringBuffer(this.q.toString());
+	for (String current : prefixes.keySet()) {
+	    Pattern pattern = Pattern.compile("<" + current + "#");
+	    Matcher matcher = pattern.matcher(newQuery.toString());
+	    newQuery = new StringBuffer(matcher.replaceAll(prefixes.get(current) + ":"));
+
+	    final String[] split = newQuery.toString().split(prefixes.get(current) + ":");
+	    Pattern secondPattern = Pattern.compile("([^>]*)>(.*)");
+	    StringJoiner js = new StringJoiner(prefixes.get(current) + ":");
+	    js.add(split[0]);
+	    for (int i = 1; i < split.length; i++) {
+		final Matcher secondMatcher = secondPattern.matcher(split[i]);
+		if (secondMatcher.matches()) {
+		    js.add(secondMatcher.replaceAll("$1$2"));
 		}
+	    }
+	    newQuery = new StringBuffer(js.toString());
 	}
 
-	@Override
-	public String toNativeQuery(Double alpha) {
-		prefixes = new HashMap<String, String>();
-		prefixes.put("http://www.w3.org/1999/02/22-rdf-syntax-ns", "rdf");
-		prefixes.put("http://swat.cse.lehigh.edu/onto/univ-bench.owl", "lubm");
-
-		StringBuffer newQuery = new StringBuffer(this.q.toString());
-		for (String current : prefixes.keySet()) {
-			Pattern pattern = Pattern.compile("<" + current + "#");
-			Matcher matcher = pattern.matcher(newQuery.toString());
-			newQuery = new StringBuffer(matcher.replaceAll(prefixes.get(current) + ":"));
-
-			final String[] split = newQuery.toString().split(prefixes.get(current) + ":");
-			Pattern secondPattern = Pattern.compile("([^>]*)>(.*)");
-			StringJoiner js = new StringJoiner(prefixes.get(current) + ":");
-			js.add(split[0]);
-			for (int i = 1; i < split.length; i++) {
-				final Matcher secondMatcher = secondPattern.matcher(split[i]);
-				if (secondMatcher.matches()) {
-					js.add(secondMatcher.replaceAll("$1$2"));
-				}
-			}
-			newQuery = new StringBuffer(js.toString());
-		}
-
-		StringBuffer prefix = new StringBuffer();
-		for (String current : prefixes.keySet()) {
-			prefix.append("PREFIX " + prefixes.get(current) + ":<" + current + "#> ");
-		}
-
-		prefix.append(" " + newQuery.toString() + " LIMIT 350");
-
-		return prefix.toString();
+	StringBuffer prefix = new StringBuffer();
+	for (String current : prefixes.keySet()) {
+	    prefix.append("PREFIX " + prefixes.get(current) + ":<" + current + "#> ");
 	}
+
+	prefix.append(" " + newQuery.toString() + " LIMIT 350");
+
+	return prefix.toString();
+    }
 }

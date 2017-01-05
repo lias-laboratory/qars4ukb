@@ -1,21 +1,21 @@
 /*********************************************************************************
-* This file is part of QARS Project.
-* Copyright (C) 2015 LIAS - ENSMA
+* This file is part of QARS4UKB Project.
+* Copyright (C) 2017 LIAS - ENSMA
 *   Teleport 2 - 1 avenue Clement Ader
 *   BP 40109 - 86961 Futuroscope Chasseneuil Cedex - FRANCE
 * 
-* QARS is free software: you can redistribute it and/or modify
+* QARS4UKB is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
-* QARS is distributed in the hope that it will be useful,
+* QARS4UKB is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU Lesser General Public License for more details.
 * 
 * You should have received a copy of the GNU Lesser General Public License
-* along with QARS.  If not, see <http://www.gnu.org/licenses/>.
+* along with QARS4UKB.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************/
 package fr.ensma.lias.qars4ukb.query;
 
@@ -46,18 +46,21 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
      * The variables of this query
      */
     private Set<String> variables;
-    
+
     /**
-     * Cache of queries 
-     * Used to avoid executing some queries
+     * Cache of queries Used to avoid executing some queries
      */
     private ICache cache;
 
     /**
      * Build a query with its factory and its string
-     * @param factory the factory
-     * @param query the string of this query
-     * @param cache the query cache
+     * 
+     * @param factory
+     *            the factory
+     * @param query
+     *            the string of this query
+     * @param cache
+     *            the query cache
      */
     public AbstractQueryOpt(QueryFactory factory, String query, ICache cache) {
 	super(factory, query);
@@ -66,9 +69,13 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     /**
      * Build a query with its factory and a set of triple patterns
-     * @param factory the factory
-     * @param tps a set of triple patterns
-     * @param cache the query cache
+     * 
+     * @param factory
+     *            the factory
+     * @param tps
+     *            a set of triple patterns
+     * @param cache
+     *            the query cache
      */
     public AbstractQueryOpt(QueryFactory factory, List<TriplePattern> tps, ICache cache) {
 	super(factory, tps);
@@ -77,15 +84,20 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     /**
      * Checks if this query is failing by executing it
-     * @param q the query
-     * @param session the connection to the KB
-     * @param alpha the threshold
+     * 
+     * @param q
+     *            the query
+     * @param session
+     *            the connection to the KB
+     * @param alpha
+     *            the threshold
      * @return true iff this query is failing
      */
     protected abstract boolean isFailingWithExecution(Query q, Session session, Double alpha);
 
     /**
      * Get the variables of this query
+     * 
      * @return the variables of this query
      */
     public Set<String> getVariables() {
@@ -106,6 +118,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     /**
      * Get the bitset representation of this query
+     * 
      * @return the bitset representation of this query
      */
     public BitSet getQueryAsBitSet() {
@@ -172,7 +185,9 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     /**
      * Checks whether this query is connected with a given triple pattern
-     * @param t a triple pattern
+     * 
+     * @param t
+     *            a triple pattern
      * @return true iff this query is connected with the triple pattern
      */
     public boolean isConnectedWith(TriplePattern t) {
@@ -187,7 +202,8 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 
     @Override
     public boolean isFailingAux(Session session, Double alpha) {
-	//System.out.println(this.toSimpleString(newInitialQuery) + " -> " + alpha);
+	// System.out.println(this.toSimpleString(newInitialQuery) + " -> " +
+	// alpha);
 	List<Query> connectedParts = getConnectedParts();
 	boolean isCartesianProduct = (connectedParts.size() > 1);
 	boolean res = false;
@@ -207,7 +223,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 		res = isFailingWithExecution(q, session, alpha);
 		if (res) {
 		    cache.addFailingQuery(q, isCartesianProduct, alpha);
-		    return true;    
+		    return true;
 		} else {
 		    cache.addSuccessfulQuery(q, alpha);
 		}
@@ -215,7 +231,7 @@ public abstract class AbstractQueryOpt extends AbstractQuery {
 	}
 	return res;
     }
-    
+
     @Override
     public void initDFS() {
 	// we need to init the cache

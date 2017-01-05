@@ -41,14 +41,11 @@ public class JenaTDBNativeQueryHelper extends SPARQLQueryHelper {
     @Override
     public boolean executeQuery(Session session, Double alpha) {
 	String sparqlQueryString = toNativeQuery(alpha);
-	org.apache.jena.query.Query query = org.apache.jena.query.QueryFactory
-		.create(sparqlQueryString);
-	QueryExecution qexec = QueryExecutionFactory.create(query,
-		((JenaTDBNativeSession) session).getDataset());
+	org.apache.jena.query.Query query = org.apache.jena.query.QueryFactory.create(sparqlQueryString);
+	QueryExecution qexec = QueryExecutionFactory.create(query, ((JenaTDBNativeSession) session).getDataset());
 	ResultSet results = qexec.execSelect();
 
-	((AbstractSession) session).setExecutedQueryCount(
-		((AbstractSession) session).getExecutedQueryCount() + 1);
+	((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
 	boolean res = !results.hasNext();
 	qexec.close();
 	return res;

@@ -1,3 +1,22 @@
+/*********************************************************************************
+* This file is part of QARS4UKB Project.
+* Copyright (C) 2017 LIAS - ENSMA
+*   Teleport 2 - 1 avenue Clement Ader
+*   BP 40109 - 86961 Futuroscope Chasseneuil Cedex - FRANCE
+* 
+* QARS4UKB is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* QARS4UKB is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+* 
+* You should have received a copy of the GNU Lesser General Public License
+* along with QARS4UKB.  If not, see <http://www.gnu.org/licenses/>.
+**********************************************************************************/
 package fr.ensma.lias.qars4ukb.algo;
 
 import static org.junit.Assert.assertEquals;
@@ -23,10 +42,17 @@ import fr.ensma.lias.qars4ukb.query.QueryFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCQueryExtFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCSession;
 
+/**
+ * @author Stéphane JEAN
+ */
 public class AlgoHybridTest {
+
     AlgoHybrid algo;
+
     private QueryFactory factoryExt;
+
     private Session session;
+
     private Query q1, q2, q3, q4, q5, q6;
 
     @Before
@@ -399,7 +425,7 @@ public class AlgoHybridTest {
     @Test
     public void TestexecutionOrderAux() {
 	// **************** given ******************
-	
+
 	List<Double> listOfAlpha1 = new ArrayList<>();
 	List<Double> listOfAlpha2 = new ArrayList<>();
 	List<Double> listOfAlpha3 = new ArrayList<>();
@@ -414,25 +440,25 @@ public class AlgoHybridTest {
 	listOfAlpha3.add(0.2);
 	listOfAlpha3.add(0.4);
 	listOfAlpha3.add(0.6);
-	
+
 	listOfAlpha4.add(0.2);
 	listOfAlpha4.add(0.4);
 	listOfAlpha4.add(0.6);
 	listOfAlpha4.add(0.8);
-	
+
 	listOfAlpha5.add(0.2);
 	listOfAlpha5.add(0.4);
 	listOfAlpha5.add(0.6);
 	listOfAlpha5.add(0.8);
 	listOfAlpha5.add(1.0);
-	
+
 	listOfAlpha6.add(0.0);
 	listOfAlpha6.add(0.2);
 	listOfAlpha6.add(0.4);
 	listOfAlpha6.add(0.6);
 	listOfAlpha6.add(0.8);
 	listOfAlpha6.add(1.0);
-	
+
 	List<HybridAlgorithmElement> res1 = new ArrayList<>();
 	List<HybridAlgorithmElement> expecttedRes1 = new ArrayList<>();
 	expecttedRes1.add(new HybridAlgorithmElement(0.2, null, null));
@@ -440,28 +466,28 @@ public class AlgoHybridTest {
 	List<HybridAlgorithmElement> res3 = new ArrayList<>();
 	List<HybridAlgorithmElement> res4 = new ArrayList<>();
 	List<HybridAlgorithmElement> res5 = new ArrayList<>();
-	
+
 	// **************** when ******************
-	algo.executionOrder( res1, listOfAlpha1);
+	algo.executionOrder(res1, listOfAlpha1);
 	algo.executionOrder(res2, listOfAlpha2);
-	algo.executionOrder( res3, listOfAlpha3);
-	algo.executionOrder( res4, listOfAlpha4);
-	algo.executionOrder( res5, listOfAlpha5);
+	algo.executionOrder(res3, listOfAlpha3);
+	algo.executionOrder(res4, listOfAlpha4);
+	algo.executionOrder(res5, listOfAlpha5);
 	// **************** then ******************
-	assertTrue(res1.size()==1);
+	assertTrue(res1.size() == 1);
 	assertTrue(res1.get(0).getAlpha() == 0.2);
 	assertTrue(res1.get(0).getLeft() == null);
 	assertTrue(res1.get(0).getRight() == null);
-	
-	assertTrue(res2.size()==2);
+
+	assertTrue(res2.size() == 2);
 	assertTrue(res2.get(0).getAlpha() == 0.2);
 	assertTrue(res2.get(0).getLeft() == null);
 	assertTrue(res2.get(0).getRight() == null);
 	assertTrue(res2.get(1).getAlpha() == 0.4);
 	assertTrue(res2.get(1).getLeft() == 0.2);
 	assertTrue(res2.get(1).getRight() == null);
-	
-	assertTrue(res3.size()==3);
+
+	assertTrue(res3.size() == 3);
 	assertTrue(res3.get(0).getAlpha() == 0.2);
 	assertTrue(res3.get(0).getLeft() == null);
 	assertTrue(res3.get(0).getRight() == null);
@@ -471,8 +497,8 @@ public class AlgoHybridTest {
 	assertTrue(res3.get(2).getAlpha() == 0.4);
 	assertTrue(res3.get(2).getLeft() == 0.2);
 	assertTrue(res3.get(2).getRight() == 0.6);
-	
-	assertTrue(res4.size()==4);
+
+	assertTrue(res4.size() == 4);
 	assertTrue(res4.get(0).getAlpha() == 0.2);
 	assertTrue(res4.get(0).getLeft() == null);
 	assertTrue(res4.get(0).getRight() == null);
@@ -485,8 +511,8 @@ public class AlgoHybridTest {
 	assertTrue(res4.get(3).getAlpha() == 0.6);
 	assertTrue(res4.get(3).getLeft() == 0.4);
 	assertTrue(res4.get(3).getRight() == 0.8);
-	
-	assertTrue(res5.size()==5);
+
+	assertTrue(res5.size() == 5);
 	assertTrue(res5.get(0).getAlpha() == 0.2);
 	assertTrue(res5.get(0).getLeft() == null);
 	assertTrue(res5.get(0).getRight() == null);
@@ -502,18 +528,20 @@ public class AlgoHybridTest {
 	assertTrue(res5.get(4).getAlpha() == 0.8);
 	assertTrue(res5.get(4).getLeft() == 0.6);
 	assertTrue(res5.get(4).getRight() == 1.0);
-	
-	
+
     }
+
     @Test
     public void testComputesAlphaMFSsAndXSSs() {
 	q1 = factoryExt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
-	q2 = factoryExt
-		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e }", q1);
-	q4 = factoryExt.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }", q1);
+	q2 = factoryExt.createQuery(
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e }", q1);
+	q4 = factoryExt
+		.createQuery("SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }", q1);
 	q5 = factoryExt.createQuery(
-		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }", q1);
+		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t }",
+		q1);
 	q3 = factoryExt.createQuery(
 		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' }", q1);
 	q6 = factoryExt.createQuery(
@@ -522,7 +550,7 @@ public class AlgoHybridTest {
 	listOfAlpha.add(0.4);
 	listOfAlpha.add(0.8);
 	AlgoResult result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
-	
+
 	// Test with 0.4
 	Set<Query> expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
@@ -551,13 +579,13 @@ public class AlgoHybridTest {
 	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
 	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
-	
+
 	// Test the number of cache hits and executed query
-	Assert.assertEquals(5,algo.getNbCacheHits());
-	Assert.assertEquals(9,algo.getNbExecutedQuery());
-	//System.out.println(algo.getNbCacheHits());
-	//System.out.println(algo.getNbExecutedQuery());
-	
+	Assert.assertEquals(5, algo.getNbCacheHits());
+	Assert.assertEquals(9, algo.getNbExecutedQuery());
+	// System.out.println(algo.getNbCacheHits());
+	// System.out.println(algo.getNbExecutedQuery());
+
 	// A new test with 4 tresholds
 	listOfAlpha = new ArrayList<>();
 	listOfAlpha.add(0.4);
@@ -565,62 +593,7 @@ public class AlgoHybridTest {
 	listOfAlpha.add(0.8);
 	listOfAlpha.add(1.0);
 	result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
-	
-	// Test with 0.4
-	expectedMFS = new HashSet<>();
-	expectedMFS.add(q2);
-	expectedMFS.add(q4);
-	expectedMFS.add(q5);
-	expectedXSS = new HashSet<>();
-	expectedXSS.add(q3);
-	expectedXSS.add(q6);	
-	obtainedMFS = result.getAlphaMFSs(0.4);
-	obtainedXSS = result.getAlphaXSSs(0.4);
-	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
-	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
-	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
-	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
-	
-	// Test with 0.6
-	obtainedMFS = result.getAlphaMFSs(0.6);
-	obtainedXSS = result.getAlphaXSSs(0.6);
-	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
-	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
-	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
-	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
-	
-	// Test with 0.8
-	expectedMFS = new HashSet<>();
-	expectedMFS.add(q2);
-	expectedMFS.add(q4);
-	expectedMFS.add(q3);
-	expectedMFS.add(q6);
-	expectedXSS = new HashSet<>();
-	obtainedMFS = result.getAlphaMFSs(0.8);
-	obtainedXSS = result.getAlphaXSSs(0.8);
-	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
-	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
-	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
-	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
-	
-	// Test with 1.0
-	obtainedMFS = result.getAlphaMFSs(1.0);
-	obtainedXSS = result.getAlphaXSSs(1.0);
-	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
-	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
-	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
-	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
-	
-	// Test the number of cache hits and executed queries
-	//Assert.assertEquals(10,algo.getNbCacheHits());
-	//Assert.assertEquals(21,algo.getNbExecutedQuery());
-	System.out.println(algo.getNbCacheHits());
-	System.out.println(algo.getNbExecutedQuery());
-	// with only one treshold
-	listOfAlpha = new ArrayList<>();
-	listOfAlpha.add(0.4);
-        result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
-	
+
 	// Test with 0.4
 	expectedMFS = new HashSet<>();
 	expectedMFS.add(q2);
@@ -635,8 +608,63 @@ public class AlgoHybridTest {
 	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
 	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
 	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
-	Assert.assertEquals(3,algo.getNbCacheHits());
-	Assert.assertEquals(9,algo.getNbExecutedQuery());
+
+	// Test with 0.6
+	obtainedMFS = result.getAlphaMFSs(0.6);
+	obtainedXSS = result.getAlphaXSSs(0.6);
+	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
+	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
+	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
+	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
+
+	// Test with 0.8
+	expectedMFS = new HashSet<>();
+	expectedMFS.add(q2);
+	expectedMFS.add(q4);
+	expectedMFS.add(q3);
+	expectedMFS.add(q6);
+	expectedXSS = new HashSet<>();
+	obtainedMFS = result.getAlphaMFSs(0.8);
+	obtainedXSS = result.getAlphaXSSs(0.8);
+	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
+	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
+	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
+	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
+
+	// Test with 1.0
+	obtainedMFS = result.getAlphaMFSs(1.0);
+	obtainedXSS = result.getAlphaXSSs(1.0);
+	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
+	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
+	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
+	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
+
+	// Test the number of cache hits and executed queries
+	// Assert.assertEquals(10,algo.getNbCacheHits());
+	// Assert.assertEquals(21,algo.getNbExecutedQuery());
+	System.out.println(algo.getNbCacheHits());
+	System.out.println(algo.getNbExecutedQuery());
+	// with only one treshold
+	listOfAlpha = new ArrayList<>();
+	listOfAlpha.add(0.4);
+	result = algo.computesAlphaMFSsAndXSSs(q1, listOfAlpha);
+
+	// Test with 0.4
+	expectedMFS = new HashSet<>();
+	expectedMFS.add(q2);
+	expectedMFS.add(q4);
+	expectedMFS.add(q5);
+	expectedXSS = new HashSet<>();
+	expectedXSS.add(q3);
+	expectedXSS.add(q6);
+	obtainedMFS = result.getAlphaMFSs(0.4);
+	obtainedXSS = result.getAlphaXSSs(0.4);
+	Assert.assertTrue(obtainedMFS.containsAll(expectedMFS));
+	Assert.assertTrue(expectedMFS.containsAll(obtainedMFS));
+	Assert.assertTrue(obtainedXSS.containsAll(expectedXSS));
+	Assert.assertTrue(expectedXSS.containsAll(obtainedXSS));
+	Assert.assertEquals(3, algo.getNbCacheHits());
+	Assert.assertEquals(9, algo.getNbExecutedQuery());
     }
 
 }

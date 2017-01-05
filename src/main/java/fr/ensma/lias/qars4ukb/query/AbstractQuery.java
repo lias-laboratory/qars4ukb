@@ -450,7 +450,7 @@ public abstract class AbstractQuery implements Query {
 	}
 	return false;
     }
-    
+
     /**
      * Check whether this query is included in one of the input queries
      * 
@@ -475,7 +475,7 @@ public abstract class AbstractQuery implements Query {
 	}
 	return false;
     }
-    
+
     @Override
     public boolean includesAQueryOf(List<Query> queries) {
 	for (Query q : queries) {
@@ -509,8 +509,7 @@ public abstract class AbstractQuery implements Query {
 	    for (Query query : knownMFS) {
 		if (pxss == null) {
 		    pxss = computePotentialXSS(query);
-		}
-		else {
+		} else {
 		    refactor(query, pxss);
 		}
 	    }

@@ -17,41 +17,24 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with QARS4UKB.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************/
-package fr.ensma.lias.qars4ukb.query;
+package fr.ensma.lias.qars4ukb;
 
-import java.util.List;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-import org.aeonbits.owner.ConfigFactory;
-
-import fr.ensma.lias.qars4ukb.cfg.QARS4UKBConfig;
+import fr.ensma.lias.qars4ukb.algo.AllAlgoTests;
+import fr.ensma.lias.qars4ukb.cache.AllCacheTests;
+import fr.ensma.lias.qars4ukb.query.AllQueryTests;
 
 /**
- * @author Stephane JEAN
  * @author Mickael BARON
  */
-public abstract class AbstractQueryFactory implements QueryFactory {
+@RunWith(Suite.class)
+@SuiteClasses(value = { 
+	AllAlgoTests.class,
+	AllCacheTests.class,
+	AllQueryTests.class})
+public class AllQARS4UKBTest {
 
-    private QARS4UKBConfig config;
-
-    public AbstractQueryFactory() {
-	config = ConfigFactory.create(QARS4UKBConfig.class);
-    }
-
-    protected QARS4UKBConfig getConfig() {
-	return this.config;
-    }
-
-    @Override
-    public Query createQuery(String rdfQuery, Query initialQuery) {
-	final Query createQuery = this.createQuery(rdfQuery);
-	((AbstractQuery) createQuery).setInitialQuery(initialQuery);
-	return createQuery;
-    }
-
-    @Override
-    public Query createQuery(List<TriplePattern> tp, Query initialQuery) {
-	final Query createQuery = this.createQuery(tp);
-	((AbstractQuery) createQuery).setInitialQuery(initialQuery);
-	return createQuery;
-    }
 }

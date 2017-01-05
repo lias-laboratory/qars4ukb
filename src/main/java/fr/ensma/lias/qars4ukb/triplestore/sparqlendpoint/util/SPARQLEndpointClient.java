@@ -35,20 +35,20 @@ import java.net.URLEncoder;
 public class SPARQLEndpointClient {
 
     protected String url;
-    
+
     protected String defaultGraphURI;
-    
+
     protected OutputFormat outputFormat;
-    
+
     protected URL baseURL;
-    
+
     protected URL sparqlURL;
-    
+
     protected Integer softLimit = Integer.MIN_VALUE;
-    
+
     private SPARQLEndpointClient() {
     }
-    
+
     public void setOutputFormat(OutputFormat outputFormat) {
 	this.outputFormat = outputFormat;
     }
@@ -64,16 +64,15 @@ public class SPARQLEndpointClient {
      * @throws ProtocolException
      * @throws IOException
      */
-    public String query(String sparql)
-	    throws MalformedURLException, ProtocolException, IOException {
+    public String query(String sparql) throws MalformedURLException, ProtocolException, IOException {
 	OutputFormat refOutputFormat = null;
-	
+
 	if (outputFormat == null) {
 	    refOutputFormat = OutputFormat.SPARQL_XML;
 	} else {
 	    refOutputFormat = outputFormat;
 	}
-	
+
 	HttpURLConnection connection = (HttpURLConnection) this.getBaseURL().openConnection();
 
 	connection.setDoOutput(true);
@@ -84,15 +83,15 @@ public class SPARQLEndpointClient {
 
 	StringBuffer queryString = new StringBuffer();
 	queryString.append("&query=" + URLEncoder.encode(sparql, "UTF-8"));
-	
+
 	if (softLimit != Integer.MIN_VALUE) {
 	    queryString.append("&soft-limit=" + softLimit);
 	}
-	
+
 	if (defaultGraphURI != null) {
 	    queryString.append("&default-graph-uri=" + URLEncoder.encode(defaultGraphURI, "UTF-8"));
 	}
-	
+
 	DataOutputStream ps = new DataOutputStream(connection.getOutputStream());
 	ps.writeBytes(queryString.toString());
 
@@ -114,55 +113,55 @@ public class SPARQLEndpointClient {
 	in.close();
 	return responseBuilder.toString();
     }
-    
+
     public URL getBaseURL() throws MalformedURLException {
 	if (baseURL == null) {
-	    baseURL = new URL(url);	    
+	    baseURL = new URL(url);
 	}
 	return baseURL;
     }
-    
+
     public String getURL() {
 	return this.url;
     }
-    
+
     public static class Builder {
-	
+
 	private String url;
-	    
+
 	private String defaultGraphURI;
-	    
+
 	private OutputFormat outputFormat;
-	
+
 	private Integer softLimit = Integer.MIN_VALUE;
-	
+
 	public Builder url(String url) {
 	    this.url = url;
 	    return this;
 	}
-	
+
 	public Builder defaultGraphURI(String pDefaultGraphURI) {
 	    this.defaultGraphURI = pDefaultGraphURI;
 	    return this;
 	}
-	
+
 	public Builder outputFormat(OutputFormat pOutputFormat) {
 	    this.outputFormat = pOutputFormat;
 	    return this;
 	}
-	
+
 	public Builder softLimit(Integer pSoftLimit) {
 	    this.softLimit = pSoftLimit;
 	    return this;
 	}
-	
+
 	public SPARQLEndpointClient build() {
 	    SPARQLEndpointClient sparqlEndpointConfig = new SPARQLEndpointClient();
 	    sparqlEndpointConfig.url = this.url;
 	    sparqlEndpointConfig.defaultGraphURI = this.defaultGraphURI;
 	    sparqlEndpointConfig.outputFormat = this.outputFormat;
 	    sparqlEndpointConfig.softLimit = this.softLimit;
-	    
+
 	    return sparqlEndpointConfig;
 	}
     }

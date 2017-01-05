@@ -20,8 +20,9 @@
 package fr.ensma.lias.qars4ukb.exception;
 
 /**
+ * Encapsulate all the exception coming from the triple store.
+ * 
  * @author Stephane Jean
- * Encapsulate all the exception coming from the triple store
  */
 public class TripleStoreException extends RuntimeException {
 

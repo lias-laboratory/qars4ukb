@@ -1,32 +1,53 @@
+/*********************************************************************************
+* This file is part of QARS4UKB Project.
+* Copyright (C) 2017 LIAS - ENSMA
+*   Teleport 2 - 1 avenue Clement Ader
+*   BP 40109 - 86961 Futuroscope Chasseneuil Cedex - FRANCE
+* 
+* QARS4UKB is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* QARS4UKB is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+* 
+* You should have received a copy of the GNU Lesser General Public License
+* along with QARS4UKB.  If not, see <http://www.gnu.org/licenses/>.
+**********************************************************************************/
 package fr.ensma.lias.qars4ukb.algo;
 
 import java.util.List;
 
 import fr.ensma.lias.qars4ukb.query.Query;
 
+/**
+ * @author Stephane JEAN
+ */
 public abstract class AbstractAlgo implements IAlgo {
 
     /**
      * Number of executed query on the KB
      */
     protected int nbExecutedQuery;
-    
+
     /**
      * Number of cache hits
      */
     protected int nbCacheHits;
-    
+
     /**
      * Computing time of the algorithm
      */
     protected float computingTime;
-    
+
     public AbstractAlgo() {
 	nbExecutedQuery = 0;
 	nbCacheHits = 0;
     }
-    
-    
+
     @Override
     public int getNbExecutedQuery() {
 	return nbExecutedQuery;
@@ -41,7 +62,7 @@ public abstract class AbstractAlgo implements IAlgo {
     public float getComputingTime() {
 	return computingTime;
     }
-    
+
     @Override
     public AlgoResult computesAlphaMFSsAndXSSs(Query q, List<Double> listOfAlpha) {
 	long begin = System.currentTimeMillis();
@@ -50,10 +71,11 @@ public abstract class AbstractAlgo implements IAlgo {
 	computingTime = ((float) (end - begin)) / 1000f;
 	return result;
     }
-    
+
     /**
      * Same as computesAlphaMFSsAndXSSs but without the computing time
-     * @return the AlphaMFSs and XSSs 
+     * 
+     * @return the AlphaMFSs and XSSs
      */
     protected abstract AlgoResult computesAlphaMFSsAndXSSsAux(Query q, List<Double> listOfAlpha);
 }

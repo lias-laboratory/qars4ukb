@@ -37,42 +37,42 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class JDBCQuery extends AbstractQuery {
 
-	private QueryHelper helper;
+    private QueryHelper helper;
 
-	public JDBCQuery(JDBCQueryFactory factory, String query) {
-		super(factory, query);
-		helper = factory.createQueryHelper(this);
-	}
+    public JDBCQuery(JDBCQueryFactory factory, String query) {
+	super(factory, query);
+	helper = factory.createQueryHelper(this);
+    }
 
-	public JDBCQuery(JDBCQueryFactory factory, List<TriplePattern> tps) {
-		super(factory, tps);
-		helper = factory.createQueryHelper(this);
-	}
+    public JDBCQuery(JDBCQueryFactory factory, List<TriplePattern> tps) {
+	super(factory, tps);
+	helper = factory.createQueryHelper(this);
+    }
 
-	@Override
-	public boolean isFailingAux(Session session, Double alpha) {
-		try {
-			Statement stmt = ((JDBCSession) session).getConnection().createStatement();
-			ResultSet rset = stmt.executeQuery(toNativeQuery(alpha));
-			((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
-			boolean res = !rset.next();
-			rset.close();
-			stmt.close();
-			return res;
-		} catch (SQLException e) {
-			System.out.println("Unable to execute the query: " + e.getMessage());
-			e.printStackTrace();
-			throw new TripleStoreException();
-		}
+    @Override
+    public boolean isFailingAux(Session session, Double alpha) {
+	try {
+	    Statement stmt = ((JDBCSession) session).getConnection().createStatement();
+	    ResultSet rset = stmt.executeQuery(toNativeQuery(alpha));
+	    ((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
+	    boolean res = !rset.next();
+	    rset.close();
+	    stmt.close();
+	    return res;
+	} catch (SQLException e) {
+	    System.out.println("Unable to execute the query: " + e.getMessage());
+	    e.printStackTrace();
+	    throw new TripleStoreException();
 	}
+    }
 
-	@Override
-	public String toNativeQuery(Double alpha) {
-		return helper.toNativeQuery(alpha);
-	}
+    @Override
+    public String toNativeQuery(Double alpha) {
+	return helper.toNativeQuery(alpha);
+    }
 
-	@Override
-	public Result getResult(Session session, Double alpha) {
-		return helper.getResult(session, alpha);
-	}
+    @Override
+    public Result getResult(Session session, Double alpha) {
+	return helper.getResult(session, alpha);
+    }
 }

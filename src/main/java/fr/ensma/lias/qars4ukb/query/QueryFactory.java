@@ -28,40 +28,49 @@ import fr.ensma.lias.qars4ukb.Session;
  */
 public interface QueryFactory {
 
-    
     /**
      * Creates a query
-     * @param rdfQuery the string of the query
+     * 
+     * @param rdfQuery
+     *            the string of the query
      * @return the resulting query
      */
     Query createQuery(String rdfQuery);
-    
+
     /**
      * Creates a query
-     * @param tp a list of triple patterns
+     * 
+     * @param tp
+     *            a list of triple patterns
      * @return the resulting query
      */
     Query createQuery(List<TriplePattern> tp);
-    
-    
+
     /**
      * Creates a subquery of a query
-     * @param rdfQuery string of the subquery
-     * @param initialQuery the superquery
+     * 
+     * @param rdfQuery
+     *            string of the subquery
+     * @param initialQuery
+     *            the superquery
      * @return a subquery of a query
      */
     Query createQuery(String rdfQuery, Query initialQuery);
 
     /**
      * Creates a subquery of a query
-     * @param tp a list of triple patterns
-     * @param initialQuery the superquery
+     * 
+     * @param tp
+     *            a list of triple patterns
+     * @param initialQuery
+     *            the superquery
      * @return a subquery of a query
      */
     Query createQuery(List<TriplePattern> tp, Query initialQuery);
-    
+
     /**
      * Creates a connection to the KB
+     * 
      * @return a connection to the KB
      */
     Session createSession();

@@ -1,21 +1,21 @@
 /*********************************************************************************
-* This file is part of QARS Project.
-* Copyright (C) 2015 LIAS - ENSMA
+* This file is part of QARS4UKB Project.
+* Copyright (C) 2017 LIAS - ENSMA
 *   Teleport 2 - 1 avenue Clement Ader
 *   BP 40109 - 86961 Futuroscope Chasseneuil Cedex - FRANCE
 * 
-* QARS is free software: you can redistribute it and/or modify
+* QARS4UKB is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
-* QARS is distributed in the hope that it will be useful,
+* QARS4UKB is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU Lesser General Public License for more details.
 * 
 * You should have received a copy of the GNU Lesser General Public License
-* along with QARS.  If not, see <http://www.gnu.org/licenses/>.
+* along with QARS4UKB.  If not, see <http://www.gnu.org/licenses/>.
 **********************************************************************************/
 package fr.ensma.lias.qars4ukb.cache;
 
@@ -47,12 +47,13 @@ public class CacheLBA implements ICache {
 	}
 	return instance;
     }
-    
+
     @Override
-    public void clearCache(){
+    public void clearCache() {
 	nbCacheHits = 0;
 	successfulCachedQueries.clear();
-	failingCachedQueries.clear();;
+	failingCachedQueries.clear();
+	;
     }
 
     @Override
@@ -67,7 +68,6 @@ public class CacheLBA implements ICache {
 	nbCacheHits++;
     }
 
-
     @Override
     public int getNbCacheHits() {
 	return nbCacheHits;
@@ -81,7 +81,6 @@ public class CacheLBA implements ICache {
 	return failingCachedQueries;
     }
 
-
     @Override
     public boolean isSuccessfulByCache(Query q, Double alpha) {
 	for (Query qCache : getSuccessfulCachedQueries()) {
@@ -92,7 +91,6 @@ public class CacheLBA implements ICache {
 	}
 	return false;
     }
-
 
     @Override
     public boolean isFailingByCache(Query q, Double alpha) {
@@ -111,9 +109,9 @@ public class CacheLBA implements ICache {
 	    getFailingCachedQueries().add(q);
 	}
     }
-    
+
     @Override
     public void addSuccessfulQuery(Query q, Double alpha) {
-	    getSuccessfulCachedQueries().add(q);
+	getSuccessfulCachedQueries().add(q);
     }
 }

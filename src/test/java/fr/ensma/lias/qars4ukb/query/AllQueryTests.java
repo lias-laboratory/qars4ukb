@@ -19,39 +19,17 @@
 **********************************************************************************/
 package fr.ensma.lias.qars4ukb.query;
 
-import java.util.List;
-
-import org.aeonbits.owner.ConfigFactory;
-
-import fr.ensma.lias.qars4ukb.cfg.QARS4UKBConfig;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * @author Stephane JEAN
  * @author Mickael BARON
  */
-public abstract class AbstractQueryFactory implements QueryFactory {
-
-    private QARS4UKBConfig config;
-
-    public AbstractQueryFactory() {
-	config = ConfigFactory.create(QARS4UKBConfig.class);
-    }
-
-    protected QARS4UKBConfig getConfig() {
-	return this.config;
-    }
-
-    @Override
-    public Query createQuery(String rdfQuery, Query initialQuery) {
-	final Query createQuery = this.createQuery(rdfQuery);
-	((AbstractQuery) createQuery).setInitialQuery(initialQuery);
-	return createQuery;
-    }
-
-    @Override
-    public Query createQuery(List<TriplePattern> tp, Query initialQuery) {
-	final Query createQuery = this.createQuery(tp);
-	((AbstractQuery) createQuery).setInitialQuery(initialQuery);
-	return createQuery;
-    }
+@RunWith(Suite.class)
+@SuiteClasses(value = { 
+	QueryHSQLDBTest.class, 
+	QueryJenaTDBGraphTest.class,
+	TriplePatternTest.class})
+public class AllQueryTests {
 }

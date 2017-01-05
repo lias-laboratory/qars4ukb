@@ -52,7 +52,7 @@ public class JenaTDBGraphQueryOpt extends AbstractQueryOpt {
     }
 
     @Override
-    protected boolean isFailingWithExecution(Query q, Session session, Double alpha)  {
+    protected boolean isFailingWithExecution(Query q, Session session, Double alpha) {
 	return new JenaTDBGraphQueryHelper(q).executeQuery(session, alpha);
     }
 

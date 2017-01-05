@@ -50,19 +50,18 @@ public class JenaTDBGraphQueryFactory extends AbstractQueryFactory {
     public Session createSession(Dataset pDataset) {
 	return new JenaTDBGraphSession(pDataset);
     }
-    
+
     @Override
     public Session createSession() {
 	final String jenatdbRepository = this.getConfig().jenanatifRepository();
 
 	if (!Files.isDirectory(Paths.get(jenatdbRepository))) {
-		
-	    throw new TripleStoreException(
-		    "File:" + jenatdbRepository + " is not found.");
+
+	    throw new TripleStoreException("File:" + jenatdbRepository + " is not found.");
 	}
 
 	Dataset dataset = TDBFactory.createDataset(jenatdbRepository);
 	return new JenaTDBGraphSession(dataset);
     }
- 
+
 }

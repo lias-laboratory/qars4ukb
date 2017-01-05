@@ -31,183 +31,201 @@ import fr.ensma.lias.qars4ukb.query.AbstractQuery.ComputeMFSAndXSSAlgorithm;
  */
 public interface Query {
 
-	/**
-	 * Execute this query
-	 * 
-	 * @param s
-	 *            the connection to the triplestore
-	 * @param alpha the threshold
-	 * @return the result
-	 */
-	Result getResult(Session s, Double alpha);
+    /**
+     * Execute this query
+     * 
+     * @param s
+     *            the connection to the triplestore
+     * @param alpha
+     *            the threshold
+     * @return the result
+     */
+    Result getResult(Session s, Double alpha);
 
-	/**
-	 * Checks whether this query has an empty result or not
-	 * 
-	 * @param s
-	 *            the connection to the triplestore
-	 * @param alpha the threshold
-	 * @return True is the result of this query is empty
-	 */
-	boolean isFailing(Session session, Double alpha);
+    /**
+     * Checks whether this query has an empty result or not
+     * 
+     * @param s
+     *            the connection to the triplestore
+     * @param alpha
+     *            the threshold
+     * @return True is the result of this query is empty
+     */
+    boolean isFailing(Session session, Double alpha);
 
-	/**
-	 * Add a triple pattern to this query
-	 * 
-	 * @param tp
-	 *            the added triple pattern
-	 */
-	void addTriplePattern(TriplePattern tp);
+    /**
+     * Add a triple pattern to this query
+     * 
+     * @param tp
+     *            the added triple pattern
+     */
+    void addTriplePattern(TriplePattern tp);
 
-	/**
-	 * Returns the triple patterns of the query
-	 * 
-	 * @return the triple patterns of the query
-	 */
-	List<TriplePattern> getTriplePatterns();
+    /**
+     * Returns the triple patterns of the query
+     * 
+     * @return the triple patterns of the query
+     */
+    List<TriplePattern> getTriplePatterns();
 
-	/**
-	 * Return an MFS of this query (must be failing)
-	 * 
-	 * @param s
-	 *            the connection to the triplestore
-	 * @param alpha the threshold
-	 * @return an MFS of this query
-	 */
-	Query findAnMFS(Session session, Double alpha);
-	
-	/**
-	 * Return an XSS of this query that contains the input query
-	 * 
-	 * @param s
-	 *            the connection to the triplestore
-	 * @param alpha the threshold
-	 * @param inputQuery the input query
-	 * @return an XSS of the intialquery that contains the input query
-	 */
-	Query findAnXSS(Session session, Double alpha, Query inputQuery);
+    /**
+     * Return an MFS of this query (must be failing)
+     * 
+     * @param s
+     *            the connection to the triplestore
+     * @param alpha
+     *            the threshold
+     * @return an MFS of this query
+     */
+    Query findAnMFS(Session session, Double alpha);
 
-	/**
-	 * Run the LBA algorithm. It fills the allMFS and allXSS variable
-	 * 
-	 * @param s
-	 *            the connection to the triplestore
-	 * @param alpha the threshold
-	 */
-	public void runLBA(Session session, Double alpha);
-	
-	
+    /**
+     * Return an XSS of this query that contains the input query
+     * 
+     * @param s
+     *            the connection to the triplestore
+     * @param alpha
+     *            the threshold
+     * @param inputQuery
+     *            the input query
+     * @return an XSS of the intialquery that contains the input query
+     */
+    Query findAnXSS(Session session, Double alpha, Query inputQuery);
 
-	/**
-	 * Test if this query includes one of the input queries
-	 * 
-	 * @param queries
-	 *            the input queries
-	 * @return true if this query includes one of the input queries
-	 */
-	public boolean includesAQueryOf(List<Query> queries);
-	
-	/**
-	 * Test if this query includes one of the input queries
-	 * 
-	 * @param queries
-	 *            the input queries
-	 * @return true if this query includes one of the input queries
-	 */
-	public boolean includesAQueryOf(Set<Query> queries);
+    /**
+     * Run the LBA algorithm. It fills the allMFS and allXSS variable
+     * 
+     * @param s
+     *            the connection to the triplestore
+     * @param alpha
+     *            the threshold
+     */
+    public void runLBA(Session session, Double alpha);
 
-	/**
-	 * Get the query executed on the target platform
-	 * @param alpha the threshold
-	 * @return the query executed on the target platform
-	 */
-	String toNativeQuery(Double alpha);
+    /**
+     * Test if this query includes one of the input queries
+     * 
+     * @param queries
+     *            the input queries
+     * @return true if this query includes one of the input queries
+     */
+    public boolean includesAQueryOf(List<Query> queries);
 
-	/**
-	 * Return true if this query is empty
-	 * 
-	 * @return true if this query is empty
-	 */
-	boolean isEmpty();
-	
-	/**
-	 * Return the number of triple patterns of this query
-	 * @return the number of triple patterns of this query
-	 */
-	int size();
+    /**
+     * Test if this query includes one of the input queries
+     * 
+     * @param queries
+     *            the input queries
+     * @return true if this query includes one of the input queries
+     */
+    public boolean includesAQueryOf(Set<Query> queries);
 
-	/**
-	 * Compute the set of MFSs of this query with a specific algorithm.
-	 * 
-	 * @param s
-	 *            the connection to the triplestore
-	 * @param algo
-	 *            the chosen algorithms
-	 * @param alpha the threshold
-	 * @return the set of MFSs of this query
-	 */
-	Set<Query> computeAllMFS(Session s, ComputeMFSAndXSSAlgorithm algo, Double alpha);
+    /**
+     * Get the query executed on the target platform
+     * 
+     * @param alpha
+     *            the threshold
+     * @return the query executed on the target platform
+     */
+    String toNativeQuery(Double alpha);
 
-	/**
-	 * Compute the set of XSSs of this query with a specific algorithm.
-	 * 
-	 * @param s
-	 *            the connection to the triplestore
-	 * @param algo
-	 *            the chosen algorithms
-	 * @param alpha the threshold
-	 * @return the set of XSSs of this query
-	 */
-	Set<Query> computeAllXSS(Session s, ComputeMFSAndXSSAlgorithm algo, Double alpha);
+    /**
+     * Return true if this query is empty
+     * 
+     * @return true if this query is empty
+     */
+    boolean isEmpty();
 
-	/**
-	 * Return the current MFSs of this query (for the last given alpha)
-	 * @return the MFSs of this query
-	 */
-	Set<Query> getAllMFS();
+    /**
+     * Return the number of triple patterns of this query
+     * 
+     * @return the number of triple patterns of this query
+     */
+    int size();
 
-	/** 
-	 * Return the current XSSs of this query (for the last given alpha)
-	 * @return the XSSs of this query
-	 */
-	Set<Query> getAllXSS();
-	
-	/**
-	 * Test if the input query is included or equals to this query
-	 * 
-	 * @param q
-	 *            the input query
-	 * @return True if the input query is included in this query
-	 */
-	boolean includes(Query q);
-	
-	/**
-	 * Get the factory of this query
-	 */
-	QueryFactory getFactory();
+    /**
+     * Compute the set of MFSs of this query with a specific algorithm.
+     * 
+     * @param s
+     *            the connection to the triplestore
+     * @param algo
+     *            the chosen algorithms
+     * @param alpha
+     *            the threshold
+     * @return the set of MFSs of this query
+     */
+    Set<Query> computeAllMFS(Session s, ComputeMFSAndXSSAlgorithm algo, Double alpha);
 
-	/**
-	 * Run the DFS algorithm and fills allMFS and XSS
-	 * @param session connection to the KB
-	 * @param alpha the threshold
-	 */
-	void runDFS(Session session, Double alpha);
+    /**
+     * Compute the set of XSSs of this query with a specific algorithm.
+     * 
+     * @param s
+     *            the connection to the triplestore
+     * @param algo
+     *            the chosen algorithms
+     * @param alpha
+     *            the threshold
+     * @return the set of XSSs of this query
+     */
+    Set<Query> computeAllXSS(Session s, ComputeMFSAndXSSAlgorithm algo, Double alpha);
 
-	
-	/**
-	 * Launch the LBA algorithm with a set of known MFSs
-	 * @param session the connection to the KB
-	 * @param knownMFS the known MFSs
-	 * @param knownXSS the known XSSs
-	 * @param alpha the threshold
-	 */
-	void runLBA(Session session, Set<Query> knownMFS, Set<Query> knownXSS, Double alpha);
-	
-	/**
-	 * Remove the input triple pattern from this query
-	 * 
-	 * @param the
-	 *            triple pattern to remove
-	 */
-	void removeTriplePattern(TriplePattern t);
+    /**
+     * Return the current MFSs of this query (for the last given alpha)
+     * 
+     * @return the MFSs of this query
+     */
+    Set<Query> getAllMFS();
+
+    /**
+     * Return the current XSSs of this query (for the last given alpha)
+     * 
+     * @return the XSSs of this query
+     */
+    Set<Query> getAllXSS();
+
+    /**
+     * Test if the input query is included or equals to this query
+     * 
+     * @param q
+     *            the input query
+     * @return True if the input query is included in this query
+     */
+    boolean includes(Query q);
+
+    /**
+     * Get the factory of this query
+     */
+    QueryFactory getFactory();
+
+    /**
+     * Run the DFS algorithm and fills allMFS and XSS
+     * 
+     * @param session
+     *            connection to the KB
+     * @param alpha
+     *            the threshold
+     */
+    void runDFS(Session session, Double alpha);
+
+    /**
+     * Launch the LBA algorithm with a set of known MFSs
+     * 
+     * @param session
+     *            the connection to the KB
+     * @param knownMFS
+     *            the known MFSs
+     * @param knownXSS
+     *            the known XSSs
+     * @param alpha
+     *            the threshold
+     */
+    void runLBA(Session session, Set<Query> knownMFS, Set<Query> knownXSS, Double alpha);
+
+    /**
+     * Remove the input triple pattern from this query
+     * 
+     * @param the
+     *            triple pattern to remove
+     */
+    void removeTriplePattern(TriplePattern t);
 }

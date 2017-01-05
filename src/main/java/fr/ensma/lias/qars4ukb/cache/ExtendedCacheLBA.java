@@ -10,11 +10,11 @@ import fr.ensma.lias.qars4ukb.query.Query;
  * Extended management of the cache for executing top-down, bottom-up and hybrid
  * approaches
  * 
- * @author Stéphane JEAN I try an implemetation that fills extensively the cache
- *         (with redundant information to optimize the finding with the hash
- *         function)
+ * I try an implemetation that fills extensively the cache (with redundant
+ * information to optimize the finding with the hash function)
+ * 
+ * @author Stéphane JEAN
  */
-
 public class ExtendedCacheLBA implements ICache {
 
     /**

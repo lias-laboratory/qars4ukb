@@ -50,7 +50,7 @@ public class JenaTDBGraphQuery extends AbstractQuery {
     }
 
     @Override
-    public Result getResult(Session session, Double alpha)  {
+    public Result getResult(Session session, Double alpha) {
 	return helper.getResult(session, alpha);
     }
 

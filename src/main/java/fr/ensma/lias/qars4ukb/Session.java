@@ -23,19 +23,19 @@ package fr.ensma.lias.qars4ukb;
  * @author Mickael BARON
  */
 public interface Session {
-    
+
     /**
      * @throws Exception
      */
-    void close() throws Exception;  
-    
+    void close() throws Exception;
+
     /**
      * Gives the number of executed queries to compute the MFS/XSS.
      * 
      * @return
      */
     int getExecutedQueryCount();
-    
+
     /**
      * Clear the number of executed queries
      */

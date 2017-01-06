@@ -22,11 +22,8 @@ package fr.ensma.lias.qars4ukb.experiment;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,8 +36,6 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
-import fr.ensma.lias.qars4ukb.SQLScriptRunner;
-import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.algo.AlgoBottomUp;
 import fr.ensma.lias.qars4ukb.algo.AlgoHybrid;
 import fr.ensma.lias.qars4ukb.algo.AlgoNLBA;
@@ -50,9 +45,6 @@ import fr.ensma.lias.qars4ukb.algo.IAlgo;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.QueryFactory;
 import fr.ensma.lias.qars4ukb.query.QueryJenaTDBGraphTest;
-import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCQueryExtFactory;
-import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCQueryOptFactory;
-import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCSession;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryExtFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryOptFactory;
 
@@ -402,7 +394,7 @@ public class ExperimentAlgoTest {
      * Method to check that each algorithm returns the same result
      ********************************************************/
 
-    @Test
+  /*  @Test
     public void testValidityOfAlgorithms() {
 	try {
 	    factory = new JDBCQueryOptFactory();
@@ -458,7 +450,7 @@ public class ExperimentAlgoTest {
 	}
 
     }
-
+*/
     @Test
     public void testValidityOfAlgorithmsJenaGraph() {
 	try {

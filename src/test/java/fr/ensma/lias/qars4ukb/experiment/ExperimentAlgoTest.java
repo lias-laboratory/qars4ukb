@@ -489,8 +489,12 @@ public class ExperimentAlgoTest {
 
 		Assert.assertEquals(algoResultNLBA, algoResultBottomUp);
 		Assert.assertEquals(algoResultTopDown, algoResultBottomUp);
+		System.out.println("=============== RESULT NLBA==============");
+		System.out.println(algoResultNLBA);
 		System.out.println("=============== RESULT TOP DOWN==============");
 		System.out.println(algoResultTopDown);
+		System.out.println("=============== RESULT BOTTOM UP==============");
+		System.out.println(algoResultBottomUp);
 		System.out.println("=============== RESULT HYBRID =============");
 		System.out.println(algoResultHybrid);
 

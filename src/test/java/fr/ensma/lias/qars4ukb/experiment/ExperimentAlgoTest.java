@@ -98,6 +98,7 @@ public class ExperimentAlgoTest {
 
     @Test
     public void testJena() {
+	testThatAllQueriesFailsForAnyAlpha();
 	testJenaNLBA();
 	testJenaBottomUp();
 	testJenaTopDown();
@@ -497,7 +498,7 @@ public class ExperimentAlgoTest {
 
     }
 
-    @Test
+    
     public void testThatAllQueriesFailsForAnyAlpha() {
 	FileManager fm = FileManager.get();
 	fm.addLocatorClassLoader(QueryJenaTDBGraphTest.class.getClassLoader());

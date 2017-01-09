@@ -68,7 +68,7 @@ public class ExperimentAlgoTest {
     /**
      * 
      */
-    private List<Double> listOfAlpha = Arrays.asList(0.0, 0.2, 0.4, 0.6, 0.8, 1.0);
+    private List<Double> listOfAlpha = Arrays.asList(0.0, 0.3, 0.6, 0.9);
 
     /**
      * Factory to create the queries

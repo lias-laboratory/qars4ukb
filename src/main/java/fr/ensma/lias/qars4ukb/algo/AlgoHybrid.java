@@ -336,8 +336,6 @@ public class AlgoHybrid extends AbstractAlgo {
 
 	    runHybrid(session, q, discoverMFSsLeft, discoverXSSsLeft, discoverMFSsRight, discoverXSSsRight,
 		    currentAlpha, result);
-	    nbExecutedQuery += session.getExecutedQueryCount();
-
 	}
 	nbCacheHits = ExtendedCacheLBA.getInstance().getNbCacheHits();
 	return result;
@@ -419,8 +417,10 @@ public class AlgoHybrid extends AbstractAlgo {
 	// Find XSSs in the rest of discoverXSSLeft
 	tmp = findAnXSSInEachQuery(q, discoverXSSsRight, currentAlpha.getAlpha(), session);
 	discoverXSSs.addAll(tmp);
-	// add result
+	// add result Executed Query Count
+	nbExecutedQuery += session.getExecutedQueryCount();
 	q.runLBA(session, discoverMFSs, discoverXSSs, currentAlpha.getAlpha());
+	// add result Executed Query Count
 	nbExecutedQuery += session.getExecutedQueryCount();
 	result.addAlphaMFSs(currentAlpha.getAlpha(), q.getAllMFS());
 	result.addAlphaXSSs(currentAlpha.getAlpha(), q.getAllXSS());

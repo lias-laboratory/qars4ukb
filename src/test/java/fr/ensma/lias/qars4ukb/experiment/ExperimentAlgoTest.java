@@ -68,7 +68,7 @@ public class ExperimentAlgoTest {
     /**
      * 
      */
-    private List<Double> listOfAlpha = Arrays.asList(0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0);
+    private List<Double> listOfAlpha = Arrays.asList(0.2, 0.4, 0.6, 0.8);
 
     /**
      * Factory to create the queries
@@ -98,7 +98,8 @@ public class ExperimentAlgoTest {
 
     @Test
     public void testJena() {
-	testThatAllQueriesFailsForAnyAlpha();
+	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
+	//testThatAllQueriesFailsForAnyAlpha();
 	testJenaNLBA();
 	testJenaBottomUp();
 	testJenaTopDown();
@@ -440,6 +441,7 @@ public class ExperimentAlgoTest {
      * 
      * }
      */
+    
     @Test
     public void testValidityOfAlgorithmsJenaGraph() {
 	try {
@@ -500,8 +502,7 @@ public class ExperimentAlgoTest {
 
     
     public void testThatAllQueriesFailsForAnyAlpha() {
-	FileManager fm = FileManager.get();
-	fm.addLocatorClassLoader(QueryJenaTDBGraphTest.class.getClassLoader());
+
 	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
 
 	factory = new JenaTDBGraphQueryOptFactory();

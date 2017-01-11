@@ -20,7 +20,9 @@
 package fr.ensma.lias.qars4ukb.experiment;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -59,6 +61,8 @@ public class ExperimentAlgoTest {
      * File containing all the queries
      */
     private static final String FILE_QUERIES = "queries-icwe2017.test";
+
+    private static final String FILE_QUERY_EXP2 = "query-icwe2017-exp2.test";
 
     /**
      * number of execution of each algorithm for a given query
@@ -500,26 +504,85 @@ public class ExperimentAlgoTest {
 
     }
 
-    
-    public void testThatAllQueriesFailsForAnyAlpha() {
+    /*****************************************
+     * Test with several list of alpha (Exp 2)
+     *****************************************/
 
+    private List<List<Double>> listOfListOfAlpha = Arrays.asList(Arrays.asList(0.1), Arrays.asList(0.1, 0.2),
+	    Arrays.asList(0.1, 0.2, 0.3), Arrays.asList(0.1, 0.2, 0.3, 0.4), Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5),
+	    Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6), Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+	    Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+	    Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9));
+
+    @Test
+    public void testExp2() {
 	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
+	testExp2NLBA();
+	testExp2BottomUp();
+	testExp2TopDown();
+	testExp2Hybrid();
+    }
 
+    public void testExp2NLBA() {
 	factory = new JenaTDBGraphQueryOptFactory();
+	launchExp2(Algorithm.NLBA, PLAT_JENA, listOfListOfAlpha);
+    }
+
+    public void testExp2BottomUp() {
+	factory = new JenaTDBGraphQueryExtFactory();
+	launchExp2(Algorithm.BOTTOMUP, PLAT_JENA, listOfListOfAlpha);
+    }
+
+    public void testExp2TopDown() {
+	factory = new JenaTDBGraphQueryExtFactory();
+	launchExp2(Algorithm.TOPDOWN, PLAT_JENA, listOfListOfAlpha);
+    }
+
+    public void testExp2Hybrid() {
+	factory = new JenaTDBGraphQueryExtFactory();
+	launchExp2(Algorithm.HYBRID, PLAT_JENA, listOfListOfAlpha);
+    }
+
+    public void launchExp2(Algorithm typeAlgo, String platform, List<List<Double>> listOfListOfAlpha) {
 	List<QueryExplain> newTestResultPairList = null;
 	try {
-	    newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERIES);
-
-	    for (int i = 0; i < newTestResultPairList.size(); i++) {
-		QueryExplain qExplain = newTestResultPairList.get(i);
-		Query q = qExplain.getQuery();
-		for (Double alpha : listOfAlpha) {
-		    Assert.assertTrue(q.isFailing(factory.createSession(), alpha));
+	    newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERY_EXP2);
+	    QueryExplain qExplain = newTestResultPairList.get(0);
+	    Query q = qExplain.getQuery();
+	    String description = qExplain.getDescription();
+	    System.out.println("-----------------------------------------------------------");
+	    System.out.println("Query (" + description + "): " + q);
+	    System.out.println("-----------------------------------------------------------");
+	    BufferedWriter fichier = new BufferedWriter(
+		    new FileWriter("exp2-" + platform + "-" + typeAlgo.name() + ".csv"));
+	    for (int i = 0; i < listOfListOfAlpha.size(); i++) {
+		ExpRelaxResult results = new ExpRelaxResult(NB_EXEC);
+		System.out.println("change list of alpha " + listOfListOfAlpha.get(i));
+		for (int k = 0; k <= NB_EXEC; k++) {
+		    q = factory.createQuery(q.toString());
+		    executeAlgo(q, typeAlgo, listOfListOfAlpha.get(i));
+		    int nbExecutedQuery = algo.getNbExecutedQuery();
+		    int nbCacheHits = algo.getNbCacheHits();
+		    float tps = algo.getComputingTime();
+		    if (k > 0) {
+			results.addQueryResult(k - 1, q, tps, nbExecutedQuery, nbCacheHits);
+		    }
+		    System.out.println(typeAlgo.name() + " - Time = " + tps + ", NbQueriesExecuted: " + nbExecutedQuery
+			    + ", NbCacheHits: " + nbCacheHits);
 		}
+		StringBuffer res = new StringBuffer("");
+		Float valTime = ExpRelaxResult.round(results.getAvgTime(q), 2);
+		res.append(valTime.toString().replace('.', ',') + "\t");
+		int nbExecutedQuery = Math.round(results.getAvgNbExecutedQuery(q));
+		res.append(nbExecutedQuery + "\t");
+		int nbCacheHits = Math.round(results.getAvgCacheHits(q));
+		res.append(nbCacheHits + "\n");
+		fichier.write(res.toString());
 	    }
+	    fichier.close();
 	} catch (IOException e) {
-	    System.out.println("It exist one ore many successful queries in the file of queries.");
-	    e.printStackTrace();
+	    System.out.println("Unable to read the queries in the file.");
+  	    e.printStackTrace();
 	}
     }
 

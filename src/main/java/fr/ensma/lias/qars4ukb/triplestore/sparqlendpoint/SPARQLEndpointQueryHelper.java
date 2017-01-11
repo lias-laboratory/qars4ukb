@@ -67,36 +67,17 @@ public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 
     @Override
     public String toNativeQuery(Double alpha) {
-	prefixes = new HashMap<String, String>();
-	prefixes.put("http://www.w3.org/1999/02/22-rdf-syntax-ns", "rdf");
-	prefixes.put("http://swat.cse.lehigh.edu/onto/univ-bench.owl", "lubm");
 
-	StringBuffer newQuery = new StringBuffer(this.q.toString());
-	for (String current : prefixes.keySet()) {
-	    Pattern pattern = Pattern.compile("<" + current + "#");
-	    Matcher matcher = pattern.matcher(newQuery.toString());
-	    newQuery = new StringBuffer(matcher.replaceAll(prefixes.get(current) + ":"));
+	String s = q.toString();
+	String res = null;
+	if (s.contains("WHERE"))
+	    res = s.replace("WHERE", "{ GRAPH ?g");
+	else
+	    res = s.replace("where", "{ GRAPH ?g");
 
-	    final String[] split = newQuery.toString().split(prefixes.get(current) + ":");
-	    Pattern secondPattern = Pattern.compile("([^>]*)>(.*)");
-	    StringJoiner js = new StringJoiner(prefixes.get(current) + ":");
-	    js.add(split[0]);
-	    for (int i = 1; i < split.length; i++) {
-		final Matcher secondMatcher = secondPattern.matcher(split[i]);
-		if (secondMatcher.matches()) {
-		    js.add(secondMatcher.replaceAll("$1$2"));
-		}
-	    }
-	    newQuery = new StringBuffer(js.toString());
-	}
+	res = res.replace("}", ".} FILTER(xsd:double(str(?g)) > " +alpha+") }");
+	res = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + res;
+	return res;
 
-	StringBuffer prefix = new StringBuffer();
-	for (String current : prefixes.keySet()) {
-	    prefix.append("PREFIX " + prefixes.get(current) + ":<" + current + "#> ");
-	}
-
-	prefix.append(" " + newQuery.toString() + " LIMIT 350");
-
-	return prefix.toString();
     }
 }

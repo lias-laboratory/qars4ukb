@@ -24,11 +24,8 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,8 +38,6 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
-import fr.ensma.lias.qars4ukb.SQLScriptRunner;
-import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.algo.AlgoBottomUp;
 import fr.ensma.lias.qars4ukb.algo.AlgoHybrid;
 import fr.ensma.lias.qars4ukb.algo.AlgoNLBA;
@@ -52,9 +47,6 @@ import fr.ensma.lias.qars4ukb.algo.IAlgo;
 import fr.ensma.lias.qars4ukb.query.Query;
 import fr.ensma.lias.qars4ukb.query.QueryFactory;
 import fr.ensma.lias.qars4ukb.query.QueryJenaTDBGraphTest;
-import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCQueryExtFactory;
-import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCQueryOptFactory;
-import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCSession;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryExtFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryOptFactory;
 
@@ -80,7 +72,7 @@ public class ExperimentAlgoTest {
     /**
      * 
      */
-    private List<Double> listOfAlpha = Arrays.asList(0.0, 0.2, 0.4, 0.6, 0.8, 1.0);
+    private List<Double> listOfAlpha = Arrays.asList(0.2, 0.4, 0.6, 0.8);
 
     /**
      * Factory to create the queries
@@ -110,6 +102,8 @@ public class ExperimentAlgoTest {
 
     @Test
     public void testJena() {
+	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
+	//testThatAllQueriesFailsForAnyAlpha();
 	testJenaNLBA();
 	testJenaBottomUp();
 	testJenaTopDown();
@@ -406,63 +400,52 @@ public class ExperimentAlgoTest {
      * Method to check that each algorithm returns the same result
      ********************************************************/
 
-    @Test
-    public void testValidityOfAlgorithms() {
-	try {
-	    factory = new JDBCQueryOptFactory();
-	    Session session = factory.createSession();
-	    SQLScriptRunner newScriptRunner = new SQLScriptRunner(((JDBCSession) session).getConnection(), false,
-		    false);
-	    InputStream resourceAsStream = getClass().getResourceAsStream("/test_dataset1.sql");
-	    newScriptRunner.runScript(new InputStreamReader(resourceAsStream));
-
-	    List<QueryExplain> newTestResultPairList = null;
-
-	    newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERIES);
-	    for (int i = 0; i < newTestResultPairList.size(); i++) {
-		QueryExplain qExplain = newTestResultPairList.get(i);
-		Query q = qExplain.getQuery();
-		// String description = qExplain.getDescription();
-		// System.out.println("Query (" + description + "): ");
-		// NLBA
-		factory = new JDBCQueryOptFactory();
-		q = factory.createQuery(q.toString());
-		algo = new AlgoNLBA();
-		AlgoResult algoResultNLBA = algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
-		// HYBRID
-		factory = new JDBCQueryExtFactory();
-		q = factory.createQuery(q.toString());
-		algo = new AlgoHybrid();
-		AlgoResult algoResultHybrid = algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
-		// BOTTOM UP
-		factory = new JDBCQueryExtFactory();
-		q = factory.createQuery(q.toString());
-		algo = new AlgoBottomUp();
-		AlgoResult algoResultBottomUp = algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
-		// TOP DOWN
-		factory = new JDBCQueryExtFactory();
-		q = factory.createQuery(q.toString());
-		algo = new AlgoTopDown();
-		AlgoResult algoResultTopDown = algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
-
-		Assert.assertEquals(algoResultNLBA, algoResultBottomUp);
-		Assert.assertEquals(algoResultTopDown, algoResultBottomUp);
-		System.out.println("=============== RESULT TOP DOWN=============");
-		System.out.println(algoResultTopDown);
-		System.out.println("=============== RESULT HYBRID =============");
-		System.out.println(algoResultHybrid);
-
-		Assert.assertEquals(algoResultTopDown, algoResultHybrid);
-
-	    }
-
-	} catch (IOException | SQLException e) {
-	    System.out.println("Unable to read the queries in the file.");
-	    e.printStackTrace();
-	}
-
-    }
-
+    /*
+     * @Test public void testValidityOfAlgorithms() { try { factory = new
+     * JDBCQueryOptFactory(); Session session = factory.createSession();
+     * SQLScriptRunner newScriptRunner = new SQLScriptRunner(((JDBCSession)
+     * session).getConnection(), false, false); InputStream resourceAsStream =
+     * getClass().getResourceAsStream("/test_dataset1.sql");
+     * newScriptRunner.runScript(new InputStreamReader(resourceAsStream));
+     * 
+     * List<QueryExplain> newTestResultPairList = null;
+     * 
+     * newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERIES);
+     * for (int i = 0; i < newTestResultPairList.size(); i++) { QueryExplain
+     * qExplain = newTestResultPairList.get(i); Query q = qExplain.getQuery();
+     * // String description = qExplain.getDescription(); //
+     * System.out.println("Query (" + description + "): "); // NLBA factory =
+     * new JDBCQueryOptFactory(); q = factory.createQuery(q.toString()); algo =
+     * new AlgoNLBA(); AlgoResult algoResultNLBA =
+     * algo.computesAlphaMFSsAndXSSs(q, listOfAlpha); // HYBRID factory = new
+     * JDBCQueryExtFactory(); q = factory.createQuery(q.toString()); algo = new
+     * AlgoHybrid(); AlgoResult algoResultHybrid =
+     * algo.computesAlphaMFSsAndXSSs(q, listOfAlpha); // BOTTOM UP factory = new
+     * JDBCQueryExtFactory(); q = factory.createQuery(q.toString()); algo = new
+     * AlgoBottomUp(); AlgoResult algoResultBottomUp =
+     * algo.computesAlphaMFSsAndXSSs(q, listOfAlpha); // TOP DOWN factory = new
+     * JDBCQueryExtFactory(); q = factory.createQuery(q.toString()); algo = new
+     * AlgoTopDown(); AlgoResult algoResultTopDown =
+     * algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
+     * 
+     * Assert.assertEquals(algoResultNLBA, algoResultBottomUp);
+     * Assert.assertEquals(algoResultTopDown, algoResultBottomUp);
+     * System.out.println("=============== RESULT TOP DOWN=============");
+     * System.out.println(algoResultTopDown);
+     * System.out.println("=============== RESULT HYBRID =============");
+     * System.out.println(algoResultHybrid);
+     * 
+     * Assert.assertEquals(algoResultTopDown, algoResultHybrid);
+     * 
+     * }
+     * 
+     * } catch (IOException | SQLException e) {
+     * System.out.println("Unable to read the queries in the file.");
+     * e.printStackTrace(); }
+     * 
+     * }
+     */
+    
     @Test
     public void testValidityOfAlgorithmsJenaGraph() {
 	try {
@@ -501,8 +484,12 @@ public class ExperimentAlgoTest {
 
 		Assert.assertEquals(algoResultNLBA, algoResultBottomUp);
 		Assert.assertEquals(algoResultTopDown, algoResultBottomUp);
+		System.out.println("=============== RESULT NLBA==============");
+		System.out.println(algoResultNLBA);
 		System.out.println("=============== RESULT TOP DOWN==============");
 		System.out.println(algoResultTopDown);
+		System.out.println("=============== RESULT BOTTOM UP==============");
+		System.out.println(algoResultBottomUp);
 		System.out.println("=============== RESULT HYBRID =============");
 		System.out.println(algoResultHybrid);
 
@@ -595,7 +582,7 @@ public class ExperimentAlgoTest {
 	    fichier.close();
 	} catch (IOException e) {
 	    System.out.println("Unable to read the queries in the file.");
-	    e.printStackTrace();
+  	    e.printStackTrace();
 	}
     }
 

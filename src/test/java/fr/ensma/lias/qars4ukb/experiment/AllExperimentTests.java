@@ -28,7 +28,7 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses(value = { 
-	ExperimentAlgoTest.class})
+	 VirtuosoExperimentAlgoTest.class, ExperimentAlgoTest.class})
 public class AllExperimentTests {
 
 }

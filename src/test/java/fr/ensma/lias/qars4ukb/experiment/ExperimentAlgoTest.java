@@ -102,6 +102,7 @@ public class ExperimentAlgoTest {
 
     @Test
     public void testJena() {
+	System.out.println("=============== JENA EXPERIMENTAION ==============");
 	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
 	//testThatAllQueriesFailsForAnyAlpha();
 	testJenaNLBA();

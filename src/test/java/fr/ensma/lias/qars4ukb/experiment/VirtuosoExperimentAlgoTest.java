@@ -97,8 +97,7 @@ public class VirtuosoExperimentAlgoTest {
 
     @Test
     public void testVirtuoso() {
-	
-	testThatAllQueriesFailsForAnyAlpha();
+	System.out.println("=============== VIRTUOSO EXPERIMENTATION==============");
 	testVirtuosoNLBA();
 	testVirtuosoBottomUp();
 	testVirtuosoTopDown();

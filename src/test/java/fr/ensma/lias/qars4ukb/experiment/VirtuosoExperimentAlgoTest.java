@@ -96,7 +96,7 @@ public class VirtuosoExperimentAlgoTest {
      * Virtuoso
      *************************/
 
-    @Test
+   // @Test
     public void testVirtuoso() {
 	System.out.println("=============== VIRTUOSO EXPERIMENTATION==============");
 	//testThatAllQueriesFailsForAnyAlpha();
@@ -368,7 +368,7 @@ public class VirtuosoExperimentAlgoTest {
     /********************************************************
      * Method to check that each algorithm returns the same result
      ********************************************************/
-    @Test
+   // @Test
     public void testValidityOfAlgorithmsVirtuosoGraph() {
 	try {
 

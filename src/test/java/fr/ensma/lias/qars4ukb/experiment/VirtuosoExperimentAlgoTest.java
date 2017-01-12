@@ -20,7 +20,9 @@
 package fr.ensma.lias.qars4ukb.experiment;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -29,7 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -58,7 +59,7 @@ public class VirtuosoExperimentAlgoTest {
      * File containing all the queries
      */
     private static final String FILE_QUERIES = "queries-icwe2017.test";
-
+    private static final String FILE_QUERY_EXP2 = "query-icwe2017-exp2.test";
     /**
      * number of execution of each algorithm for a given query
      */
@@ -98,6 +99,7 @@ public class VirtuosoExperimentAlgoTest {
     @Test
     public void testVirtuoso() {
 	System.out.println("=============== VIRTUOSO EXPERIMENTATION==============");
+	//testThatAllQueriesFailsForAnyAlpha();
 	testVirtuosoNLBA();
 	testVirtuosoBottomUp();
 	testVirtuosoTopDown();
@@ -124,33 +126,6 @@ public class VirtuosoExperimentAlgoTest {
 	testAlgo(Algorithm.HYBRID, PLAT_VIRTUOSO, listOfAlpha);
     }
 
-    /*************************
-     * Test with an HSQL Database in-memory
-     *************************/
-    /*
-     * @Test public void testHSQLDB() throws Exception { testHSQLDBNLBA();
-     * testHSQLDBBottomUp(); testHSQLDBTopDown(); testHSQLDBHybrid(); }
-     * 
-     * @Test public void testHSQLDBNLBA() throws Exception { factory = new
-     * JDBCQueryOptFactory(); Session session = factory.createSession();
-     * SQLScriptRunner newScriptRunner = new SQLScriptRunner(((JDBCSession)
-     * session).getConnection(), false, false); InputStream resourceAsStream =
-     * getClass().getResourceAsStream("/test_dataset1.sql");
-     * newScriptRunner.runScript(new InputStreamReader(resourceAsStream));
-     * testAlgo(Algorithm.NLBA, PLAT_JENA, listOfAlpha); }
-     * 
-     * @Test public void testHSQLDBBottomUp() throws Exception { factory = new
-     * JDBCQueryExtFactory(); testAlgo(Algorithm.BOTTOMUP, PLAT_JENA,
-     * listOfAlpha); }
-     * 
-     * @Test public void testHSQLDBTopDown() throws Exception { factory = new
-     * JDBCQueryExtFactory(); testAlgo(Algorithm.TOPDOWN, PLAT_JENA,
-     * listOfAlpha); }
-     * 
-     * @Test public void testHSQLDBHybrid() throws Exception { factory = new
-     * JDBCQueryExtFactory(); testAlgo(Algorithm.HYBRID, PLAT_JENA,
-     * listOfAlpha); }
-     */
     /************************************
      * Main method to test the algorithms
      ************************************/
@@ -393,56 +368,9 @@ public class VirtuosoExperimentAlgoTest {
     /********************************************************
      * Method to check that each algorithm returns the same result
      ********************************************************/
-
-    /*
-     * @Test public void testValidityOfAlgorithms() { try { factory = new
-     * JDBCQueryOptFactory(); Session session = factory.createSession();
-     * SQLScriptRunner newScriptRunner = new SQLScriptRunner(((JDBCSession)
-     * session).getConnection(), false, false); InputStream resourceAsStream =
-     * getClass().getResourceAsStream("/test_dataset1.sql");
-     * newScriptRunner.runScript(new InputStreamReader(resourceAsStream));
-     * 
-     * List<QueryExplain> newTestResultPairList = null;
-     * 
-     * newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERIES);
-     * for (int i = 0; i < newTestResultPairList.size(); i++) { QueryExplain
-     * qExplain = newTestResultPairList.get(i); Query q = qExplain.getQuery();
-     * // String description = qExplain.getDescription(); //
-     * System.out.println("Query (" + description + "): "); // NLBA factory =
-     * new JDBCQueryOptFactory(); q = factory.createQuery(q.toString()); algo =
-     * new AlgoNLBA(); AlgoResult algoResultNLBA =
-     * algo.computesAlphaMFSsAndXSSs(q, listOfAlpha); // HYBRID factory = new
-     * JDBCQueryExtFactory(); q = factory.createQuery(q.toString()); algo = new
-     * AlgoHybrid(); AlgoResult algoResultHybrid =
-     * algo.computesAlphaMFSsAndXSSs(q, listOfAlpha); // BOTTOM UP factory = new
-     * JDBCQueryExtFactory(); q = factory.createQuery(q.toString()); algo = new
-     * AlgoBottomUp(); AlgoResult algoResultBottomUp =
-     * algo.computesAlphaMFSsAndXSSs(q, listOfAlpha); // TOP DOWN factory = new
-     * JDBCQueryExtFactory(); q = factory.createQuery(q.toString()); algo = new
-     * AlgoTopDown(); AlgoResult algoResultTopDown =
-     * algo.computesAlphaMFSsAndXSSs(q, listOfAlpha);
-     * 
-     * Assert.assertEquals(algoResultNLBA, algoResultBottomUp);
-     * Assert.assertEquals(algoResultTopDown, algoResultBottomUp);
-     * System.out.println("=============== RESULT TOP DOWN=============");
-     * System.out.println(algoResultTopDown);
-     * System.out.println("=============== RESULT HYBRID =============");
-     * System.out.println(algoResultHybrid);
-     * 
-     * Assert.assertEquals(algoResultTopDown, algoResultHybrid);
-     * 
-     * }
-     * 
-     * } catch (IOException | SQLException e) {
-     * System.out.println("Unable to read the queries in the file.");
-     * e.printStackTrace(); }
-     * 
-     * }
-     */
-
+    @Test
     public void testValidityOfAlgorithmsVirtuosoGraph() {
 	try {
-	
 
 	    factory = new SPARQLEndpointQueryOptFactory();
 	    List<QueryExplain> newTestResultPairList = null;
@@ -497,21 +425,104 @@ public class VirtuosoExperimentAlgoTest {
 
     public void testThatAllQueriesFailsForAnyAlpha() {
 
+   	
 
-	factory = new SPARQLEndpointQueryFactory();
+   	factory = new SPARQLEndpointQueryFactory();
+   	List<QueryExplain> newTestResultPairList = null;
+   	try {
+   	    newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERIES);
+
+   	    for (int i = 0; i < newTestResultPairList.size(); i++) {
+   		QueryExplain qExplain = newTestResultPairList.get(i);
+   		Query q = qExplain.getQuery();
+   		
+   		for (Double alpha : listOfAlpha) {
+   		    System.out.println(q.toNativeQuery(alpha));
+   		    Assert.assertTrue(q.isFailing(factory.createSession(), alpha));
+   		}
+   	    }
+   	} catch (IOException e) {
+   	    System.out.println("It exist one ore many successful queries in the file of queries.");
+   	    e.printStackTrace();
+   	}
+       }
+    /*****************************************
+     * Test with several list of alpha (Exp 2)
+     *****************************************/
+
+    private List<List<Double>> listOfListOfAlpha = Arrays.asList(Arrays.asList(0.1), Arrays.asList(0.1, 0.2),
+	    Arrays.asList(0.1, 0.2, 0.3), Arrays.asList(0.1, 0.2, 0.3, 0.4), Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5),
+	    Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6), Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+	    Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+	    Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9));
+
+    @Test
+    public void testExp2() {
+	testExp2NLBA();
+	testExp2BottomUp();
+	testExp2TopDown();
+	testExp2Hybrid();
+    }
+
+    public void testExp2NLBA() {
+	factory = new SPARQLEndpointQueryOptFactory();
+	launchExp2(Algorithm.NLBA, PLAT_VIRTUOSO, listOfListOfAlpha);
+    }
+
+    public void testExp2BottomUp() {
+	factory = new SPARQLEndpointQueryExtFactory();
+	launchExp2(Algorithm.BOTTOMUP, PLAT_VIRTUOSO, listOfListOfAlpha);
+    }
+
+    public void testExp2TopDown() {
+	factory = new SPARQLEndpointQueryExtFactory();
+	launchExp2(Algorithm.TOPDOWN, PLAT_VIRTUOSO, listOfListOfAlpha);
+    }
+
+    public void testExp2Hybrid() {
+	factory = new SPARQLEndpointQueryExtFactory();
+	launchExp2(Algorithm.HYBRID, PLAT_VIRTUOSO, listOfListOfAlpha);
+    }
+
+    public void launchExp2(Algorithm typeAlgo, String platform, List<List<Double>> listOfListOfAlpha) {
 	List<QueryExplain> newTestResultPairList = null;
 	try {
-	    newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERIES);
-
-	    for (int i = 0; i < newTestResultPairList.size(); i++) {
-		QueryExplain qExplain = newTestResultPairList.get(i);
-		Query q = qExplain.getQuery();
-		for (Double alpha : listOfAlpha) {
-		    Assert.assertTrue(q.isFailing(factory.createSession(), alpha));
+	    newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERY_EXP2);
+	    QueryExplain qExplain = newTestResultPairList.get(0);
+	    Query q = qExplain.getQuery();
+	    String description = qExplain.getDescription();
+	    System.out.println("-----------------------------------------------------------");
+	    System.out.println("Query (" + description + "): " + q);
+	    System.out.println("-----------------------------------------------------------");
+	    BufferedWriter fichier = new BufferedWriter(
+		    new FileWriter("exp2-" + platform + "-" + typeAlgo.name() + ".csv"));
+	    for (int i = 0; i < listOfListOfAlpha.size(); i++) {
+		ExpRelaxResult results = new ExpRelaxResult(NB_EXEC);
+		System.out.println("change list of alpha " + listOfListOfAlpha.get(i));
+		for (int k = 0; k <= NB_EXEC; k++) {
+		    q = factory.createQuery(q.toString());
+		    executeAlgo(q, typeAlgo, listOfListOfAlpha.get(i));
+		    int nbExecutedQuery = algo.getNbExecutedQuery();
+		    int nbCacheHits = algo.getNbCacheHits();
+		    float tps = algo.getComputingTime();
+		    if (k > 0) {
+			results.addQueryResult(k - 1, q, tps, nbExecutedQuery, nbCacheHits);
+		    }
+		    System.out.println(typeAlgo.name() + " - Time = " + tps + ", NbQueriesExecuted: " + nbExecutedQuery
+			    + ", NbCacheHits: " + nbCacheHits);
 		}
+		StringBuffer res = new StringBuffer("");
+		Float valTime = ExpRelaxResult.round(results.getAvgTime(q), 2);
+		res.append(valTime.toString().replace('.', ',') + "\t");
+		int nbExecutedQuery = Math.round(results.getAvgNbExecutedQuery(q));
+		res.append(nbExecutedQuery + "\t");
+		int nbCacheHits = Math.round(results.getAvgCacheHits(q));
+		res.append(nbCacheHits + "\n");
+		fichier.write(res.toString());
 	    }
+	    fichier.close();
 	} catch (IOException e) {
-	    System.out.println("It exist one ore many successful queries in the file of queries.");
+	    System.out.println("Unable to read the queries in the file.");
 	    e.printStackTrace();
 	}
     }

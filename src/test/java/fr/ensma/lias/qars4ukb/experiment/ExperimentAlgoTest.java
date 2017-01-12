@@ -49,6 +49,7 @@ import fr.ensma.lias.qars4ukb.query.QueryFactory;
 import fr.ensma.lias.qars4ukb.query.QueryJenaTDBGraphTest;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryExtFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryOptFactory;
+import fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint.SPARQLEndpointQueryFactory;
 
 /**
  * @author Stéphane JEAN
@@ -104,6 +105,7 @@ public class ExperimentAlgoTest {
     public void testJena() {
 	System.out.println("=============== JENA EXPERIMENTAION ==============");
 	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
+	testThatAllQueriesFailsForAnyAlpha();
 	//testThatAllQueriesFailsForAnyAlpha();
 	testJenaNLBA();
 	testJenaBottomUp();
@@ -504,7 +506,27 @@ public class ExperimentAlgoTest {
 	}
 
     }
+    public void testThatAllQueriesFailsForAnyAlpha() {
 
+   	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
+
+   	factory = new SPARQLEndpointQueryFactory();
+   	List<QueryExplain> newTestResultPairList = null;
+   	try {
+   	    newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERIES);
+
+   	    for (int i = 0; i < newTestResultPairList.size(); i++) {
+   		QueryExplain qExplain = newTestResultPairList.get(i);
+   		Query q = qExplain.getQuery();
+   		for (Double alpha : listOfAlpha) {
+   		    Assert.assertTrue(q.isFailing(factory.createSession(), alpha));
+   		}
+   	    }
+   	} catch (IOException e) {
+   	    System.out.println("It exist one ore many successful queries in the file of queries.");
+   	    e.printStackTrace();
+   	}
+       }
     /*****************************************
      * Test with several list of alpha (Exp 2)
      *****************************************/

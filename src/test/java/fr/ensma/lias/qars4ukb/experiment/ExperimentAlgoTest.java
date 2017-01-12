@@ -101,11 +101,11 @@ public class ExperimentAlgoTest {
      * Jena
      *************************/
 
-    @Test
+   // @Test
     public void testJena() {
 	System.out.println("=============== JENA EXPERIMENTAION ==============");
 	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
-	testThatAllQueriesFailsForAnyAlpha();
+	//testThatAllQueriesFailsForAnyAlpha();
 	//testThatAllQueriesFailsForAnyAlpha();
 	testJenaNLBA();
 	testJenaBottomUp();
@@ -449,7 +449,7 @@ public class ExperimentAlgoTest {
      * }
      */
     
-    @Test
+    //@Test
     public void testValidityOfAlgorithmsJenaGraph() {
 	try {
 	    FileManager fm = FileManager.get();

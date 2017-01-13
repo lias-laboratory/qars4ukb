@@ -456,7 +456,7 @@ public class VirtuosoExperimentAlgoTest {
 	    Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
 	    Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9));
 
-    @Test
+    //@Test
     public void testExp2() {
 	testExp2NLBA();
 	testExp2BottomUp();

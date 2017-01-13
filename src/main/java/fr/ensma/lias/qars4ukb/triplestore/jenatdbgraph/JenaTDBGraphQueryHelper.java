@@ -26,6 +26,7 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.tdb.store.NodeId;
 import org.apache.jena.tdb.sys.SystemTDB;
 import org.apache.jena.tdb.sys.TDBInternal;
@@ -52,8 +53,8 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
 	org.apache.jena.query.Query query = org.apache.jena.query.QueryFactory.create(sparqlQueryString);
 	QueryExecution qexec = QueryExecutionFactory.create(query, ((JenaTDBGraphSession) session).getDataset());
 	// add the filter function to the Query Execution
-	//qexec.getContext().set(SystemTDB.symTupleFilter,
-	//	createFilter(((JenaTDBGraphSession) session).getDataset(), alpha));
+	qexec.getContext().set(SystemTDB.symTupleFilter,
+		createFilter(((JenaTDBGraphSession) session).getDataset(), alpha));
 	ResultSet results = qexec.execSelect();
 
 	((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
@@ -94,26 +95,10 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
 	QueryExecution qexec = QueryExecutionFactory.create(toNativeQuery(alpha),
 		((JenaTDBGraphSession) s).getDataset());
 	// add the filter function to the Query Execution
-	//qexec.getContext().set(SystemTDB.symTupleFilter, createFilter(((JenaTDBGraphSession) s).getDataset(), alpha));
+	qexec.getContext().set(SystemTDB.symTupleFilter, createFilter(((JenaTDBGraphSession) s).getDataset(), alpha));
 	ResultSet results = qexec.execSelect();
-	// ResultSetFormatter.out(results);
+	ResultSetFormatter.out(results);
 	return new JenaTDBGraphResult(results);
     }
-    
-    
-    @Override
-    public String toNativeQuery(Double alpha) {
 
-	String s = q.toString();
-	String res = null;
-	if (s.contains("WHERE"))
-	    res = s.replace("WHERE", "{ GRAPH ?g");
-	else
-	    res = s.replace("where", "{ GRAPH ?g");
-
-	res = res.replace("}", ".} FILTER(xsd:double(str(?g)) > " +alpha+") }");
-	res = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + res;
-	return res;
-
-    }
 }

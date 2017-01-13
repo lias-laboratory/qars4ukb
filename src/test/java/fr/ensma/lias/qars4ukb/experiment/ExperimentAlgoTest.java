@@ -49,7 +49,9 @@ import fr.ensma.lias.qars4ukb.query.QueryFactory;
 import fr.ensma.lias.qars4ukb.query.QueryJenaTDBGraphTest;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryExtFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryOptFactory;
+import fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint.SPARQLEndpointQueryExtFactory;
 import fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint.SPARQLEndpointQueryFactory;
+import fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint.SPARQLEndpointQueryOptFactory;
 
 /**
  * @author Stéphane JEAN
@@ -83,6 +85,7 @@ public class ExperimentAlgoTest {
     /**
      * The used platform
      */
+    private static final String PLAT_VIRTUOSO = "VIRTUOSO";
     private static final String PLAT_JENA = "JENA";
 
     /**
@@ -105,7 +108,7 @@ public class ExperimentAlgoTest {
     public void testJena() {
 	System.out.println("=============== JENA EXPERIMENTAION ==============");
 	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
-	//testThatAllQueriesFailsForAnyAlpha();
+	// testThatAllQueriesFailsForAnyAlpha();
 	testThatAllQueriesFailsForAnyAlpha();
 	testJenaNLBA();
 	testJenaBottomUp();
@@ -131,6 +134,36 @@ public class ExperimentAlgoTest {
     public void testJenaHybrid() {
 	factory = new JenaTDBGraphQueryExtFactory();
 	testAlgo(Algorithm.HYBRID, PLAT_JENA, listOfAlpha);
+    }
+
+    @Test
+    public void testVirtuoso() {
+	System.out.println("=============== VIRTUOSO EXPERIMENTATION==============");
+	// testThatAllQueriesFailsForAnyAlpha();
+	testVirtuosoNLBA();
+	testVirtuosoBottomUp();
+	testVirtuosoTopDown();
+	testVirtuosoHybrid();
+    }
+
+    public void testVirtuosoNLBA() {
+	factory = new SPARQLEndpointQueryOptFactory();
+	testAlgo(Algorithm.NLBA, PLAT_VIRTUOSO, listOfAlpha);
+    }
+
+    public void testVirtuosoBottomUp() {
+	factory = new SPARQLEndpointQueryExtFactory();
+	testAlgo(Algorithm.BOTTOMUP, PLAT_VIRTUOSO, listOfAlpha);
+    }
+
+    public void testVirtuosoTopDown() {
+	factory = new SPARQLEndpointQueryExtFactory();
+	testAlgo(Algorithm.TOPDOWN, PLAT_VIRTUOSO, listOfAlpha);
+    }
+
+    public void testVirtuosoHybrid() {
+	factory = new SPARQLEndpointQueryExtFactory();
+	testAlgo(Algorithm.HYBRID, PLAT_VIRTUOSO, listOfAlpha);
     }
 
     /*************************
@@ -448,8 +481,8 @@ public class ExperimentAlgoTest {
      * 
      * }
      */
-    
-    //@Test
+
+    @Test
     public void testValidityOfAlgorithmsJenaGraph() {
 	try {
 	    FileManager fm = FileManager.get();
@@ -506,28 +539,30 @@ public class ExperimentAlgoTest {
 	}
 
     }
+
     public void testThatAllQueriesFailsForAnyAlpha() {
 
-   	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
+	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
 
-   	factory = new SPARQLEndpointQueryFactory();
-   	List<QueryExplain> newTestResultPairList = null;
-   	try {
-   	    newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERIES);
+	factory = new SPARQLEndpointQueryFactory();
+	List<QueryExplain> newTestResultPairList = null;
+	try {
+	    newTestResultPairList = this.newTestResultPairList("/" + FILE_QUERIES);
 
-   	    for (int i = 0; i < newTestResultPairList.size(); i++) {
-   		QueryExplain qExplain = newTestResultPairList.get(i);
-   		Query q = qExplain.getQuery();
-   		for (Double alpha : listOfAlpha) {
-   		    System.out.println(q.toNativeQuery(alpha));
-   		    Assert.assertTrue(q.isFailing(factory.createSession(), alpha));
-   		}
-   	    }
-   	} catch (IOException e) {
-   	    System.out.println("It exist one ore many successful queries in the file of queries.");
-   	    e.printStackTrace();
-   	}
-       }
+	    for (int i = 0; i < newTestResultPairList.size(); i++) {
+		QueryExplain qExplain = newTestResultPairList.get(i);
+		Query q = qExplain.getQuery();
+		for (Double alpha : listOfAlpha) {
+		    System.out.println(q.toNativeQuery(alpha));
+		    Assert.assertTrue(q.isFailing(factory.createSession(), alpha));
+		}
+	    }
+	} catch (IOException e) {
+	    System.out.println("It exist one ore many successful queries in the file of queries.");
+	    e.printStackTrace();
+	}
+    }
+
     /*****************************************
      * Test with several list of alpha (Exp 2)
      *****************************************/
@@ -606,7 +641,7 @@ public class ExperimentAlgoTest {
 	    fichier.close();
 	} catch (IOException e) {
 	    System.out.println("Unable to read the queries in the file.");
-  	    e.printStackTrace();
+	    e.printStackTrace();
 	}
     }
 

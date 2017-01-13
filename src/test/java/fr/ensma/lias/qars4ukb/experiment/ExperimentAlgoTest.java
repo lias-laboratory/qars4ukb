@@ -101,12 +101,12 @@ public class ExperimentAlgoTest {
      * Jena
      *************************/
 
-   // @Test
+    @Test
     public void testJena() {
 	System.out.println("=============== JENA EXPERIMENTAION ==============");
 	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
 	//testThatAllQueriesFailsForAnyAlpha();
-	//testThatAllQueriesFailsForAnyAlpha();
+	testThatAllQueriesFailsForAnyAlpha();
 	testJenaNLBA();
 	testJenaBottomUp();
 	testJenaTopDown();
@@ -519,6 +519,7 @@ public class ExperimentAlgoTest {
    		QueryExplain qExplain = newTestResultPairList.get(i);
    		Query q = qExplain.getQuery();
    		for (Double alpha : listOfAlpha) {
+   		    System.out.println(q.toNativeQuery(alpha));
    		    Assert.assertTrue(q.isFailing(factory.createSession(), alpha));
    		}
    	    }

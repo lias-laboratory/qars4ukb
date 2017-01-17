@@ -1,20 +1,20 @@
-# Test 1 (Query Q1-4TP)
-SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course33' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }
+# Test 1 (Query Q1-3TP)
+SELECT * WHERE { ?p <http://db.uwaterloo.ca/~galuc/wsdbm/friendOf> ?f . ?f <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?p . ?p <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory> }
 
-# Test 2 (Query Q2-4TP)
-SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course34' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }
+# Test 2 (Query Q2-6TP-MOSTLY-CHAIN)
+SELECT * WHERE { <http://db.uwaterloo.ca/~galuc/wsdbm/User666524> <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v0 . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> ?v1 . ?v1 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic129> . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/friendOf> ?v2 . ?v2 <http://purl.org/dc/terms/Location> ?v3 . ?v3 <http://www.geonames.org/ontology#parentCountry> <http://db.uwaterloo.ca/~galuc/wsdbm/Country17> }
 
-# Test 3 (Query Q3-4TP)
-SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course35' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }
+# Test 3 (Query Q3-7TP)
+SELECT * WHERE { ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/follows> ?v1 . ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/follows> ?v0 . ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/subscribes> ?v2 . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/subscribes> ?v2 . ?v1 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> <http://db.uwaterloo.ca/~galuc/wsdbm/Product16770> . ?v0 <http://schema.org/nationality> <http://db.uwaterloo.ca/~galuc/wsdbm/Country20> . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/makesPurchase> ?v3 }
 
-# Test 4 (Query Q4-4TP)
-SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course36' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }
+# Test 4 (Query Q4-STAR-8TP)
+SELECT * WHERE { ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/User> . ?v0 <http://xmlns.com/foaf/familyName> 'Smith' . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/subscribes> <http://db.uwaterloo.ca/~galuc/wsdbm/Website362909> . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/follows> ?v1 . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/friendOf> ?v2 . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?v3 . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/userId> ?v4 . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/makesPurchase> ?v5 . ?v0 <http://purl.org/dc/terms/Location> ?v6 . ?v0 <http://schema.org/nationality> ?v7 . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/userId> ?v8 }  
 
-# Test 5 (Query Q5-4TP)
-SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course37' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }
+# Test 5 (Query Q5 10-TP)
+SELECT * WHERE { ?p <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?x . ?x <http://db.uwaterloo.ca/~galuc/wsdbm/likes> ?p . ?p <http://db.uwaterloo.ca/~galuc/wsdbm/hasGenre> <http://db.uwaterloo.ca/~galuc/wsdbm/SubGenre92> . ?x <http://db.uwaterloo.ca/~galuc/wsdbm/subscribe> ?w1 . ?w1 <http://schema.org/language> <http://db.uwaterloo.ca/~galuc/wsdbm/Language21> . <http://db.uwaterloo.ca/~galuc/wsdbm/Website121> <http://db.uwaterloo.ca/~galuc/wsdbm/hits> ?h . ?x <http://xmlns.com/foaf/homepage> <http://db.uwaterloo.ca/~galuc/wsdbm/Website120> . ?x <http://xmlns.com/foaf/familyName> 'Smith' . ?x <http://db.uwaterloo.ca/~galuc/wsdbm/friendOf> ?x2 . ?x2 <http://schema.org/email> 'xxx@xxx.com' } 
 
-# Test 6 (Query Q6-4TP)
-SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course38' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }
+# Test 6 (Query Q6 12-TP)
+SELECT * WHERE { ?v0 <http://schema.org/eligibleRegion> <http://db.uwaterloo.ca/~galuc/wsdbm/Country05> . ?v0 <http://purl.org/goodrelations/includes> ?v1 . <http://db.uwaterloo.ca/~galuc/wsdbm/Retailer1257> <http://purl.org/goodrelations/offers> ?v0 . ?v0 <http://purl.org/goodrelations/price> '90' . ?v0 <http://purl.org/goodrelations/serialNumber> ?v4 . ?v0 <http://purl.org/goodrelations/validFrom> ?v5 . ?v0 <http://purl.org/goodrelations/validThrough> ?v6 . ?v0 <http://schema.org/eligibleQuantity> ?v8 . ?v0 <http://schema.org/priceValidUntil> ?v11 . ?v1 <http://ogp.me/ns#tag> ?v7 . ?v1 <http://schema.org/keywords> ?v10 . ?v12 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor> ?v1 }
 
-# Test 7 (Query Q7-4TP)
-SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course39' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }
+# Test 7 (Query Q7 15-TP)
+SELECT * WHERE { ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory7> . ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic245> . ?v0 <http://purl.org/stuff/rev#hasReview> ?v4 . ?v0 <http://schema.org/contentSize> ?v9 . ?v0 <http://schema.org/description> ?v10 . ?v0 <http://schema.org/keywords> ?v11 . ?v12 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor> ?v0 . ?v2 <http://ogp.me/ns#tag> ?v1 . ?v4 <http://purl.org/stuff/rev#rating> ?v5 . ?v4 <http://purl.org/stuff/rev#reviewer> ?v6 . ?v4 <http://purl.org/stuff/rev#text> ?v7 . ?v4 <http://purl.org/stuff/rev#title> ?v8 . ?v6 <http://xmlns.com/foaf/familyName> ?v13 . ?v6 <http://schema.org/birthDate> ?v14 . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v15 }

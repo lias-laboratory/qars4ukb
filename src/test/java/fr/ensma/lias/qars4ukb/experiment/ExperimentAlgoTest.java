@@ -48,7 +48,6 @@ import fr.ensma.lias.qars4ukb.query.QueryFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryExtFactory;
 import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryOptFactory;
 import fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint.SPARQLEndpointQueryExtFactory;
-import fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint.SPARQLEndpointQueryFactory;
 import fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint.SPARQLEndpointQueryOptFactory;
 
 /**
@@ -479,7 +478,7 @@ public class ExperimentAlgoTest {
 	 * }
 	 */
 
-	//@Test
+	@Test
 	public void testValidityOfAlgorithmsJenaGraph() {
 		try {
 

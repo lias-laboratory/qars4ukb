@@ -80,7 +80,7 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
 	    public boolean test(Tuple<NodeId> item) {
 		NodeId QuadTrustValueNodeID = item.get(0);
 		Double QuadTrustValue = Double.parseDouble(TDBInternal.getNode(ds, QuadTrustValueNodeID).getURI());
-		if (item.asList().size() == 4 && QuadTrustValue > alpha) {
+		if (item.asList().size() == 4 && QuadTrustValue >= alpha) {
 		    return true;
 		}
 		return false;

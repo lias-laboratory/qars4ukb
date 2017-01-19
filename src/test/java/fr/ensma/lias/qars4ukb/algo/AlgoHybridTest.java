@@ -582,9 +582,7 @@ public class AlgoHybridTest {
 
 	// Test the number of cache hits and executed query
 	Assert.assertEquals(5, algo.getNbCacheHits());
-	Assert.assertEquals(9, algo.getNbExecutedQuery());
-	// System.out.println(algo.getNbCacheHits());
-	// System.out.println(algo.getNbExecutedQuery());
+	Assert.assertEquals(11, algo.getNbExecutedQuery());
 
 	// A new test with 4 tresholds
 	listOfAlpha = new ArrayList<>();

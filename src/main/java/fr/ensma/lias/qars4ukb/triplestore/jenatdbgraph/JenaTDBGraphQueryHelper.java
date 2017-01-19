@@ -97,7 +97,6 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
 	// add the filter function to the Query Execution
 	qexec.getContext().set(SystemTDB.symTupleFilter, createFilter(((JenaTDBGraphSession) s).getDataset(), alpha));
 	ResultSet results = qexec.execSelect();
-	ResultSetFormatter.out(results);
 	return new JenaTDBGraphResult(results);
     }
 

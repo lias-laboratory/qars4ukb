@@ -42,19 +42,19 @@ import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCSession;
  */
 public class AlgoNLBATest {
 
-    IAlgo algo;
-    
+    private IAlgo algo;
+
     private QueryFactory factoryOpt;
-    
+
     private Session session;
-    
+
     private Query q1, q2, q3, q4, q5, q6;
 
     @Before
     public void setup() throws Exception {
-	algo = new AlgoNLBA();
 	factoryOpt = new JDBCQueryOptFactory();
 	session = factoryOpt.createSession();
+	algo = new AlgoNLBA(session);
 	SQLScriptRunner newScriptRunner = new SQLScriptRunner(((JDBCSession) session).getConnection(), false, false);
 	InputStream resourceAsStream = getClass().getResourceAsStream("/test_dataset1.sql");
 	newScriptRunner.runScript(new InputStreamReader(resourceAsStream));

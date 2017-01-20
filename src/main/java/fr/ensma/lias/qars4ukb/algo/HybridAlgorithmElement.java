@@ -23,11 +23,11 @@ package fr.ensma.lias.qars4ukb.algo;
  * @author Ibrahim DELLAL
  */
 public class HybridAlgorithmElement {
-    
+
     private Double alpha;
 
     private Double left;
-    
+
     private Double right;
 
     public HybridAlgorithmElement(Double alpha, Double left, Double right) {

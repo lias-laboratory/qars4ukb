@@ -25,8 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
 import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.cache.ICache;
 
@@ -34,8 +32,6 @@ import fr.ensma.lias.qars4ukb.cache.ICache;
  * @author Stephane JEAN
  */
 public abstract class AbstractQueryOpt extends AbstractQuery {
-
-    Logger log = Logger.getLogger(AbstractQueryOpt.class);
 
     /**
      * Encoding of this query 1011 => t1 ^ t3 ^ t4

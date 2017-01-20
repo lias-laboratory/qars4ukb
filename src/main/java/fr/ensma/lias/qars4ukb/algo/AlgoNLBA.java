@@ -29,25 +29,22 @@ import fr.ensma.lias.qars4ukb.query.Query;
  * @author Stéphane JEAN
  */
 public class AlgoNLBA extends AbstractAlgo {
-    
-    public AlgoNLBA(){
-	super();
+
+    public AlgoNLBA(Session pSession) {
+	super(pSession);
     }
-    
+
     @Override
     public AlgoResult computesAlphaMFSsAndXSSsAux(Query q, List<Double> listOfAlpha) {
-	Session session = q.getFactory().createSession();
 	AlgoResult result = new AlgoResult();
 	for (Double alpha : listOfAlpha) {
-	    q.runLBA(session, alpha);
+	    q.runLBA(this.getSession(), alpha);
 	    result.addAlphaMFSs(alpha, q.getAllMFS());
 	    result.addAlphaXSSs(alpha, q.getAllXSS());
 	    // this query must used the CacheLBA (and not the extended cache)
 	    nbCacheHits += CacheLBA.getInstance().getNbCacheHits();
-	    nbExecutedQuery += session.getExecutedQueryCount();
+	    nbExecutedQuery += this.getSession().getExecutedQueryCount();
 	}
 	return result;
     }
-
-
 }

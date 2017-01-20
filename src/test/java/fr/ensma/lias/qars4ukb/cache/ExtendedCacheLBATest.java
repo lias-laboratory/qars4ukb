@@ -39,7 +39,7 @@ public class ExtendedCacheLBATest {
     private QueryFactory factoryExt;
 
     private Session session;
-    
+
     private Query q1, q2, q3, q4;
 
     @Before
@@ -74,7 +74,8 @@ public class ExtendedCacheLBATest {
 	// The query is in the cache with a lower degree => cache miss
 	Assert.assertFalse(ExtendedCacheLBA.getInstance().isSuccessfulByCache(q1, 0.81));
 	// now we consider the case where the query is not in the cache
-	// first there is a superquery with a degree greater or equals => cache hits + add
+	// first there is a superquery with a degree greater or equals => cache
+	// hits + add
 	ExtendedCacheLBA.getInstance().clearCache();
 	ExtendedCacheLBA.getInstance().addSuccessfulQuery(q3, 0.7);
 	ExtendedCacheLBA.getInstance().addSuccessfulQuery(q4, 0.6);
@@ -102,8 +103,9 @@ public class ExtendedCacheLBATest {
 	Assert.assertFalse(ExtendedCacheLBA.getInstance().isSuccessfulByCache(q1, 0.8));
 	obtainedMap = ExtendedCacheLBA.getInstance().getSuccessfulCachedQueries();
 	Assert.assertTrue(obtainedMap.size() == 2);
-	
-	// second there is a superquery with a lower degree => cache miss + no add
+
+	// second there is a superquery with a lower degree => cache miss + no
+	// add
 	ExtendedCacheLBA.getInstance().clearCache();
 	ExtendedCacheLBA.getInstance().addSuccessfulQuery(q3, 0.7);
 	ExtendedCacheLBA.getInstance().addSuccessfulQuery(q4, 0.6);
@@ -111,7 +113,7 @@ public class ExtendedCacheLBATest {
 	obtainedMap = ExtendedCacheLBA.getInstance().getSuccessfulCachedQueries();
 	Assert.assertNull(obtainedMap.get(q1));
 	Assert.assertTrue(obtainedMap.size() == 2);
-	
+
 	// last there is no superquery => cache miss
 	ExtendedCacheLBA.getInstance().clearCache();
 	ExtendedCacheLBA.getInstance().addSuccessfulQuery(q2, 0.7);

@@ -35,8 +35,8 @@ import fr.ensma.lias.qars4ukb.query.Query;
  */
 public class AlgoHybrid extends AbstractAlgo {
 
-    public AlgoHybrid() {
-	super();
+    public AlgoHybrid(Session pSession) {
+	super(pSession);
     }
 
     /**

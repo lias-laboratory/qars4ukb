@@ -20,11 +20,6 @@
 package fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import fr.ensma.lias.qars4ukb.AbstractSession;
 import fr.ensma.lias.qars4ukb.Result;
@@ -37,8 +32,6 @@ import fr.ensma.lias.qars4ukb.query.SPARQLQueryHelper;
  * @author Mickael BARON
  */
 public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
-
-    private Map<String, String> prefixes;
 
     public SPARQLEndpointQueryHelper(Query q) {
 	super(q);
@@ -75,7 +68,7 @@ public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 	else
 	    res = s.replace("where", "{ GRAPH ?g");
 
-	res = res.replace("}", ".} FILTER(xsd:double(str(?g)) > " +alpha+") }");
+	res = res.replace("}", ".} FILTER(xsd:double(str(?g)) > " + alpha + ") }");
 	res = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + res;
 	return res;
 

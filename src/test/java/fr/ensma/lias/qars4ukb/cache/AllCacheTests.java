@@ -30,5 +30,4 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses(value = { 
 	ExtendedCacheLBATest.class})
 public class AllCacheTests {
-
 }

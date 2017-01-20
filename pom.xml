@@ -13,6 +13,7 @@
 		<maven.surfire.version>2.19.1</maven.surfire.version>
 		<maven.resources.version>2.6</maven.resources.version>
 		<maven.compiler.version>3.1</maven.compiler.version>
+		<maven.assembly.version>2.2.1</maven.assembly.version>
 	</properties>
 	<developers>
 		<developer>
@@ -112,6 +113,26 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${maven.assembly.version}</version>
+				<executions>
+					<execution>
+						<id>create-zip-package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>qars</finalName>
+							<descriptors>
+								<descriptor>src/main/assembly/AssemblyDIST.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 	<profiles>

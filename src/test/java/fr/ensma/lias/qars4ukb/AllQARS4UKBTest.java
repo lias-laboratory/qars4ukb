@@ -36,5 +36,4 @@ import fr.ensma.lias.qars4ukb.query.AllQueryTests;
 	AllCacheTests.class,
 	AllQueryTests.class})
 public class AllQARS4UKBTest {
-
 }

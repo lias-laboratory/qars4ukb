@@ -1,0 +1,15 @@
+<assembly>
+	<id>dist</id>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<formats>
+		<format>jar</format>
+	</formats>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>/</outputDirectory>
+			<useProjectArtifact>true</useProjectArtifact>
+			<unpack>true</unpack>
+			<scope>runtime</scope>
+		</dependencySet>
+	</dependencySets>
+</assembly>

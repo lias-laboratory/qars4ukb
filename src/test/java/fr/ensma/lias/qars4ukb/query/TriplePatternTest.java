@@ -34,12 +34,12 @@ public class TriplePatternTest {
      * Constants for RDFS prefixes
      */
     public static String PREFIX_RDFS = "http://www.w3.org/2000/01/rdf-schema#";
-    
+
     /**
      * Constants for OWL prefixes
      */
     public static String PREFIX_OWL = "http://www.w3.org/2002/07/owl#";
-    
+
     /**
      * Constants for the WatDiv benchmark
      */

@@ -21,12 +21,18 @@ package fr.ensma.lias.qars4ukb.algo;
 
 import java.util.List;
 
+import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.query.Query;
 
 /**
  * @author Stephane JEAN
  */
 public abstract class AbstractAlgo implements IAlgo {
+
+    /**
+     * Current session
+     */
+    private Session session;
 
     /**
      * Number of executed query on the KB
@@ -43,7 +49,8 @@ public abstract class AbstractAlgo implements IAlgo {
      */
     protected float computingTime;
 
-    public AbstractAlgo() {
+    public AbstractAlgo(Session pSession) {
+	this.session = pSession;
 	nbExecutedQuery = 0;
 	nbCacheHits = 0;
     }
@@ -78,4 +85,8 @@ public abstract class AbstractAlgo implements IAlgo {
      * @return the AlphaMFSs and XSSs
      */
     protected abstract AlgoResult computesAlphaMFSsAndXSSsAux(Query q, List<Double> listOfAlpha);
+
+    public Session getSession() {
+	return this.session;
+    }
 }

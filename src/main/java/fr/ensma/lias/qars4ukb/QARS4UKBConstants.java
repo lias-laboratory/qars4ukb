@@ -22,21 +22,21 @@ package fr.ensma.lias.qars4ukb;
 /**
  * @author Mickael BARON
  */
-public class QARS4UKBConstants {
+public interface QARS4UKBConstants {
 
-    public static final String SUB_CLASS_OF = "subclassof";
+    static final String SUB_CLASS_OF = "subclassof";
 
-    public static final String INSTANCES = "instances";
+    static final String INSTANCES = "instances";
 
-    public static final String TOTAL_INSTANCES = "total.instances";
+    static final String TOTAL_INSTANCES = "total.instances";
 
-    public static final String SUB_PROPERTY_OF = "subpropertyof";
+    static final String SUB_PROPERTY_OF = "subpropertyof";
 
-    public static final String TRIPLES_BY_PROP = "triplesbyprop";
+    static final String TRIPLES_BY_PROP = "triplesbyprop";
 
-    public static final String TOTAL_NUMBER_TRIPLES = "total.number.triples";
+    static final String TOTAL_NUMBER_TRIPLES = "total.number.triples";
 
-    public static final String JDBC_DB_ORACLE = "oracle";
+    static final String JDBC_DB_ORACLE = "oracle";
 
-    public static final String JDBC_DB_HSQLDB = "hsqldb";
+    static final String JDBC_DB_HSQLDB = "hsqldb";
 }

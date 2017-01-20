@@ -33,20 +33,19 @@ import fr.ensma.lias.qars4ukb.query.Query;
  */
 public class AlgoBottomUp extends AbstractAlgo {
 
-    public AlgoBottomUp() {
-	super();
+    public AlgoBottomUp(Session pSession) {
+	super(pSession);
     }
 
     @Override
     protected AlgoResult computesAlphaMFSsAndXSSsAux(Query q, List<Double> listOfAlpha) {
 	ExtendedCacheLBA.getInstance().clearCache();
-	Session session = q.getFactory().createSession();
 	AlgoResult result = new AlgoResult();
 
 	// first executes the normal version of LBA for the first alpha
 	Double firstAlpha = listOfAlpha.get(0);
-	q.runLBA(session, firstAlpha);
-	nbExecutedQuery = session.getExecutedQueryCount();
+	q.runLBA(this.getSession(), firstAlpha);
+	nbExecutedQuery = this.getSession().getExecutedQueryCount();
 	Set<Query> discoverMFSs = q.getAllMFS();
 	Set<Query> discoverXSSs = q.getAllXSS();
 	result.addAlphaMFSs(firstAlpha, discoverMFSs);
@@ -56,12 +55,12 @@ public class AlgoBottomUp extends AbstractAlgo {
 	    Double currentAlpha = listOfAlpha.get(i);
 	    // we clear the number of executed queries by the previous run of
 	    // LBA
-	    session.clearExecutedQueryCount();
-	    discoverMFSs = discoverMFS(discoverMFSs, currentAlpha, session);
-	    discoverXSSs = discoverXSS(discoverXSSs, currentAlpha, session);
-	    nbExecutedQuery += session.getExecutedQueryCount();
-	    q.runLBA(session, discoverMFSs, discoverXSSs, currentAlpha);
-	    nbExecutedQuery += session.getExecutedQueryCount();
+	    this.getSession().clearExecutedQueryCount();
+	    discoverMFSs = discoverMFS(discoverMFSs, currentAlpha, this.getSession());
+	    discoverXSSs = discoverXSS(discoverXSSs, currentAlpha, this.getSession());
+	    nbExecutedQuery += this.getSession().getExecutedQueryCount();
+	    q.runLBA(this.getSession(), discoverMFSs, discoverXSSs, currentAlpha);
+	    nbExecutedQuery += this.getSession().getExecutedQueryCount();
 	    discoverMFSs = q.getAllMFS();
 	    discoverXSSs = q.getAllXSS();
 	    result.addAlphaMFSs(currentAlpha, discoverMFSs);

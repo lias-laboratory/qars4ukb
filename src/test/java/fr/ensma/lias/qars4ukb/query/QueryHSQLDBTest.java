@@ -42,9 +42,9 @@ import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCSession;
 public class QueryHSQLDBTest {
 
     private QueryFactory factory, factoryOpt;
-    
+
     private Session session;
-    
+
     private Query q1, q2, q3, q4, q5, q6, q1Opt, q2Opt, q3Opt, q4Opt, q5Opt, q6Opt;
 
     @Before

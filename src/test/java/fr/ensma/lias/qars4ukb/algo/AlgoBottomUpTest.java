@@ -44,18 +44,18 @@ import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.JDBCSession;
 public class AlgoBottomUpTest {
 
     AlgoBottomUp algo;
-    
+
     private QueryFactory factoryExt;
-    
+
     private Session session;
-    
+
     private Query q1, q2, q3, q4, q5, q6;
 
     @Before
     public void setup() throws Exception {
-	algo = new AlgoBottomUp();
 	factoryExt = new JDBCQueryExtFactory();
 	session = factoryExt.createSession();
+	algo = new AlgoBottomUp(session);
 	SQLScriptRunner newScriptRunner = new SQLScriptRunner(((JDBCSession) session).getConnection(), false, false);
 	InputStream resourceAsStream = getClass().getResourceAsStream("/test_dataset1.sql");
 	newScriptRunner.runScript(new InputStreamReader(resourceAsStream));

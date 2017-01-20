@@ -26,7 +26,6 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.tdb.store.NodeId;
 import org.apache.jena.tdb.sys.SystemTDB;
 import org.apache.jena.tdb.sys.TDBInternal;

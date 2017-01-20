@@ -57,9 +57,9 @@ public class AlgoHybridTest {
 
     @Before
     public void setup() throws Exception {
-	algo = new AlgoHybrid();
 	factoryExt = new JDBCQueryExtFactory();
 	session = factoryExt.createSession();
+	algo = new AlgoHybrid(session);
 	SQLScriptRunner newScriptRunner = new SQLScriptRunner(((JDBCSession) session).getConnection(), false, false);
 	InputStream resourceAsStream = getClass().getResourceAsStream("/test_dataset1.sql");
 	newScriptRunner.runScript(new InputStreamReader(resourceAsStream));

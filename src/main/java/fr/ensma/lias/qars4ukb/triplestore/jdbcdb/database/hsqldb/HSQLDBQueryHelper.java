@@ -30,5 +30,4 @@ public class HSQLDBQueryHelper extends AbstractJDBCQueryHelper {
     public HSQLDBQueryHelper(Query q) {
 	super(q);
     }
-
 }

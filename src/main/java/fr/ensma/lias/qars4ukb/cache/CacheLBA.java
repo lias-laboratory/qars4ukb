@@ -32,9 +32,9 @@ public class CacheLBA implements ICache {
 
     protected int nbCacheHits;
 
-    protected List<Query> successfulCachedQueries;
+    protected List<Query> successfulCachedQueries = new ArrayList<Query>();
 
-    protected List<Query> failingCachedQueries;
+    protected List<Query> failingCachedQueries = new ArrayList<Query>();
 
     private static CacheLBA instance;
 
@@ -53,7 +53,6 @@ public class CacheLBA implements ICache {
 	nbCacheHits = 0;
 	successfulCachedQueries.clear();
 	failingCachedQueries.clear();
-	;
     }
 
     @Override

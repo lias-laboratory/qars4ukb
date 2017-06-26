@@ -76,8 +76,12 @@ public class JenaTDBGraphResult implements Result {
 
     @Override
     public List<String> getNbRow(int maxK) {
+	if (maxK == 0) {
+	    maxK = Integer.MAX_VALUE;
+	}
+	
 	List<String> res = new ArrayList<String>();
-	while (rset.hasNext() && res.size() <= maxK) {
+	while (rset.hasNext() && res.size() < maxK) {
 	    res.add(rset.nextSolution().toString());
 	}
 	return res;

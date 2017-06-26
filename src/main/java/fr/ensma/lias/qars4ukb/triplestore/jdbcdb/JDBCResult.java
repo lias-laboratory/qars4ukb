@@ -90,9 +90,13 @@ public class JDBCResult implements Result {
 
     @Override
     public List<String> getNbRow(int maxK) {
+	if (maxK == 0) {
+	    maxK = Integer.MAX_VALUE;
+	}
+	
 	try {
 	    List<String> res = new ArrayList<String>();
-	    while (rset.next() && res.size() <= maxK) {
+	    while (rset.next() && res.size() < maxK) {
 		res.add(rset.getString(1));
 	    }
 	    return res;

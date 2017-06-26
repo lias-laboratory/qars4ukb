@@ -96,6 +96,10 @@ public class SPARQLEndpointResult implements Result {
 
     @Override
     public List<String> getNbRow(int maxK) {
+	if (maxK == 0) {
+	    maxK = Integer.MAX_VALUE;
+	}
+	
 	if (rows.size() > maxK) {
 	    return rows.subList(0, maxK);
 	}

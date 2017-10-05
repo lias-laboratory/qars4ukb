@@ -4,7 +4,7 @@
 	<groupId>fr.ensma.lias</groupId>
 	<artifactId>qars4ukb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
+	<description>Query-and-Relax System (QaRS) For Uncertain Knowledge bases</description>
 	<properties>
 		<owner.version>1.0.8</owner.version>
 		<hsqldb.version>2.3.2</hsqldb.version>
@@ -153,21 +153,21 @@
 	</profiles>
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>http://s-localforge-lias/jenkins/job/QaRS4UKB/</url>
+		<url>https://ci-lias.ensma.fr/job/QaRS4UKB</url>
 	</ciManagement>
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
 			<name>Internal Releases</name>
-			<url>http://s-localforge-lias/nexus/content/repositories/releases</url>
+			<url>http://s-nexus-lias.ensma.fr/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
 			<name>Internal Snapshots</name>
-			<url>http://s-localforge-lias/nexus/content/repositories/snapshots</url>
+			<url>http://s-nexus-lias.ensma.fr/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<scm>
-		<url>scm:git:http://s-localforge-lias.ensma.fr/gitblit/r/java/qars4ukb.git</url>
+		<url>scm:git:https://git.lias-lab.fr/r/exploiting/qars4ukb.git</url>
 	</scm>
 </project>

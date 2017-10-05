@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.ensma.lias</groupId>
 	<artifactId>qars4ukb</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 	<description>Query-and-Relax System (QaRS) For Uncertain Knowledge bases</description>
 	<properties>
 		<owner.version>1.0.8</owner.version>
 		<hsqldb.version>2.3.2</hsqldb.version>
 		<junit.version>4.12</junit.version>
 		<jenatdb.version>3.0.0</jenatdb.version>
-		<maven.surfire.version>2.19.1</maven.surfire.version>
+		<maven.surfire.version>2.12.4</maven.surfire.version>
 		<maven.resources.version>2.6</maven.resources.version>
 		<maven.compiler.version>3.1</maven.compiler.version>
 		<maven.assembly.version>3.1.0</maven.assembly.version>
@@ -113,26 +113,6 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>${maven.assembly.version}</version>
-				<executions>
-					<execution>
-						<id>create-zip-package</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<finalName>qars</finalName>
-							<descriptors>
-								<descriptor>src/main/assembly/AssemblyDIST.xml</descriptor>
-							</descriptors>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 	</build>
 	<profiles>
@@ -148,6 +128,32 @@
 						</configuration>
 					</plugin>
 				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>deployement</id>
+			<build>
+				<plugins>
+				<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${maven.assembly.version}</version>
+				<executions>
+					<execution>
+						<id>create-zip-package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>qars4ukb-${project.version}</finalName>
+							<descriptors>
+								<descriptor>src/main/assembly/AssemblyDIST.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+				</plugins>	
 			</build>
 		</profile>
 	</profiles>

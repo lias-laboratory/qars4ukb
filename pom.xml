@@ -127,28 +127,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-		</plugins>
-	</build>
-	<profiles>
-		<profile>
-			<id>experiment</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<skipTests>false</skipTests>
-							<test>AllExperimentTests.java</test>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>deployement</id>
-			<build>
-				<plugins>
-				<plugin>
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>${maven.assembly.version}</version>
 				<executions>
@@ -167,7 +146,21 @@
 					</execution>
 				</executions>
 			</plugin>
-				</plugins>	
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>experiment</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skipTests>false</skipTests>
+							<test>AllExperimentTests.java</test>
+						</configuration>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 	</profiles>

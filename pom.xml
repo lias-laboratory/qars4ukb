@@ -81,6 +81,7 @@
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-tdb</artifactId>
 			<version>${jenatdb.version}</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
@@ -101,6 +102,19 @@
 				<version>${maven.resources.version}</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>fr.ensma.lias.qars4ukb.QaRS4UKMSample</mainClass>
+						</manifest>
+					</archive>
 				</configuration>
 			</plugin>
 			<plugin>

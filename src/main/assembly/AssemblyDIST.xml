@@ -2,14 +2,19 @@
 	<id>dist</id>
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<formats>
-		<format>jar</format>
+		<format>zip</format>
 	</formats>
+	<files>
+		<file>
+			<source>src/main/bin/qars4ukb.sh</source>
+			<destName>qars4ukb.sh</destName>
+			<outputDirectory>bin</outputDirectory>
+		</file>
+	</files>
 	<dependencySets>
 		<dependencySet>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory>lib</outputDirectory>
 			<useProjectArtifact>true</useProjectArtifact>
-			<unpack>true</unpack>
-			<scope>runtime</scope>
 		</dependencySet>
 	</dependencySets>
 </assembly>

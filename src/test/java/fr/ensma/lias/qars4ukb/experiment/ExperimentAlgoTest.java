@@ -101,7 +101,8 @@ public class ExperimentAlgoTest {
     @Test
     public void testJena() {
 	System.out.println("=============== JENA EXPERIMENTAION ==============");
-	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
+	//cette ligne on la rajoute pour la version Graph et non pas pour la reification
+	//TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
 	// testThatAllQueriesFailsForAnyAlpha();
 	testJenaNLBA();
 	testJenaBottomUp();

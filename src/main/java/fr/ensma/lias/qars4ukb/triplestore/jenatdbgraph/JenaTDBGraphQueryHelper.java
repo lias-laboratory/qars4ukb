@@ -19,6 +19,7 @@
 **********************************************************************************/
 package fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.jena.atlas.lib.Tuple;
@@ -34,7 +35,9 @@ import fr.ensma.lias.qars4ukb.AbstractSession;
 import fr.ensma.lias.qars4ukb.Result;
 import fr.ensma.lias.qars4ukb.Session;
 import fr.ensma.lias.qars4ukb.query.Query;
+import fr.ensma.lias.qars4ukb.query.QueryFactory;
 import fr.ensma.lias.qars4ukb.query.SPARQLQueryHelper;
+import fr.ensma.lias.qars4ukb.query.TriplePattern;
 
 /**
  * @author Stephane JEAN
@@ -88,7 +91,9 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
 
 	return filter;
     }
-    @Override 
+    
+    //TonativeGraph
+   /* @Override 
     public String toNativeQuery(Double alpha) { 
    	 int i = 1; String s = q.toString();
    	 
@@ -119,8 +124,51 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
    	resultat="PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> "+resultat+" }";
    	//System.out.println(resultat);
    	return resultat;
+*/
+    
+    //toNativeReification
+    @Override
+	public String toNativeQuery(Double alpha) {
+		String result = null;
+		QueryFactory factory = new JenaTDBGraphQueryOptFactory();
+		Query qStar = factory.createQuery(q.toString());
+		result = "SELECT * WHERE {";
+		List<TriplePattern> triplePatternsQStar = qStar.getTriplePatterns();
+		for (int i = 0; i < triplePatternsQStar.size(); i++) {
+			// triplePatternsQStar.get(i).;
+			String sujet = triplePatternsQStar.get(i).getSubject();
+			String predicat = triplePatternsQStar.get(i).getPredicate();
+			String objet = triplePatternsQStar.get(i).getObject();
+			if (!sujet.startsWith("?"))
+				sujet = "<"+sujet+">";
+			if (!predicat.startsWith("?"))
+				predicat = "<"+predicat+">";
+			if (!objet.startsWith("?"))
+				objet = "<"+objet+">";
+			
 
-   	}
+			result += " ?statement" + i + " <http://www.w3.org/2004/06/rei#type> <http://www.w3.org/2004/06/rei#statement>"
+					+ " . ?statement" + i + " <http://www.w3.org/2004/06/rei#subject> " + sujet
+					+ " . ?statement" + i + " <http://www.w3.org/2004/06/rei#predicate> " + predicat
+					+ " . ?statement" + i + "  <http://www.w3.org/2004/06/rei#object> " + objet
+					+ " . ?statement" + i + " <http://www.w3.org/2004/06/rei#trust> ?g" + i + " .";
+
+
+		}
+		
+		for(int i = 0; i < triplePatternsQStar.size(); i++) {
+			result += " FILTER(xsd:double(strafter(str(?g" + i + "),\"file:///home/lias/\")) > " + alpha + ") .";
+
+		}
+		
+		result = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + result + " } limit 2";
+		//System.out.println(result);
+		return result;//"SELECT * WHERE { ?st <http://www.w3.org/2004/06/rei#type> <http://www.w3.org/2004/06/rei#statement> ; <http://www.w3.org/2004/06/rei#subject> ?s ; <http://www.w3.org/2004/06/rei#predicate> ?p ; <http://www.w3.org/2004/06/rei#object> ?o ; <http://www.w3.org/2004/06/rei#trust> ?t . } limit 6";//result;
+		//return "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT * WHERE { ?s <http://www.w3.org/2004/06/rei#type> <http://www.w3.org/2004/06/rei#statement> ; <http://www.w3.org/2004/06/rei#subject> ?ss ; <http://www.w3.org/2004/06/rei#predicate> <http://db.uwaterloo.ca/~galuc/wsdbm/friendOf> ; <http://www.w3.org/2004/06/rei#object> ?oo ; <http://www.w3.org/2004/06/rei#trust> ?t } limit 6";
+
+	}
+
+ 
     @Override
     public Result getResult(Session s, Double alpha) {
 	QueryExecution qexec = QueryExecutionFactory.create(toNativeQuery(alpha),

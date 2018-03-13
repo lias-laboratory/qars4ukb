@@ -52,8 +52,8 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
 	org.apache.jena.query.Query query = org.apache.jena.query.QueryFactory.create(sparqlQueryString);
 	QueryExecution qexec = QueryExecutionFactory.create(query, ((JenaTDBGraphSession) session).getDataset());
 	// add the filter function to the Query Execution
-	qexec.getContext().set(SystemTDB.symTupleFilter,
-		createFilter(((JenaTDBGraphSession) session).getDataset(), alpha));
+	//qexec.getContext().set(SystemTDB.symTupleFilter,
+		//createFilter(((JenaTDBGraphSession) session).getDataset(), alpha));
 	ResultSet results = qexec.execSelect();
 
 	((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
@@ -88,7 +88,39 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
 
 	return filter;
     }
+    @Override 
+    public String toNativeQuery(Double alpha) { 
+   	 int i = 1; String s = q.toString();
+   	 
+   	 String res = null;
+   	 if (s.contains("WHERE")) 
+   	 	res = s.replace("WHERE", "{ GRAPH ?g" + i); 
+   	 else
+   		res = s.replace("where", "{ GRAPH ?g" + i); 
+   	 	
+   	 i++;
+   	// System.out.println("res " + res); 
+   	 res = res.replace(" . ", "unpoint");
+   	 String resultat = ""; 
+   	 String[] tokens = res.split("unpoint"); 
+   	 for (int k = 0; k < tokens.length - 1; k++)// String t : tokens) 
+   	{
+   		 //System.out.println("  " + i + tokens[k]);
+   		 resultat += tokens[k] + " } . GRAPH ?g" + i + " { "; i++; 
+   	}
+   	 
+   	resultat+=tokens[tokens.length-1];
+   	for(int j = 1;j<i-1;j++)
+   	{
+   		resultat += " FILTER(xsd:double(str(?g" + j + ")) > " + alpha + ") .";
 
+   	}
+   	resultat+=" FILTER(xsd:double(str(?g"+(i-1)+")) > "+alpha+") .";
+   	resultat="PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> "+resultat+" }";
+   	//System.out.println(resultat);
+   	return resultat;
+
+   	}
     @Override
     public Result getResult(Session s, Double alpha) {
 	QueryExecution qexec = QueryExecutionFactory.create(toNativeQuery(alpha),

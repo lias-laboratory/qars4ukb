@@ -58,19 +58,36 @@ public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 	}
     }
 
-    @Override
-    public String toNativeQuery(Double alpha) {
+    @Override public String toNativeQuery(Double alpha) { 
+		 int i = 1; String s = q.toString();
+		 
+		 String res = null;
+		 if (s.contains("WHERE")) 
+		 	res = s.replace("WHERE", "{ GRAPH ?g" + i); 
+		 else
+			res = s.replace("where", "{ GRAPH ?g" + i); 
+		 	
+		 i++;
+		// System.out.println("res " + res); 
+		 res = res.replace(" . ", "unpoint");
+		 String resultat = ""; 
+		 String[] tokens = res.split("unpoint"); 
+		 for (int k = 0; k < tokens.length - 1; k++)// String t : tokens) 
+		{
+			 //System.out.println("  " + i + tokens[k]);
+			 resultat += tokens[k] + " } . GRAPH ?g" + i + " { "; i++; 
+		}
+		 
+		resultat+=tokens[tokens.length-1];
+		for(int j = 1;j<i-1;j++)
+		{
+			resultat += " FILTER(xsd:double(str(?g" + j + ")) > " + alpha + ") .";
 
-	String s = q.toString();
-	String res = null;
-	if (s.contains("WHERE"))
-	    res = s.replace("WHERE", "{ GRAPH ?g");
-	else
-	    res = s.replace("where", "{ GRAPH ?g");
+		}
+		resultat+=" FILTER(xsd:double(str(?g"+(i-1)+")) > "+alpha+") .";
+		resultat="PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> "+resultat+" }";
+		//System.out.println(resultat);
+		return resultat;
 
-	res = res.replace("}", ".} FILTER(xsd:double(str(?g)) > " + alpha + ") }");
-	res = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + res;
-	return res;
-
-    }
+		}
 }

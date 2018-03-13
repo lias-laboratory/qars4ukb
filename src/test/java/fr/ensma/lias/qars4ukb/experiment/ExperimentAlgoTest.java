@@ -129,7 +129,7 @@ public class ExperimentAlgoTest {
 	testAlgo(Algorithm.HYBRID, PLAT_JENA, listOfAlpha);
     }
 
-    // @Test
+    @Test
     public void testVirtuoso() {
 	System.out.println("=============== VIRTUOSO EXPERIMENTATION==============");
 	// testThatAllQueriesFailsForAnyAlpha();
@@ -475,7 +475,7 @@ public class ExperimentAlgoTest {
      * }
      */
 
-    @Test
+  //  @Test
     public void testValidityOfAlgorithmsJenaGraph() {
 	try {
 

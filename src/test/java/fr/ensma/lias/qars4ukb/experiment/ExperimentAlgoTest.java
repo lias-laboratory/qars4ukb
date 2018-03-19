@@ -98,16 +98,16 @@ public class ExperimentAlgoTest {
      * Jena
      *************************/
 
-    @Test
+     @Test
     public void testJena() {
-	System.out.println("=============== JENA EXPERIMENTAION ==============");
-	//cette ligne on la rajoute pour la version Graph et non pas pour la reification
-	//TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
-	// testThatAllQueriesFailsForAnyAlpha();
-	testJenaNLBA();
-	testJenaBottomUp();
-	testJenaTopDown();
-	testJenaHybrid();
+		System.out.println("=============== JENA EXPERIMENTAION ==============");
+		//cette ligne on la rajoute pour la version Graph et non pas pour la reification
+		//TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
+		// testThatAllQueriesFailsForAnyAlpha();
+		testJenaNLBA();
+		testJenaBottomUp();
+		testJenaTopDown();
+		testJenaHybrid();
     }
 
     public void testJenaNLBA() {
@@ -130,7 +130,7 @@ public class ExperimentAlgoTest {
 	testAlgo(Algorithm.HYBRID, PLAT_JENA, listOfAlpha);
     }
 
-    @Test
+   @Test
     public void testVirtuoso() {
 	System.out.println("=============== VIRTUOSO EXPERIMENTATION==============");
 	// testThatAllQueriesFailsForAnyAlpha();

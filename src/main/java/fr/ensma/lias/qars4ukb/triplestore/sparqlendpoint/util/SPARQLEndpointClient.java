@@ -65,7 +65,8 @@ public class SPARQLEndpointClient {
      * @throws IOException
      */
     public String query(String sparql) throws MalformedURLException, ProtocolException, IOException {
-	OutputFormat refOutputFormat = null;
+	//System.out.println("sparql  " +sparql);
+    	OutputFormat refOutputFormat = null;
 
 	if (outputFormat == null) {
 	    refOutputFormat = OutputFormat.SPARQL_XML;
@@ -91,7 +92,7 @@ public class SPARQLEndpointClient {
 	if (defaultGraphURI != null) {
 	    queryString.append("&default-graph-uri=" + URLEncoder.encode(defaultGraphURI, "UTF-8"));
 	}
-
+//System.out.println("query  : "+ queryString.toString());
 	DataOutputStream ps = new DataOutputStream(connection.getOutputStream());
 	ps.writeBytes(queryString.toString());
 

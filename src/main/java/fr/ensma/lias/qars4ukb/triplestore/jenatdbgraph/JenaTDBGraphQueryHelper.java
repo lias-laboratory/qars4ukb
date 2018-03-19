@@ -147,8 +147,7 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
 				objet = "<"+objet+">";
 			
 
-			result += " ?statement" + i + " <http://www.w3.org/2004/06/rei#type> <http://www.w3.org/2004/06/rei#statement>"
-					+ " . ?statement" + i + " <http://www.w3.org/2004/06/rei#subject> " + sujet
+			result += " ?statement" + i + " <http://www.w3.org/2004/06/rei#subject> " + sujet
 					+ " . ?statement" + i + " <http://www.w3.org/2004/06/rei#predicate> " + predicat
 					+ " . ?statement" + i + "  <http://www.w3.org/2004/06/rei#object> " + objet
 					+ " . ?statement" + i + " <http://www.w3.org/2004/06/rei#trust> ?g" + i + " .";
@@ -158,6 +157,7 @@ public class JenaTDBGraphQueryHelper extends SPARQLQueryHelper {
 		
 		for(int i = 0; i < triplePatternsQStar.size(); i++) {
 			result += " FILTER(xsd:double(strafter(str(?g" + i + "),\"file:///home/lias/\")) > " + alpha + ") .";
+			//result += " FILTER(?g" + i + " > " + alpha + ") .";
 
 		}
 		

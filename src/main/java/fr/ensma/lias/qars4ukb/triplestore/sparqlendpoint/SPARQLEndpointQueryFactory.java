@@ -33,22 +33,22 @@ import fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint.util.SPARQLEndpointClie
  */
 public class SPARQLEndpointQueryFactory extends AbstractQueryFactory {
 
-    @Override
-    public Query createQuery(String rdfQuery) {
-	return new SPARQLEndpointQuery(this, rdfQuery);
-    }
+	@Override
+	public Query createQuery(String rdfQuery) {
+		return new SPARQLEndpointQuery(this, rdfQuery);
+	}
 
-    @Override
-    public Query createQuery(List<TriplePattern> tps) {
-	return new SPARQLEndpointQuery(this, tps);
-    }
+	@Override
+	public Query createQuery(List<TriplePattern> tps) {
+		return new SPARQLEndpointQuery(this, tps);
+	}
 
-    @Override
-    public Session createSession() {
-	SPARQLEndpointClient virtuoso = new SPARQLEndpointClient.Builder().url(this.getConfig().sparqlendpointUrl())
-		.defaultGraphURI(this.getConfig().sparqlendpointDefaultGraphURI())
-		.outputFormat(OutputFormat.TAB_SEPARATED).build();
+	@Override
+	public Session createSession() {
+		SPARQLEndpointClient virtuoso = new SPARQLEndpointClient.Builder().url(this.getConfig().sparqlendpointUrl())
+				.defaultGraphURI(this.getConfig().sparqlendpointDefaultGraphURI())
+				.outputFormat(OutputFormat.TAB_SEPARATED).build();
 
-	return new SPARQLEndpointSession(virtuoso);
-    }
+		return new SPARQLEndpointSession(virtuoso);
+	}
 }

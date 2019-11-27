@@ -32,30 +32,30 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class JenaTDBNativeQuery extends AbstractQuery {
 
-    private JenaTDBNativeQueryHelper helper;
+	private JenaTDBNativeQueryHelper helper;
 
-    public JenaTDBNativeQuery(QueryFactory factory, String query) {
-	super(factory, query);
-	helper = new JenaTDBNativeQueryHelper(this);
-    }
+	public JenaTDBNativeQuery(QueryFactory factory, String query) {
+		super(factory, query);
+		helper = new JenaTDBNativeQueryHelper(this);
+	}
 
-    public JenaTDBNativeQuery(QueryFactory factory, List<TriplePattern> tps) {
-	super(factory, tps);
-	helper = new JenaTDBNativeQueryHelper(this);
-    }
+	public JenaTDBNativeQuery(QueryFactory factory, List<TriplePattern> tps) {
+		super(factory, tps);
+		helper = new JenaTDBNativeQueryHelper(this);
+	}
 
-    @Override
-    public boolean isFailingAux(Session session, Double alpha) {
-	return helper.executeQuery(session, alpha);
-    }
+	@Override
+	public boolean isFailingAux(Session session, Double alpha) {
+		return helper.executeQuery(session, alpha);
+	}
 
-    @Override
-    public Result getResult(Session session, Double alpha) {
-	return helper.getResult(session, alpha);
-    }
+	@Override
+	public Result getResult(Session session, Double alpha) {
+		return helper.getResult(session, alpha);
+	}
 
-    @Override
-    public String toNativeQuery(Double alpha) {
-	return helper.toNativeQuery(alpha);
-    }
+	@Override
+	public String toNativeQuery(Double alpha) {
+		return helper.toNativeQuery(alpha);
+	}
 }

@@ -29,14 +29,14 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class JDBCQueryFactory extends AbstractJDBCQueryFactory {
 
-    @Override
-    public Query createQuery(String rdfQuery) {
-	return new JDBCQuery(this, rdfQuery);
-    }
+	@Override
+	public Query createQuery(String rdfQuery) {
+		return new JDBCQuery(this, rdfQuery);
+	}
 
-    @Override
-    public Query createQuery(List<TriplePattern> tps) {
-	return new JDBCQuery(this, tps);
-    }
+	@Override
+	public Query createQuery(List<TriplePattern> tps) {
+		return new JDBCQuery(this, tps);
+	}
 
 }

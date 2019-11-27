@@ -30,13 +30,13 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class SPARQLEndpointQueryExtFactory extends SPARQLEndpointQueryFactory {
 
-    @Override
-    public Query createQuery(String rdfQuery) {
-	return new SPARQLEndpointQueryOpt(this, rdfQuery, ExtendedCacheLBA.getInstance());
-    }
+	@Override
+	public Query createQuery(String rdfQuery) {
+		return new SPARQLEndpointQueryOpt(this, rdfQuery, ExtendedCacheLBA.getInstance());
+	}
 
-    @Override
-    public Query createQuery(List<TriplePattern> tps) {
-	return new SPARQLEndpointQueryOpt(this, tps, ExtendedCacheLBA.getInstance());
-    }
+	@Override
+	public Query createQuery(List<TriplePattern> tps) {
+		return new SPARQLEndpointQueryOpt(this, tps, ExtendedCacheLBA.getInstance());
+	}
 }

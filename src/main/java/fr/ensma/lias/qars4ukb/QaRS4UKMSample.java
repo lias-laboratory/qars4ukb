@@ -43,44 +43,44 @@ import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryOptFacto
  * @author Mickael BARON
  */
 public class QaRS4UKMSample {
-    public static void main(String[] args) {
-	// Initialize a JenaTDB instance by using the memory version.
-	Location locationMemory = Location.mem("watdivtdbmemory");
-	DatasetGraph currentGraph = TDBFactory.createDatasetGraph(locationMemory);
-	Dataset dataset = TDBFactory.createDataset(locationMemory);
-	dataset.begin(ReadWrite.READ);
-	TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
+	public static void main(String[] args) {
+		// Initialize a JenaTDB instance by using the memory version.
+		Location locationMemory = Location.mem("watdivtdbmemory");
+		DatasetGraph currentGraph = TDBFactory.createDatasetGraph(locationMemory);
+		Dataset dataset = TDBFactory.createDataset(locationMemory);
+		dataset.begin(ReadWrite.READ);
+		TDB.getContext().setTrue(TDB.symUnionDefaultGraph);
 
-	// Load the N-Quads from the previous generated file.
-	FileManager fm = FileManager.get();
-	InputStream in = fm.open("/Users/baronm/workspacejava/qars4ukb/src/main/resources/test_jena_quad.nq");
-	TDBLoader.load(TDBInternal.getBaseDatasetGraphTDB(currentGraph), in, true);
+		// Load the N-Quads from the previous generated file.
+		FileManager fm = FileManager.get();
+		InputStream in = fm.open("/Users/baronm/workspacejava/qars4ukb/src/main/resources/test_jena_quad.nq");
+		TDBLoader.load(TDBInternal.getBaseDatasetGraphTDB(currentGraph), in, true);
 
-	// Define the SPARQL query.
-	QueryFactory factory = new JenaTDBGraphQueryOptFactory();
-	Query createQuery = factory.createQuery(
-		"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course35' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
+		// Define the SPARQL query.
+		QueryFactory factory = new JenaTDBGraphQueryOptFactory();
+		Query createQuery = factory.createQuery(
+				"SELECT * WHERE { ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#name> 'Course35' . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#email> ?e . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#telephone> ?t . ?p <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#fax> ?f }");
 
-	// Choose an algorithm.
-	Session currentSession = ((JenaTDBGraphQueryOptFactory) factory).createSession(dataset);
-	IAlgo algo = new AlgoNLBA(currentSession);
-	// IAlgo algo = new AlgoBottomUp(((JenaTDBGraphQueryOptFactory)
-	// factory).createSession(dataset));
-	// IAlgo algo = new AlgoHybrid(((JenaTDBGraphQueryOptFactory)
-	// factory).createSession(dataset));
-	// IAlgo algo = new AlgoTopDown(((JenaTDBGraphQueryOptFactory)
-	// factory).createSession(dataset));
+		// Choose an algorithm.
+		Session currentSession = ((JenaTDBGraphQueryOptFactory) factory).createSession(dataset);
+		IAlgo algo = new AlgoNLBA(currentSession);
+		// IAlgo algo = new AlgoBottomUp(((JenaTDBGraphQueryOptFactory)
+		// factory).createSession(dataset));
+		// IAlgo algo = new AlgoHybrid(((JenaTDBGraphQueryOptFactory)
+		// factory).createSession(dataset));
+		// IAlgo algo = new AlgoTopDown(((JenaTDBGraphQueryOptFactory)
+		// factory).createSession(dataset));
 
-	// Execute the algorithm.
-	AlgoResult computesAlphaMFSsAndXSSs = algo.computesAlphaMFSsAndXSSs(createQuery,
-		Arrays.asList(0.2, 0.4, 0.6, 0.8));
+		// Execute the algorithm.
+		AlgoResult computesAlphaMFSsAndXSSs = algo.computesAlphaMFSsAndXSSs(createQuery,
+				Arrays.asList(0.2, 0.4, 0.6, 0.8));
 
-	// Statistics on the executed algorithm.
-	System.out.println("Time = " + algo.getComputingTime() + ", NbQueriesExecuted: " + algo.getNbExecutedQuery()
-		+ ", NbCacheHits: " + algo.getNbCacheHits());
+		// Statistics on the executed algorithm.
+		System.out.println("Time = " + algo.getComputingTime() + ", NbQueriesExecuted: " + algo.getNbExecutedQuery()
+				+ ", NbCacheHits: " + algo.getNbCacheHits());
 
-	// Display results on 0.2 MFS and 0.2 XSS.
-	System.out.println("NbMFS for 0.2:" + computesAlphaMFSsAndXSSs.getAlphaMFSs(0.2).size());
-	System.out.println(computesAlphaMFSsAndXSSs.getAlphaXSSs(0.2).size());
-    }
+		// Display results on 0.2 MFS and 0.2 XSS.
+		System.out.println("NbMFS for 0.2:" + computesAlphaMFSsAndXSSs.getAlphaMFSs(0.2).size());
+		System.out.println(computesAlphaMFSsAndXSSs.getAlphaXSSs(0.2).size());
+	}
 }

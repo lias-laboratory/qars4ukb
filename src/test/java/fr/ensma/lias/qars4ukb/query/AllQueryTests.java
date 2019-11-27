@@ -27,9 +27,6 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Mickael BARON
  */
 @RunWith(Suite.class)
-@SuiteClasses(value = { 
-	QueryHSQLDBTest.class, 
-	QueryJenaTDBGraphTest.class,
-	TriplePatternTest.class})
+@SuiteClasses(value = { QueryHSQLDBTest.class, QueryJenaTDBGraphTest.class, TriplePatternTest.class })
 public class AllQueryTests {
 }

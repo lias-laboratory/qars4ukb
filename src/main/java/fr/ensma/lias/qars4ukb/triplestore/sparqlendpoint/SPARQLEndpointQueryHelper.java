@@ -54,13 +54,13 @@ public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 
 		final Result result = this.getResult(session, alpha);
 		// long end = System.currentTimeMillis();
-		//== System.out.println(super.toNativeQuery(alpha));
+		// == System.out.println(super.toNativeQuery(alpha));
 		// System.out.println(((float) (end - begin)) / 1000f);
 		((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
-	/*	if(!(result.getNbRow() == 0))
-		System.out.println("success");
-	else
-		System.out.println("fails");*/
+		/*
+		 * if(!(result.getNbRow() == 0)) System.out.println("success"); else
+		 * System.out.println("fails");
+		 */
 		return result.getNbRow() == 0;
 	}
 
@@ -79,58 +79,48 @@ public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 	}
 
 	/*
-	 * @Override public String toNativeQuery(Double alpha) { int i = 1; String s
-	 * = q.toString();
+	 * @Override public String toNativeQuery(Double alpha) { int i = 1; String s =
+	 * q.toString();
 	 * 
 	 * String res = null; if (s.contains("WHERE")) res = s.replace("WHERE",
 	 * "{ GRAPH ?g"+i); else res = s.replace("where", "{ GRAPH ?g"+i); i++;
-	 * //System.out.println("res " +res); res = res.replace(" . ","unpoint");
-	 * String resultat =""; String[] tokens = res.split("unpoint"); for (int
-	 * k=0;k<tokens.length-1;k++)//String t : tokens) {
-	 * //System.out.println("  "+i + tokens[k]); resultat += tokens[k]
-	 * +" } . GRAPH ?g"+i+" { "; i++; } resultat+= tokens[tokens.length-1]; for
-	 * (int j=1; j<i-1; j++){ resultat+=" FILTER(xsd:double(str(?g"+j+")) > "
-	 * +alpha+") .";
+	 * //System.out.println("res " +res); res = res.replace(" . ","unpoint"); String
+	 * resultat =""; String[] tokens = res.split("unpoint"); for (int
+	 * k=0;k<tokens.length-1;k++)//String t : tokens) { //System.out.println("  "+i
+	 * + tokens[k]); resultat += tokens[k] +" } . GRAPH ?g"+i+" { "; i++; }
+	 * resultat+= tokens[tokens.length-1]; for (int j=1; j<i-1; j++){
+	 * resultat+=" FILTER(xsd:double(str(?g"+j+")) > " +alpha+") .";
 	 * 
-	 * } resultat+=" FILTER(xsd:double(str(?g"+(i-1)+")) > " +alpha+") .";
-	 * resultat = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + resultat
-	 * + " }"; //System.out.println(resultat); return resultat;
+	 * } resultat+=" FILTER(xsd:double(str(?g"+(i-1)+")) > " +alpha+") ."; resultat
+	 * = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + resultat + " }";
+	 * //System.out.println(resultat); return resultat;
 	 * 
 	 * }
-	 
-	@Override
-	public String toNativeQuery(Double alpha) {
-		int i = 1;
-		String s = q.toString();
-
-		String res = null;
-
-		i++;
-
-		res = res.replace(" . ", "unpoint");
-		String resultat = "";
-		String[] tokens = res.split("unpoint");
-		for (int k = 0; k < tokens.length - 1; k++)// String t : tokens)
-		{
-			// System.out.println(" "+i + tokens[k]);
-			resultat += tokens[k] + " } . GRAPH ?g" + i + " { ";
-			i++;
-		}
-		resultat += tokens[tokens.length - 1];
-		for (int j = 1; j < i - 1; j++) {
-			resultat += " FILTER(xsd:double(str(?g" + j + ")) > " + alpha + ") .";
-
-		}
-		resultat += " FILTER(xsd:double(str(?g" + (i - 1) + ")) > " + alpha + ") .";
-		resultat = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + resultat + " }";
-		// System.out.println(resultat);
-		return resultat;
-
-	}*//*
+	 * 
+	 * @Override public String toNativeQuery(Double alpha) { int i = 1; String s =
+	 * q.toString();
+	 * 
+	 * String res = null;
+	 * 
+	 * i++;
+	 * 
+	 * res = res.replace(" . ", "unpoint"); String resultat = ""; String[] tokens =
+	 * res.split("unpoint"); for (int k = 0; k < tokens.length - 1; k++)// String t
+	 * : tokens) { // System.out.println(" "+i + tokens[k]); resultat += tokens[k] +
+	 * " } . GRAPH ?g" + i + " { "; i++; } resultat += tokens[tokens.length - 1];
+	 * for (int j = 1; j < i - 1; j++) { resultat += " FILTER(xsd:double(str(?g" + j
+	 * + ")) > " + alpha + ") .";
+	 * 
+	 * } resultat += " FILTER(xsd:double(str(?g" + (i - 1) + ")) > " + alpha +
+	 * ") ."; resultat = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " +
+	 * resultat + " }"; // System.out.println(resultat); return resultat;
+	 * 
+	 * }
+	 *//*
 		 * @Override public String toNativeQuery(Double alpha) {
 		 * 
-		 * String s = q.toString(); String res = null; if (s.contains("WHERE"))
-		 * res = s.replace("WHERE", "{ GRAPH ?g"); else res = s.replace("where",
+		 * String s = q.toString(); String res = null; if (s.contains("WHERE")) res =
+		 * s.replace("WHERE", "{ GRAPH ?g"); else res = s.replace("where",
 		 * "{ GRAPH ?g");
 		 * 
 		 * res = res.replace("}", ".} FILTER(xsd:double(str(?g)) > "
@@ -139,6 +129,40 @@ public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 		 * 
 		 * }
 		 *//*
+			 * @Override public String toNativeQuery(Double alpha) { String result = null;
+			 * QueryFactory factory = new JenaTDBGraphQueryOptFactory(); Query qStar =
+			 * factory.createQuery(q.toString()); result = "SELECT * WHERE {";
+			 * List<TriplePattern> triplePatternsQStar = qStar.getTriplePatterns(); for (int
+			 * i = 0; i < triplePatternsQStar.size(); i++) { // triplePatternsQStar.get(i).;
+			 * String sujet = triplePatternsQStar.get(i).getSubject(); String predicat =
+			 * triplePatternsQStar.get(i).getPredicate(); String objet =
+			 * triplePatternsQStar.get(i).getObject(); if (!sujet.startsWith("?")) sujet =
+			 * "<"+sujet+">"; if (!predicat.startsWith("?")) predicat = "<"+predicat+">"; if
+			 * (!objet.startsWith("?")) objet = "<"+objet+">";
+			 * 
+			 * result += " ?statement" + i +
+			 * " <http://www.w3.org/2004/06/rei#type> <http://www.w3.org/2004/06/rei#statement> ;"
+			 * + " <http://www.w3.org/2004/06/rei#subject> " + sujet +
+			 * " ; <http://www.w3.org/2004/06/rei#predicate> " + predicat +
+			 * " ; <http://www.w3.org/2004/06/rei#object> " + objet +
+			 * " ; <http://www.w3.org/2004/06/rei#trust> ?g" + i + " .";
+			 * 
+			 * }
+			 * 
+			 * for(int i = 0; i < triplePatternsQStar.size(); i++) { result +=
+			 * " FILTER(xsd:double(strafter(str(?g" + i + "),\"rant/\")) > " + alpha +
+			 * ") .";
+			 * 
+			 * }
+			 * 
+			 * result = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + result + " }";
+			 * //System.out.println(result); return result; //return
+			 * "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT * WHERE { ?s <http://www.w3.org/2004/06/rei#type> <http://www.w3.org/2004/06/rei#statement> ; <http://www.w3.org/2004/06/rei#subject> ?ss ; <http://www.w3.org/2004/06/rei#predicate> <http://db.uwaterloo.ca/~galuc/wsdbm/friendOf> ; <http://www.w3.org/2004/06/rei#object> ?oo ; <http://www.w3.org/2004/06/rei#trust> ?t } limit 6"
+			 * ;
+			 * 
+			 * }
+			 */
+	// bersion reification
 	@Override
 	public String toNativeQuery(Double alpha) {
 		String result = null;
@@ -152,109 +176,67 @@ public class SPARQLEndpointQueryHelper extends SPARQLQueryHelper {
 			String predicat = triplePatternsQStar.get(i).getPredicate();
 			String objet = triplePatternsQStar.get(i).getObject();
 			if (!sujet.startsWith("?"))
-				sujet = "<"+sujet+">";
+				sujet = "<" + sujet + ">";
 			if (!predicat.startsWith("?"))
-				predicat = "<"+predicat+">";
+				predicat = "<" + predicat + ">";
 			if (!objet.startsWith("?"))
-				objet = "<"+objet+">";
-			
-			result += " ?statement" + i + " <http://www.w3.org/2004/06/rei#type> <http://www.w3.org/2004/06/rei#statement> ;"
-					+ " <http://www.w3.org/2004/06/rei#subject> " + sujet
-					+ " ; <http://www.w3.org/2004/06/rei#predicate> " + predicat
-					+ " ; <http://www.w3.org/2004/06/rei#object> " + objet
-					+ " ; <http://www.w3.org/2004/06/rei#trust> ?g" + i + " .";
+				objet = "<" + objet + ">";
+
+			result += " ?statement" + i + " <http://www.w3.org/2004/06/rei#subject> " + sujet + " . ?statement" + i
+					+ " <http://www.w3.org/2004/06/rei#predicate> " + predicat + " . ?statement" + i
+					+ "  <http://www.w3.org/2004/06/rei#object> " + objet + " . ?statement" + i
+					+ " <http://www.w3.org/2004/06/rei#trust> ?g" + i + " .";
 
 		}
-		
-		for(int i = 0; i < triplePatternsQStar.size(); i++) {
-			result += " FILTER(xsd:double(strafter(str(?g" + i + "),\"rant/\")) > " + alpha + ") .";
 
-		}
-		
-		result = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + result + " }";
-		//System.out.println(result);
-		return result;
-		//return "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT * WHERE { ?s <http://www.w3.org/2004/06/rei#type> <http://www.w3.org/2004/06/rei#statement> ; <http://www.w3.org/2004/06/rei#subject> ?ss ; <http://www.w3.org/2004/06/rei#predicate> <http://db.uwaterloo.ca/~galuc/wsdbm/friendOf> ; <http://www.w3.org/2004/06/rei#object> ?oo ; <http://www.w3.org/2004/06/rei#trust> ?t } limit 6";
-
-	}
-	*/
-	//bersion reification
-	@Override
-	public String toNativeQuery(Double alpha) {
-		String result = null;
-		QueryFactory factory = new JenaTDBGraphQueryOptFactory();
-		Query qStar = factory.createQuery(q.toString());
-		result = "SELECT * WHERE {";
-		List<TriplePattern> triplePatternsQStar = qStar.getTriplePatterns();
 		for (int i = 0; i < triplePatternsQStar.size(); i++) {
-			// triplePatternsQStar.get(i).;
-			String sujet = triplePatternsQStar.get(i).getSubject();
-			String predicat = triplePatternsQStar.get(i).getPredicate();
-			String objet = triplePatternsQStar.get(i).getObject();
-			if (!sujet.startsWith("?"))
-				sujet = "<"+sujet+">";
-			if (!predicat.startsWith("?"))
-				predicat = "<"+predicat+">";
-			if (!objet.startsWith("?"))
-				objet = "<"+objet+">";
-			
-		
-			result += " ?statement" + i + " <http://www.w3.org/2004/06/rei#subject> " + sujet
-					+ " . ?statement" + i + " <http://www.w3.org/2004/06/rei#predicate> " + predicat
-					+ " . ?statement" + i + "  <http://www.w3.org/2004/06/rei#object> " + objet
-					+ " . ?statement" + i + " <http://www.w3.org/2004/06/rei#trust> ?g" + i + " .";
-
-
-		}
-		
-		for(int i = 0; i < triplePatternsQStar.size(); i++) {
 			result += " FILTER(xsd:double(str(?g" + i + ")) > " + alpha + ") .";
 
 		}
-		
+
 		result = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + result + " } limit 2";
-		//System.out.println(result);
-		return result;//"SELECT * WHERE { ?st <http://www.w3.org/2004/06/rei#type> <http://www.w3.org/2004/06/rei#statement> ; <http://www.w3.org/2004/06/rei#subject> ?s ; <http://www.w3.org/2004/06/rei#predicate> ?p ; <http://www.w3.org/2004/06/rei#object> ?o ; <http://www.w3.org/2004/06/rei#trust> ?t . } limit 6";//result;
-		//return "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT * WHERE { ?s <http://www.w3.org/2004/06/rei#type> <http://www.w3.org/2004/06/rei#statement> ; <http://www.w3.org/2004/06/rei#subject> ?ss ; <http://www.w3.org/2004/06/rei#predicate> <http://db.uwaterloo.ca/~galuc/wsdbm/friendOf> ; <http://www.w3.org/2004/06/rei#object> ?oo ; <http://www.w3.org/2004/06/rei#trust> ?t } limit 6";
+		// System.out.println(result);
+		return result;// "SELECT * WHERE { ?st <http://www.w3.org/2004/06/rei#type>
+						// <http://www.w3.org/2004/06/rei#statement> ;
+						// <http://www.w3.org/2004/06/rei#subject> ?s ;
+						// <http://www.w3.org/2004/06/rei#predicate> ?p ;
+						// <http://www.w3.org/2004/06/rei#object> ?o ;
+						// <http://www.w3.org/2004/06/rei#trust> ?t . } limit 6";//result;
+		// return "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT * WHERE { ?s
+		// <http://www.w3.org/2004/06/rei#type>
+		// <http://www.w3.org/2004/06/rei#statement> ;
+		// <http://www.w3.org/2004/06/rei#subject> ?ss ;
+		// <http://www.w3.org/2004/06/rei#predicate>
+		// <http://db.uwaterloo.ca/~galuc/wsdbm/friendOf> ;
+		// <http://www.w3.org/2004/06/rei#object> ?oo ;
+		// <http://www.w3.org/2004/06/rei#trust> ?t } limit 6";
 
 	}
 	/*
-	
-	//version graph
-	
-	 @Override public String toNativeQuery(Double alpha){
-		 
-		 int i = 1; String s = q.toString();
-		 
-		 String res = null;
-		 if (s.contains("WHERE")) 
-		 	res = s.replace("WHERE", "{ GRAPH ?g" + i); 
-		 else
-			res = s.replace("where", "{ GRAPH ?g" + i); 
-		 	
-		 i++;
-		// System.out.println("res " + res); 
-		 res = res.replace(" . ", "unpoint");
-		 String resultat = ""; 
-		 String[] tokens = res.split("unpoint"); 
-		 for (int k = 0; k < tokens.length - 1; k++)// String t : tokens) 
-		{
-			 //System.out.println("  " + i + tokens[k]);
-			 resultat += tokens[k] + " } . GRAPH ?g" + i + " { "; i++; 
-		}
-		 
-		resultat+=tokens[tokens.length-1];
-		for(int j = 1;j<i-1;j++)
-		{
-			resultat += " FILTER(xsd:double(str(?g" + j + ")) > " + alpha + ") .";
+	 * 
+	 * //version graph
+	 * 
+	 * @Override public String toNativeQuery(Double alpha){
+	 * 
+	 * int i = 1; String s = q.toString();
+	 * 
+	 * String res = null; if (s.contains("WHERE")) res = s.replace("WHERE",
+	 * "{ GRAPH ?g" + i); else res = s.replace("where", "{ GRAPH ?g" + i);
+	 * 
+	 * i++; // System.out.println("res " + res); res = res.replace(" . ",
+	 * "unpoint"); String resultat = ""; String[] tokens = res.split("unpoint"); for
+	 * (int k = 0; k < tokens.length - 1; k++)// String t : tokens) {
+	 * //System.out.println("  " + i + tokens[k]); resultat += tokens[k] +
+	 * " } . GRAPH ?g" + i + " { "; i++; }
+	 * 
+	 * resultat+=tokens[tokens.length-1]; for(int j = 1;j<i-1;j++) { resultat +=
+	 * " FILTER(xsd:double(str(?g" + j + ")) > " + alpha + ") .";
+	 * 
+	 * } resultat+=" FILTER(xsd:double(str(?g"+(i-1)+")) > "+alpha+") .";
+	 * resultat="PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> "+resultat+" }";
+	 * //System.out.println(resultat); return resultat;
+	 * 
+	 * }
+	 */
 
-		}
-		resultat+=" FILTER(xsd:double(str(?g"+(i-1)+")) > "+alpha+") .";
-		resultat="PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> "+resultat+" }";
-		//System.out.println(resultat);
-		return resultat;
-
-		}
-*/
-	
 }

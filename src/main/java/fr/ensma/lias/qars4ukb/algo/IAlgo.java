@@ -29,30 +29,34 @@ import fr.ensma.lias.qars4ukb.query.Query;
  */
 public interface IAlgo {
 
-    /**
-     * Computes the AlphaMFSs and XSSs for a set of alpha
-     * @param q a query
-     * @param listOfAlpha a list of thresholds in the ascending order
-     * @return the AlphaMFSs and XSSs
-     */
-    AlgoResult computesAlphaMFSsAndXSSs(Query q, List<Double> listOfAlpha);
-    
-    /**
-     * Get the number of executed queries on the KB
-     * @return the number of executed queries on the KB
-     */
-    int getNbExecutedQuery();
-    
-    /**
-     * Get the number of cache hits during the algorithm
-     * @return the number of cache hits
-     */
-    int getNbCacheHits();
-    
-    /**
-     * Get the computing time of this algorithm
-     * @return the computing time of this algorithm
-     */
-    float getComputingTime(); 
+	/**
+	 * Computes the AlphaMFSs and XSSs for a set of alpha
+	 * 
+	 * @param q           a query
+	 * @param listOfAlpha a list of thresholds in the ascending order
+	 * @return the AlphaMFSs and XSSs
+	 */
+	AlgoResult computesAlphaMFSsAndXSSs(Query q, List<Double> listOfAlpha);
+
+	/**
+	 * Get the number of executed queries on the KB
+	 * 
+	 * @return the number of executed queries on the KB
+	 */
+	int getNbExecutedQuery();
+
+	/**
+	 * Get the number of cache hits during the algorithm
+	 * 
+	 * @return the number of cache hits
+	 */
+	int getNbCacheHits();
+
+	/**
+	 * Get the computing time of this algorithm
+	 * 
+	 * @return the computing time of this algorithm
+	 */
+	float getComputingTime();
 
 }

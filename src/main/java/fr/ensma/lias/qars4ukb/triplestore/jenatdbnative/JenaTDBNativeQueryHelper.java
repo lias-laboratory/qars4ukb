@@ -34,28 +34,28 @@ import fr.ensma.lias.qars4ukb.query.SPARQLQueryHelper;
  */
 public class JenaTDBNativeQueryHelper extends SPARQLQueryHelper {
 
-    public JenaTDBNativeQueryHelper(Query q) {
-	super(q);
-    }
+	public JenaTDBNativeQueryHelper(Query q) {
+		super(q);
+	}
 
-    @Override
-    public boolean executeQuery(Session session, Double alpha) {
-	String sparqlQueryString = toNativeQuery(alpha);
-	org.apache.jena.query.Query query = org.apache.jena.query.QueryFactory.create(sparqlQueryString);
-	QueryExecution qexec = QueryExecutionFactory.create(query, ((JenaTDBNativeSession) session).getDataset());
-	ResultSet results = qexec.execSelect();
+	@Override
+	public boolean executeQuery(Session session, Double alpha) {
+		String sparqlQueryString = toNativeQuery(alpha);
+		org.apache.jena.query.Query query = org.apache.jena.query.QueryFactory.create(sparqlQueryString);
+		QueryExecution qexec = QueryExecutionFactory.create(query, ((JenaTDBNativeSession) session).getDataset());
+		ResultSet results = qexec.execSelect();
 
-	((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
-	boolean res = !results.hasNext();
-	qexec.close();
-	return res;
-    }
+		((AbstractSession) session).setExecutedQueryCount(((AbstractSession) session).getExecutedQueryCount() + 1);
+		boolean res = !results.hasNext();
+		qexec.close();
+		return res;
+	}
 
-    @Override
-    public Result getResult(Session s, Double alpha) {
-	QueryExecution qexec = QueryExecutionFactory.create(toNativeQuery(alpha),
-		((JenaTDBNativeSession) s).getDataset());
-	ResultSet results = qexec.execSelect();
-	return new JenaTDBNativeResult(results);
-    }
+	@Override
+	public Result getResult(Session s, Double alpha) {
+		QueryExecution qexec = QueryExecutionFactory.create(toNativeQuery(alpha),
+				((JenaTDBNativeSession) s).getDataset());
+		ResultSet results = qexec.execSelect();
+		return new JenaTDBNativeResult(results);
+	}
 }

@@ -27,17 +27,17 @@ import fr.ensma.lias.qars4ukb.triplestore.sparqlendpoint.util.SPARQLEndpointClie
  */
 public class SPARQLEndpointSession extends AbstractSession {
 
-    private SPARQLEndpointClient currentSession;
+	private SPARQLEndpointClient currentSession;
 
-    public SPARQLEndpointSession(SPARQLEndpointClient pCurrentSession) {
-	this.currentSession = pCurrentSession;
-    }
+	public SPARQLEndpointSession(SPARQLEndpointClient pCurrentSession) {
+		this.currentSession = pCurrentSession;
+	}
 
-    public SPARQLEndpointClient getSPARQLEndpointClient() {
-	return currentSession;
-    }
+	public SPARQLEndpointClient getSPARQLEndpointClient() {
+		return currentSession;
+	}
 
-    @Override
-    public void close() throws Exception {
-    }
+	@Override
+	public void close() throws Exception {
+	}
 }

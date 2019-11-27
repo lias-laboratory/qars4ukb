@@ -31,9 +31,6 @@ import fr.ensma.lias.qars4ukb.query.AllQueryTests;
  * @author Mickael BARON
  */
 @RunWith(Suite.class)
-@SuiteClasses(value = { 
-	AllAlgoTests.class,
-	AllCacheTests.class,
-	AllQueryTests.class})
+@SuiteClasses(value = { AllAlgoTests.class, AllCacheTests.class, AllQueryTests.class })
 public class AllQARS4UKBTest {
 }

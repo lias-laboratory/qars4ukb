@@ -27,7 +27,7 @@ import fr.ensma.lias.qars4ukb.triplestore.jdbcdb.AbstractJDBCQueryHelper;
  */
 public class OracleQueryHelper extends AbstractJDBCQueryHelper {
 
-    public OracleQueryHelper(Query q) {
-	super(q);
-    }
+	public OracleQueryHelper(Query q) {
+		super(q);
+	}
 }

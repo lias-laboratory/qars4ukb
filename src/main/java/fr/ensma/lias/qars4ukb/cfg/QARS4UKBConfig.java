@@ -28,27 +28,27 @@ import org.aeonbits.owner.Config.Sources;
 @Sources("classpath:triplestores.config")
 public interface QARS4UKBConfig extends Config {
 
-    @Key("jenatdbnative.repository")
-    String jenanatifRepository();
+	@Key("jenatdbnative.repository")
+	String jenanatifRepository();
 
-    @Key("jdbc.database")
-    String jdbcDatabase();
-    
-    @Key("jdbc.url")
-    String jdbcUrl();
+	@Key("jdbc.database")
+	String jdbcDatabase();
 
-    @Key("jdbc.driver")
-    String jdbcDriver();
+	@Key("jdbc.url")
+	String jdbcUrl();
 
-    @Key("jdbc.login")
-    String jdbcLogin();
+	@Key("jdbc.driver")
+	String jdbcDriver();
 
-    @Key("jdbc.password")
-    String jdbcPassword();
+	@Key("jdbc.login")
+	String jdbcLogin();
 
-    @Key("sparqlendpoint.url")
-    String sparqlendpointUrl();
+	@Key("jdbc.password")
+	String jdbcPassword();
 
-    @Key("sparqlendpoint.defaultgraphuri")
-    String sparqlendpointDefaultGraphURI();    
+	@Key("sparqlendpoint.url")
+	String sparqlendpointUrl();
+
+	@Key("sparqlendpoint.defaultgraphuri")
+	String sparqlendpointDefaultGraphURI();
 }

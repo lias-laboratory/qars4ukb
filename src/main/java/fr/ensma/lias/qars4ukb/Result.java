@@ -28,49 +28,47 @@ import java.util.List;
  */
 public interface Result {
 
-    /**
-     * Close the result set
-     */
-    void close();
+	/**
+	 * Close the result set
+	 */
+	void close();
 
-    /**
-     * Iterates to the next result
-     * 
-     * @return true if there is a next result
-     */
-    boolean next();
+	/**
+	 * Iterates to the next result
+	 * 
+	 * @return true if there is a next result
+	 */
+	boolean next();
 
-    /**
-     * Return the string value of the result for the given column
-     * 
-     * @param col
-     *            the column
-     * @return the string value of the result for the given column
-     */
-    String getString(int col);
+	/**
+	 * Return the string value of the result for the given column
+	 * 
+	 * @param col the column
+	 * @return the string value of the result for the given column
+	 */
+	String getString(int col);
 
-    /**
-     * Return the number of rows of this result
-     * 
-     * @return the number of rows of this result
-     * @throws Exception
-     */
-    int getNbRow();
+	/**
+	 * Return the number of rows of this result
+	 * 
+	 * @return the number of rows of this result
+	 * @throws Exception
+	 */
+	int getNbRow();
 
-    /**
-     * Return return a list of results ; the maximum number of element is set
-     * with maxk
-     * 
-     * @return the number of rows of this result with a maximum set to maxk
-     */
-    List<String> getNbRow(int maxK);
+	/**
+	 * Return return a list of results ; the maximum number of element is set with
+	 * maxk
+	 * 
+	 * @return the number of rows of this result with a maximum set to maxk
+	 */
+	List<String> getNbRow(int maxK);
 
-    /**
-     * Return the string values of the result for the given columns
-     * 
-     * @param cols
-     *            the given columns
-     * @return the string values of the result for the given columns
-     */
-    String[] getString(String[] cols);
+	/**
+	 * Return the string values of the result for the given columns
+	 * 
+	 * @param cols the given columns
+	 * @return the string values of the result for the given columns
+	 */
+	String[] getString(String[] cols);
 }

@@ -32,30 +32,30 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class SPARQLEndpointQuery extends AbstractQuery {
 
-    private SPARQLEndpointQueryHelper helper;
+	private SPARQLEndpointQueryHelper helper;
 
-    public SPARQLEndpointQuery(QueryFactory factory, String query) {
-	super(factory, query);
-	helper = new SPARQLEndpointQueryHelper(this);
-    }
+	public SPARQLEndpointQuery(QueryFactory factory, String query) {
+		super(factory, query);
+		helper = new SPARQLEndpointQueryHelper(this);
+	}
 
-    public SPARQLEndpointQuery(QueryFactory factory, List<TriplePattern> tps) {
-	super(factory, tps);
-	helper = new SPARQLEndpointQueryHelper(this);
-    }
+	public SPARQLEndpointQuery(QueryFactory factory, List<TriplePattern> tps) {
+		super(factory, tps);
+		helper = new SPARQLEndpointQueryHelper(this);
+	}
 
-    @Override
-    public Result getResult(Session session, Double alpha) {
-	return helper.getResult(session, alpha);
-    }
+	@Override
+	public Result getResult(Session session, Double alpha) {
+		return helper.getResult(session, alpha);
+	}
 
-    @Override
-    protected boolean isFailingAux(Session session, Double alpha) {
-	return helper.executeQuery(session, alpha);
-    }
+	@Override
+	protected boolean isFailingAux(Session session, Double alpha) {
+		return helper.executeQuery(session, alpha);
+	}
 
-    @Override
-    public String toNativeQuery(Double alpha) {
-	return helper.toNativeQuery(alpha);
-    }
+	@Override
+	public String toNativeQuery(Double alpha) {
+		return helper.toNativeQuery(alpha);
+	}
 }

@@ -25,29 +25,29 @@ package fr.ensma.lias.qars4ukb.experiment;
  */
 public class QueryResult {
 
-    private float time;
+	private float time;
 
-    private int nbExecutedQuery;
+	private int nbExecutedQuery;
 
-    private int nbCacheHits;
+	private int nbCacheHits;
 
-    public QueryResult(float time, int nbExecutedQuery, int nbCacheHits) {
-	super();
-	this.time = time;
-	this.nbExecutedQuery = nbExecutedQuery;
-	this.nbCacheHits = nbCacheHits;
-    }
+	public QueryResult(float time, int nbExecutedQuery, int nbCacheHits) {
+		super();
+		this.time = time;
+		this.nbExecutedQuery = nbExecutedQuery;
+		this.nbCacheHits = nbCacheHits;
+	}
 
-    public float getTime() {
-	return time;
-    }
+	public float getTime() {
+		return time;
+	}
 
-    public int getNbExecutedQuery() {
-	return nbExecutedQuery;
-    }
+	public int getNbExecutedQuery() {
+		return nbExecutedQuery;
+	}
 
-    public int getNbCacheHits() {
-	return nbCacheHits;
-    }
+	public int getNbCacheHits() {
+		return nbCacheHits;
+	}
 
 }

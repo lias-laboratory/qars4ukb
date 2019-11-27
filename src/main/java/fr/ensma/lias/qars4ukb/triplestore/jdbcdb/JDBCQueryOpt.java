@@ -31,25 +31,25 @@ import fr.ensma.lias.qars4ukb.query.QueryHelper;
  */
 public class JDBCQueryOpt extends AbstractQueryOpt {
 
-    protected QueryHelper helper;
+	protected QueryHelper helper;
 
-    public JDBCQueryOpt(JDBCQueryFactory factory, String query, ICache cache) {
-	super(factory, query, cache);
-	helper = factory.createQueryHelper(this);
-    }
+	public JDBCQueryOpt(JDBCQueryFactory factory, String query, ICache cache) {
+		super(factory, query, cache);
+		helper = factory.createQueryHelper(this);
+	}
 
-    @Override
-    protected boolean isFailingWithExecution(Query q, Session session, Double alpha) {
-	return ((JDBCQueryFactory) this.factory).createQueryHelper(q).executeQuery(session, alpha);
-    }
+	@Override
+	protected boolean isFailingWithExecution(Query q, Session session, Double alpha) {
+		return ((JDBCQueryFactory) this.factory).createQueryHelper(q).executeQuery(session, alpha);
+	}
 
-    @Override
-    public String toNativeQuery(Double alpha) {
-	return helper.toNativeQuery(alpha);
-    }
+	@Override
+	public String toNativeQuery(Double alpha) {
+		return helper.toNativeQuery(alpha);
+	}
 
-    @Override
-    public Result getResult(Session session, Double alpha) {
-	return helper.getResult(session, alpha);
-    }
+	@Override
+	public Result getResult(Session session, Double alpha) {
+		return helper.getResult(session, alpha);
+	}
 }

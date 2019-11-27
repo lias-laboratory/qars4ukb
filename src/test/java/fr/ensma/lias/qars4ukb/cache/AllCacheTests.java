@@ -27,7 +27,6 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Mickael BARON
  */
 @RunWith(Suite.class)
-@SuiteClasses(value = { 
-	ExtendedCacheLBATest.class})
+@SuiteClasses(value = { ExtendedCacheLBATest.class })
 public class AllCacheTests {
 }

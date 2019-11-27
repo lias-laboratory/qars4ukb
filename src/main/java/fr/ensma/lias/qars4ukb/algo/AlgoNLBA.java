@@ -30,21 +30,21 @@ import fr.ensma.lias.qars4ukb.query.Query;
  */
 public class AlgoNLBA extends AbstractAlgo {
 
-    public AlgoNLBA(Session pSession) {
-	super(pSession);
-    }
-
-    @Override
-    public AlgoResult computesAlphaMFSsAndXSSsAux(Query q, List<Double> listOfAlpha) {
-	AlgoResult result = new AlgoResult();
-	for (Double alpha : listOfAlpha) {
-	    q.runLBA(this.getSession(), alpha);
-	    result.addAlphaMFSs(alpha, q.getAllMFS());
-	    result.addAlphaXSSs(alpha, q.getAllXSS());
-	    // this query must used the CacheLBA (and not the extended cache)
-	    nbCacheHits += CacheLBA.getInstance().getNbCacheHits();
-	    nbExecutedQuery += this.getSession().getExecutedQueryCount();
+	public AlgoNLBA(Session pSession) {
+		super(pSession);
 	}
-	return result;
-    }
+
+	@Override
+	public AlgoResult computesAlphaMFSsAndXSSsAux(Query q, List<Double> listOfAlpha) {
+		AlgoResult result = new AlgoResult();
+		for (Double alpha : listOfAlpha) {
+			q.runLBA(this.getSession(), alpha);
+			result.addAlphaMFSs(alpha, q.getAllMFS());
+			result.addAlphaXSSs(alpha, q.getAllXSS());
+			// this query must used the CacheLBA (and not the extended cache)
+			nbCacheHits += CacheLBA.getInstance().getNbCacheHits();
+			nbExecutedQuery += this.getSession().getExecutedQueryCount();
+		}
+		return result;
+	}
 }

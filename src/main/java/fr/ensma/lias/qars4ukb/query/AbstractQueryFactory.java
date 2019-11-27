@@ -31,27 +31,27 @@ import fr.ensma.lias.qars4ukb.cfg.QARS4UKBConfig;
  */
 public abstract class AbstractQueryFactory implements QueryFactory {
 
-    private QARS4UKBConfig config;
+	private QARS4UKBConfig config;
 
-    public AbstractQueryFactory() {
-	config = ConfigFactory.create(QARS4UKBConfig.class);
-    }
+	public AbstractQueryFactory() {
+		config = ConfigFactory.create(QARS4UKBConfig.class);
+	}
 
-    protected QARS4UKBConfig getConfig() {
-	return this.config;
-    }
+	protected QARS4UKBConfig getConfig() {
+		return this.config;
+	}
 
-    @Override
-    public Query createQuery(String rdfQuery, Query initialQuery) {
-	final Query createQuery = this.createQuery(rdfQuery);
-	((AbstractQuery) createQuery).setInitialQuery(initialQuery);
-	return createQuery;
-    }
+	@Override
+	public Query createQuery(String rdfQuery, Query initialQuery) {
+		final Query createQuery = this.createQuery(rdfQuery);
+		((AbstractQuery) createQuery).setInitialQuery(initialQuery);
+		return createQuery;
+	}
 
-    @Override
-    public Query createQuery(List<TriplePattern> tp, Query initialQuery) {
-	final Query createQuery = this.createQuery(tp);
-	((AbstractQuery) createQuery).setInitialQuery(initialQuery);
-	return createQuery;
-    }
+	@Override
+	public Query createQuery(List<TriplePattern> tp, Query initialQuery) {
+		final Query createQuery = this.createQuery(tp);
+		((AbstractQuery) createQuery).setInitialQuery(initialQuery);
+		return createQuery;
+	}
 }

@@ -27,10 +27,6 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Mickael BARON
  */
 @RunWith(Suite.class)
-@SuiteClasses(value = { 
-	AlgoBottomUpTest.class, 
-	AlgoHybridTest.class,
-	AlgoNLBATest.class, 
-	AlgoTopDownTest.class})
+@SuiteClasses(value = { AlgoBottomUpTest.class, AlgoHybridTest.class, AlgoNLBATest.class, AlgoTopDownTest.class })
 public class AllAlgoTests {
 }

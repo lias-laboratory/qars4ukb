@@ -24,6 +24,6 @@ package fr.ensma.lias.qars4ukb.exception;
  */
 public class NotYetImplementedException extends RuntimeException {
 
-    private static final long serialVersionUID = -5005623190195013020L;
+	private static final long serialVersionUID = -5005623190195013020L;
 
 }

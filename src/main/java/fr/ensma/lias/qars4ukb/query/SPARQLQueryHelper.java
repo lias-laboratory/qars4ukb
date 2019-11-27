@@ -24,14 +24,14 @@ package fr.ensma.lias.qars4ukb.query;
  */
 public abstract class SPARQLQueryHelper implements QueryHelper {
 
-    protected Query q;
+	protected Query q;
 
-    public SPARQLQueryHelper(Query q) {
-	this.q = q;
-    }
+	public SPARQLQueryHelper(Query q) {
+		this.q = q;
+	}
 
-    @Override
-    public String toNativeQuery(Double alpha) {
-	return q.toString();
-    }
+	@Override
+	public String toNativeQuery(Double alpha) {
+		return q.toString();
+	}
 }

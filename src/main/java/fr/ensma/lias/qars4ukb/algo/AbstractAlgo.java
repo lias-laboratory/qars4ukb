@@ -29,64 +29,64 @@ import fr.ensma.lias.qars4ukb.query.Query;
  */
 public abstract class AbstractAlgo implements IAlgo {
 
-    /**
-     * Current session
-     */
-    private Session session;
+	/**
+	 * Current session
+	 */
+	private Session session;
 
-    /**
-     * Number of executed query on the KB
-     */
-    protected int nbExecutedQuery;
+	/**
+	 * Number of executed query on the KB
+	 */
+	protected int nbExecutedQuery;
 
-    /**
-     * Number of cache hits
-     */
-    protected int nbCacheHits;
+	/**
+	 * Number of cache hits
+	 */
+	protected int nbCacheHits;
 
-    /**
-     * Computing time of the algorithm
-     */
-    protected float computingTime;
+	/**
+	 * Computing time of the algorithm
+	 */
+	protected float computingTime;
 
-    public AbstractAlgo(Session pSession) {
-	this.session = pSession;
-	nbExecutedQuery = 0;
-	nbCacheHits = 0;
-    }
+	public AbstractAlgo(Session pSession) {
+		this.session = pSession;
+		nbExecutedQuery = 0;
+		nbCacheHits = 0;
+	}
 
-    @Override
-    public int getNbExecutedQuery() {
-	return nbExecutedQuery;
-    }
+	@Override
+	public int getNbExecutedQuery() {
+		return nbExecutedQuery;
+	}
 
-    @Override
-    public int getNbCacheHits() {
-	return nbCacheHits;
-    }
+	@Override
+	public int getNbCacheHits() {
+		return nbCacheHits;
+	}
 
-    @Override
-    public float getComputingTime() {
-	return computingTime;
-    }
+	@Override
+	public float getComputingTime() {
+		return computingTime;
+	}
 
-    @Override
-    public AlgoResult computesAlphaMFSsAndXSSs(Query q, List<Double> listOfAlpha) {
-	long begin = System.currentTimeMillis();
-	AlgoResult result = computesAlphaMFSsAndXSSsAux(q, listOfAlpha);
-	long end = System.currentTimeMillis();
-	computingTime = ((float) (end - begin)) / 1000f;
-	return result;
-    }
+	@Override
+	public AlgoResult computesAlphaMFSsAndXSSs(Query q, List<Double> listOfAlpha) {
+		long begin = System.currentTimeMillis();
+		AlgoResult result = computesAlphaMFSsAndXSSsAux(q, listOfAlpha);
+		long end = System.currentTimeMillis();
+		computingTime = ((float) (end - begin)) / 1000f;
+		return result;
+	}
 
-    /**
-     * Same as computesAlphaMFSsAndXSSs but without the computing time
-     * 
-     * @return the AlphaMFSs and XSSs
-     */
-    protected abstract AlgoResult computesAlphaMFSsAndXSSsAux(Query q, List<Double> listOfAlpha);
+	/**
+	 * Same as computesAlphaMFSsAndXSSs but without the computing time
+	 * 
+	 * @return the AlphaMFSs and XSSs
+	 */
+	protected abstract AlgoResult computesAlphaMFSsAndXSSsAux(Query q, List<Double> listOfAlpha);
 
-    public Session getSession() {
-	return this.session;
-    }
+	public Session getSession() {
+		return this.session;
+	}
 }

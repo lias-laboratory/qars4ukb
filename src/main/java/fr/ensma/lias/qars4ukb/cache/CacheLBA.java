@@ -30,87 +30,87 @@ import fr.ensma.lias.qars4ukb.query.Query;
  */
 public class CacheLBA implements ICache {
 
-    protected int nbCacheHits;
+	protected int nbCacheHits;
 
-    protected List<Query> successfulCachedQueries = new ArrayList<Query>();
+	protected List<Query> successfulCachedQueries = new ArrayList<Query>();
 
-    protected List<Query> failingCachedQueries = new ArrayList<Query>();
+	protected List<Query> failingCachedQueries = new ArrayList<Query>();
 
-    private static CacheLBA instance;
+	private static CacheLBA instance;
 
-    private CacheLBA() {
-    }
-
-    public static CacheLBA getInstance() {
-	if (instance == null) {
-	    instance = new CacheLBA();
+	private CacheLBA() {
 	}
-	return instance;
-    }
 
-    @Override
-    public void clearCache() {
-	nbCacheHits = 0;
-	successfulCachedQueries.clear();
-	failingCachedQueries.clear();
-    }
+	public static CacheLBA getInstance() {
+		if (instance == null) {
+			instance = new CacheLBA();
+		}
+		return instance;
+	}
 
-    @Override
-    public void initCacheBeforeLBA() {
-	nbCacheHits = 0;
-	successfulCachedQueries = new ArrayList<Query>();
-	// System.out.println("cache query empty");
-	failingCachedQueries = new ArrayList<Query>();
-    }
+	@Override
+	public void clearCache() {
+		nbCacheHits = 0;
+		successfulCachedQueries.clear();
+		failingCachedQueries.clear();
+	}
 
-    public void incrementeCacheHits() {
-	nbCacheHits++;
-    }
+	@Override
+	public void initCacheBeforeLBA() {
+		nbCacheHits = 0;
+		successfulCachedQueries = new ArrayList<Query>();
+		// System.out.println("cache query empty");
+		failingCachedQueries = new ArrayList<Query>();
+	}
 
-    @Override
-    public int getNbCacheHits() {
-	return nbCacheHits;
-    }
-
-    public List<Query> getSuccessfulCachedQueries() {
-	return successfulCachedQueries;
-    }
-
-    public List<Query> getFailingCachedQueries() {
-	return failingCachedQueries;
-    }
-
-    @Override
-    public boolean isSuccessfulByCache(Query q, Double alpha) {
-	for (Query qCache : getSuccessfulCachedQueries()) {
-	    if (qCache.includes(q)) {
+	public void incrementeCacheHits() {
 		nbCacheHits++;
-		return true;
-	    }
 	}
-	return false;
-    }
 
-    @Override
-    public boolean isFailingByCache(Query q, Double alpha) {
-	for (Query qCache : getFailingCachedQueries()) {
-	    if (q.includes(qCache)) {
-		nbCacheHits++;
-		return true;
-	    }
+	@Override
+	public int getNbCacheHits() {
+		return nbCacheHits;
 	}
-	return false;
-    }
 
-    @Override
-    public void addFailingQuery(Query q, boolean isCartesianProduct, Double alpha) {
-	if (isCartesianProduct) {
-	    getFailingCachedQueries().add(q);
+	public List<Query> getSuccessfulCachedQueries() {
+		return successfulCachedQueries;
 	}
-    }
 
-    @Override
-    public void addSuccessfulQuery(Query q, Double alpha) {
-	getSuccessfulCachedQueries().add(q);
-    }
+	public List<Query> getFailingCachedQueries() {
+		return failingCachedQueries;
+	}
+
+	@Override
+	public boolean isSuccessfulByCache(Query q, Double alpha) {
+		for (Query qCache : getSuccessfulCachedQueries()) {
+			if (qCache.includes(q)) {
+				nbCacheHits++;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isFailingByCache(Query q, Double alpha) {
+		for (Query qCache : getFailingCachedQueries()) {
+			if (q.includes(qCache)) {
+				nbCacheHits++;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void addFailingQuery(Query q, boolean isCartesianProduct, Double alpha) {
+		if (isCartesianProduct) {
+			getFailingCachedQueries().add(q);
+		}
+	}
+
+	@Override
+	public void addSuccessfulQuery(Query q, Double alpha) {
+		getSuccessfulCachedQueries().add(q);
+	}
 }

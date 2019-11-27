@@ -30,14 +30,14 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class JenaTDBGraphQueryExtFactory extends JenaTDBGraphQueryFactory {
 
-    @Override
-    public Query createQuery(String rdfQuery) {
-	return new JenaTDBGraphQueryOpt(this, rdfQuery, ExtendedCacheLBA.getInstance());
-    }
+	@Override
+	public Query createQuery(String rdfQuery) {
+		return new JenaTDBGraphQueryOpt(this, rdfQuery, ExtendedCacheLBA.getInstance());
+	}
 
-    @Override
-    public Query createQuery(List<TriplePattern> tps) {
-	return new JenaTDBGraphQueryOpt(this, tps, ExtendedCacheLBA.getInstance());
-    }
+	@Override
+	public Query createQuery(List<TriplePattern> tps) {
+		return new JenaTDBGraphQueryOpt(this, tps, ExtendedCacheLBA.getInstance());
+	}
 
 }

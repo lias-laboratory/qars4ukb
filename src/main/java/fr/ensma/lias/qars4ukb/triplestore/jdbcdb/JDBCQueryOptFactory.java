@@ -27,8 +27,8 @@ import fr.ensma.lias.qars4ukb.query.Query;
  */
 public class JDBCQueryOptFactory extends JDBCQueryFactory {
 
-    @Override
-    public Query createQuery(String rdfQuery) {
-	return new JDBCQueryOpt(this, rdfQuery, CacheLBA.getInstance());
-    }
+	@Override
+	public Query createQuery(String rdfQuery) {
+		return new JDBCQueryOpt(this, rdfQuery, CacheLBA.getInstance());
+	}
 }

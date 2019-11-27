@@ -24,19 +24,19 @@ package fr.ensma.lias.qars4ukb;
  */
 public abstract class AbstractSession implements Session {
 
-    protected int executedQueryNumber = 0;
+	protected int executedQueryNumber = 0;
 
-    @Override
-    public int getExecutedQueryCount() {
-	return executedQueryNumber;
-    }
+	@Override
+	public int getExecutedQueryCount() {
+		return executedQueryNumber;
+	}
 
-    public void setExecutedQueryCount(int value) {
-	this.executedQueryNumber = value;
-    }
+	public void setExecutedQueryCount(int value) {
+		this.executedQueryNumber = value;
+	}
 
-    @Override
-    public void clearExecutedQueryCount() {
-	executedQueryNumber = 0;
-    }
+	@Override
+	public void clearExecutedQueryCount() {
+		executedQueryNumber = 0;
+	}
 }

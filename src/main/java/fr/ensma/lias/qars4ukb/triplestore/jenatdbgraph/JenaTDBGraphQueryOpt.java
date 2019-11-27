@@ -34,31 +34,31 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class JenaTDBGraphQueryOpt extends AbstractQueryOpt {
 
-    protected JenaTDBGraphQueryHelper jenaHelper;
+	protected JenaTDBGraphQueryHelper jenaHelper;
 
-    public JenaTDBGraphQueryOpt(QueryFactory factory, String query, ICache cache) {
-	super(factory, query, cache);
-	this.jenaHelper = new JenaTDBGraphQueryHelper(this);
-    }
+	public JenaTDBGraphQueryOpt(QueryFactory factory, String query, ICache cache) {
+		super(factory, query, cache);
+		this.jenaHelper = new JenaTDBGraphQueryHelper(this);
+	}
 
-    public JenaTDBGraphQueryOpt(QueryFactory factory, List<TriplePattern> tps, ICache cache) {
-	super(factory, tps, cache);
-	this.jenaHelper = new JenaTDBGraphQueryHelper(this);
-    }
+	public JenaTDBGraphQueryOpt(QueryFactory factory, List<TriplePattern> tps, ICache cache) {
+		super(factory, tps, cache);
+		this.jenaHelper = new JenaTDBGraphQueryHelper(this);
+	}
 
-    @Override
-    public String toNativeQuery(Double alpha) {
-	return jenaHelper.toNativeQuery(alpha);
-    }
+	@Override
+	public String toNativeQuery(Double alpha) {
+		return jenaHelper.toNativeQuery(alpha);
+	}
 
-    @Override
-    protected boolean isFailingWithExecution(Query q, Session session, Double alpha) {
-	return new JenaTDBGraphQueryHelper(q).executeQuery(session, alpha);
-    }
+	@Override
+	protected boolean isFailingWithExecution(Query q, Session session, Double alpha) {
+		return new JenaTDBGraphQueryHelper(q).executeQuery(session, alpha);
+	}
 
-    @Override
-    public Result getResult(Session session, Double alpha) {
-	return jenaHelper.getResult(session, alpha);
-    }
+	@Override
+	public Result getResult(Session session, Double alpha) {
+		return jenaHelper.getResult(session, alpha);
+	}
 
 }

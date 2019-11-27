@@ -28,20 +28,20 @@ import fr.ensma.lias.qars4ukb.AbstractSession;
  */
 public class JDBCSession extends AbstractSession {
 
-    private Connection connection;
+	private Connection connection;
 
-    public JDBCSession(Connection connection) {
-	this.connection = connection;
-    }
-
-    @Override
-    public void close() throws Exception {
-	if (connection != null) {
-	    connection.close();
+	public JDBCSession(Connection connection) {
+		this.connection = connection;
 	}
-    }
 
-    public Connection getConnection() {
-	return connection;
-    }
+	@Override
+	public void close() throws Exception {
+		if (connection != null) {
+			connection.close();
+		}
+	}
+
+	public Connection getConnection() {
+		return connection;
+	}
 }

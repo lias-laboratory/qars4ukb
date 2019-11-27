@@ -37,26 +37,26 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class JenaTDBNativeQueryFactory extends AbstractQueryFactory {
 
-    @Override
-    public Query createQuery(String rdfQuery) {
-	return new JenaTDBNativeQuery(this, rdfQuery);
-    }
-
-    @Override
-    public Query createQuery(List<TriplePattern> tps) {
-	return new JenaTDBNativeQuery(this, tps);
-    }
-
-    @Override
-    public Session createSession() {
-	final String jenatdbRepository = this.getConfig().jenanatifRepository();
-
-	if (Files.isDirectory(Paths.get(jenatdbRepository))) {
-
-	    throw new TripleStoreException("File:" + jenatdbRepository + " is not found.");
+	@Override
+	public Query createQuery(String rdfQuery) {
+		return new JenaTDBNativeQuery(this, rdfQuery);
 	}
 
-	Dataset dataset = TDBFactory.createDataset(jenatdbRepository);
-	return new JenaTDBNativeSession(dataset);
-    }
+	@Override
+	public Query createQuery(List<TriplePattern> tps) {
+		return new JenaTDBNativeQuery(this, tps);
+	}
+
+	@Override
+	public Session createSession() {
+		final String jenatdbRepository = this.getConfig().jenanatifRepository();
+
+		if (Files.isDirectory(Paths.get(jenatdbRepository))) {
+
+			throw new TripleStoreException("File:" + jenatdbRepository + " is not found.");
+		}
+
+		Dataset dataset = TDBFactory.createDataset(jenatdbRepository);
+		return new JenaTDBNativeSession(dataset);
+	}
 }

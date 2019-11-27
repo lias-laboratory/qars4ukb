@@ -32,30 +32,30 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class JenaTDBGraphQuery extends AbstractQuery {
 
-    private JenaTDBGraphQueryHelper helper;
+	private JenaTDBGraphQueryHelper helper;
 
-    public JenaTDBGraphQuery(QueryFactory factory, String query) {
-	super(factory, query);
-	helper = new JenaTDBGraphQueryHelper(this);
-    }
+	public JenaTDBGraphQuery(QueryFactory factory, String query) {
+		super(factory, query);
+		helper = new JenaTDBGraphQueryHelper(this);
+	}
 
-    public JenaTDBGraphQuery(QueryFactory factory, List<TriplePattern> tps) {
-	super(factory, tps);
-	helper = new JenaTDBGraphQueryHelper(this);
-    }
+	public JenaTDBGraphQuery(QueryFactory factory, List<TriplePattern> tps) {
+		super(factory, tps);
+		helper = new JenaTDBGraphQueryHelper(this);
+	}
 
-    @Override
-    public boolean isFailingAux(Session session, Double alpha) {
-	return helper.executeQuery(session, alpha);
-    }
+	@Override
+	public boolean isFailingAux(Session session, Double alpha) {
+		return helper.executeQuery(session, alpha);
+	}
 
-    @Override
-    public Result getResult(Session session, Double alpha) {
-	return helper.getResult(session, alpha);
-    }
+	@Override
+	public Result getResult(Session session, Double alpha) {
+		return helper.getResult(session, alpha);
+	}
 
-    @Override
-    public String toNativeQuery(Double alpha) {
-	return helper.toNativeQuery(alpha);
-    }
+	@Override
+	public String toNativeQuery(Double alpha) {
+		return helper.toNativeQuery(alpha);
+	}
 }

@@ -37,31 +37,31 @@ import fr.ensma.lias.qars4ukb.query.TriplePattern;
  */
 public class JenaTDBGraphQueryFactory extends AbstractQueryFactory {
 
-    @Override
-    public Query createQuery(String rdfQuery) {
-	return new JenaTDBGraphQuery(this, rdfQuery);
-    }
-
-    @Override
-    public Query createQuery(List<TriplePattern> tps) {
-	return new JenaTDBGraphQuery(this, tps);
-    }
-
-    public Session createSession(Dataset pDataset) {
-	return new JenaTDBGraphSession(pDataset);
-    }
-
-    @Override
-    public Session createSession() {
-	final String jenatdbRepository = this.getConfig().jenanatifRepository();
-
-	if (!Files.isDirectory(Paths.get(jenatdbRepository))) {
-
-	    throw new TripleStoreException("File:" + jenatdbRepository + " is not found.");
+	@Override
+	public Query createQuery(String rdfQuery) {
+		return new JenaTDBGraphQuery(this, rdfQuery);
 	}
 
-	Dataset dataset = TDBFactory.createDataset(jenatdbRepository);
-	return new JenaTDBGraphSession(dataset);
-    }
+	@Override
+	public Query createQuery(List<TriplePattern> tps) {
+		return new JenaTDBGraphQuery(this, tps);
+	}
+
+	public Session createSession(Dataset pDataset) {
+		return new JenaTDBGraphSession(pDataset);
+	}
+
+	@Override
+	public Session createSession() {
+		final String jenatdbRepository = this.getConfig().jenanatifRepository();
+
+		if (!Files.isDirectory(Paths.get(jenatdbRepository))) {
+
+			throw new TripleStoreException("File:" + jenatdbRepository + " is not found.");
+		}
+
+		Dataset dataset = TDBFactory.createDataset(jenatdbRepository);
+		return new JenaTDBGraphSession(dataset);
+	}
 
 }

@@ -28,20 +28,20 @@ import fr.ensma.lias.qars4ukb.AbstractSession;
  */
 public class JenaTDBGraphSession extends AbstractSession {
 
-    private Dataset dataset;
+	private Dataset dataset;
 
-    public JenaTDBGraphSession(Dataset pDataset) {
-	this.dataset = pDataset;
-    }
-
-    public Dataset getDataset() {
-	return dataset;
-    }
-
-    @Override
-    public void close() throws Exception {
-	if (dataset != null) {
-	    dataset.close();
+	public JenaTDBGraphSession(Dataset pDataset) {
+		this.dataset = pDataset;
 	}
-    }
+
+	public Dataset getDataset() {
+		return dataset;
+	}
+
+	@Override
+	public void close() throws Exception {
+		if (dataset != null) {
+			dataset.close();
+		}
+	}
 }

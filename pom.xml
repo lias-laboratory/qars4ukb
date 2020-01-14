@@ -165,7 +165,7 @@
 	</profiles>
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://ci-lias.ensma.fr/job/QaRS4UKB</url>
+		<url>https://ci-lias.ensma.fr/job/qars4ukb</url>
 	</ciManagement>
 	<distributionManagement>
 		<repository>

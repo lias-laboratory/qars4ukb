@@ -42,7 +42,7 @@ import fr.ensma.lias.qars4ukb.triplestore.jenatdbgraph.JenaTDBGraphQueryOptFacto
 /**
  * @author Mickael BARON
  */
-public class QaRS4UKMSample {
+public class QaRS4UKBSample {
 	public static void main(String[] args) {
 		// Initialize a JenaTDB instance by using the memory version.
 		Location locationMemory = Location.mem("watdivtdbmemory");

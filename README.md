@@ -161,7 +161,7 @@ SELECT * WHERE { ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://d
 
 Details the license agreement of QaRS4UKB: [LICENCE](LICENCE)
 
-## Historic Contributors
+## Historic Contributors (core developers first followed by alphabetical order)
 
 * [Ibrahim DELLAL (core developer)](https://www.lias-lab.fr/members/ibrahimdellal/)
 * [Mickael BARON](https://www.lias-lab.fr/members/mickaelbaron/)

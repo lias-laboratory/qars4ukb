@@ -132,23 +132,4 @@
 			</build>
 		</profile>
 	</profiles>
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>https://ci-lias.ensma.fr/job/qars4ukb</url>
-	</ciManagement>
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>Internal Releases</name>
-			<url>http://s-nexus-lias.ensma.fr/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Internal Snapshots</name>
-			<url>http://s-nexus-lias.ensma.fr/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-	<scm>
-		<url>scm:git:https://git.lias-lab.fr/r/exploiting/qars4ukb.git</url>
-	</scm>
 </project>

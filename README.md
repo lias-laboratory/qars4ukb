@@ -159,7 +159,7 @@ SELECT * WHERE { ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://d
 
 ## Software licence agreement
 
-Details the license agreement of QaRS4UKB: [LICENCE](LICENCE)
+Details the license agreement of QaRS4UKB: [LICENSE](LICENSE)
 
 ## Historic Contributors (core developers first followed by alphabetical order)
 

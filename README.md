@@ -157,7 +157,7 @@ SELECT * WHERE { ?v0 <http://schema.org/eligibleRegion> <http://db.uwaterloo.ca/
 SELECT * WHERE { ?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/ProductCategory7> . ?v0 <http://ogp.me/ns#tag> <http://db.uwaterloo.ca/~galuc/wsdbm/Topic245> . ?v0 <http://purl.org/stuff/rev#hasReview> ?v4 . ?v0 <http://schema.org/contentSize> ?v9 . ?v0 <http://schema.org/description> ?v10 . ?v0 <http://schema.org/keywords> ?v11 . ?v12 <http://db.uwaterloo.ca/~galuc/wsdbm/purchaseFor> ?v0 . ?v2 <http://ogp.me/ns#tag> ?v1 . ?v4 <http://purl.org/stuff/rev#rating> ?v5 . ?v4 <http://purl.org/stuff/rev#reviewer> ?v6 . ?v4 <http://purl.org/stuff/rev#text> ?v7 . ?v4 <http://purl.org/stuff/rev#title> ?v8 . ?v6 <http://xmlns.com/foaf/familyName> ?v13 . ?v6 <http://schema.org/birthDate> ?v14 . ?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> ?v15 }
 ```
 
-## Software licence agreement
+## Software license agreement
 
 Details the license agreement of QaRS4UKB: [LICENSE](LICENSE)
 
